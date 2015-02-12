@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Budget for Month"
+        android:id="@+id/monthTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:textSize="20sp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/monthSpinner"
+        android:layout_alignBottom="@+id/monthTextView"
+        android:layout_alignParentEnd="true"
+        android:padding="@dimen/activity_margin" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monthly Budget"
+        android:id="@+id/monthlyBudgetTextView"
+        android:layout_below="@+id/monthTextView"
+        android:layout_alignParentStart="true"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:textSize="20sp" />
+
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:textSize="20sp"
+        android:id="@+id/monthlyBudgetEditText"
+        android:gravity="center"
+        android:hint="00.00"
+        android:layout_alignBaseline="@id/monthlyBudgetTextView"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weekly Budget"
+        android:textSize="20sp"
+        android:id="@+id/weeklyBudgetTextView"
+        android:layout_below="@id/monthlyBudgetTextView"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:layout_alignParentStart="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/weeksTextView"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/weeklyBudgetTextView"
+        android:layout_alignParentStart="true" >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Week 1"
+        android:id="@+id/week1TextView"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Week 2"
+        android:id="@+id/week2TextView"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Week 3"
+        android:id="@+id/week3TextView"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Week 4"
+        android:id="@+id/week4TextView"
+        android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/weeksEditText"
+        android:layout_below="@id/weeksTextView"
+        android:layout_alignParentStart="true"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="00.0"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:id="@+id/week1EditText"
+        android:textSize="20sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="00.0"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:id="@+id/week2EditText"
+        android:textSize="20sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:hint="00.0"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:id="@+id/week3EditText"
+        android:textSize="20sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="00.0"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:id="@+id/week4EditText"
+        android:textSize="20sp" />
+    </LinearLayout>
+
+</RelativeLayout>
