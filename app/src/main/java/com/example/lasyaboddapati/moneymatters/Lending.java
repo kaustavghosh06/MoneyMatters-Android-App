@@ -117,7 +117,7 @@ public class Lending extends Activity {
 
         //For Credits
 
-        /*credcloud.addValueEventListener(new ValueEventListener() {
+        credcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map<String, Object> cred = (Map<String, Object>) snapshot.getValue();
@@ -145,11 +145,11 @@ public class Lending extends Activity {
             public void onCancelled(FirebaseError firebaseError) {
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
-        });*/
+        });
 
         //FOR DEBTS
 
-        debtcloud.addValueEventListener(new ValueEventListener() {
+        /*debtcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map<String, Object> de = (Map<String, Object>) snapshot.getValue();
