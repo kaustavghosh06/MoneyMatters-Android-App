@@ -45,6 +45,13 @@ public class Lending extends Activity {
     LinkedHashMap<String, String> d;
     LinkedHashMap<String, String> n;
     String key1;
+    String lender;
+    String receiver;
+    String descr;
+    String amt;
+    Firebase lendercloud=null;
+    Firebase receivercloud=null;
+    String url="https://crackling-inferno-5209.firebaseio.com/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -298,20 +305,24 @@ public class Lending extends Activity {
             //final EditText user = new EditText(this);
 
             final EditText amount = new EditText(this);
+            final EditText description = new EditText(this);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_dropdown_item_1line, USERS);
-            final AutoCompleteTextView user = new AutoCompleteTextView(this);
-            user.setHint("Enter User ID");
-            user.setAdapter(adapter);
+            final AutoCompleteTextView user1 = new AutoCompleteTextView(this);
+            user1.setHint("Enter User ID");
+            user1.setAdapter(adapter);
 
 
 
             amount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             amount.setHint("Enter Amount");
+            description.setHint("Enter Description");
+
             LinearLayout layout = new LinearLayout(getApplicationContext());
             layout.setOrientation(LinearLayout.VERTICAL);
-            layout.addView(user);
+            layout.addView(user1);
             layout.addView(amount);
+            layout.addView(description);
             alertDialog.setView(layout);
 
 
@@ -321,6 +332,18 @@ public class Lending extends Activity {
 
                                     Toast.makeText(getApplicationContext(),
                                             "Amount Lent!", Toast.LENGTH_SHORT).show();
+                                    lender=user;
+                                    amt=amount.getText().toString();
+                                    receiver=user1.getText().toString();
+                                    descr=description.getText().toString();
+                                    lendercloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+lender);
+                                    receivercloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+receiver);
+                                    lendercloud.child("Credit").child(descr+":"+receiver).setValue(amt);
+                                    receivercloud.child("Debts").child(descr+":"+lender).setValue(amt);
+
+
+
+
 
                                 }
 
