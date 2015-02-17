@@ -7,10 +7,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name=".Login" >
-            <intent-filter android:label="@string/title_activity_login">
+        <activity android:name=".Login" >
+            <intent-filter android:label="@string/title_activity_login" >
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,6 +42,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.lasyaboddapati.moneymatters.HomeScreen" />
         </activity>
+
+
+
+        <activity
+            android:name=".FirebaseActivity"
+            android:label="@string/title_activity_firebase" >
+        </activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

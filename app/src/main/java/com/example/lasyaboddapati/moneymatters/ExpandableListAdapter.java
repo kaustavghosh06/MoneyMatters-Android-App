@@ -1,6 +1,7 @@
 package com.example.lasyaboddapati.moneymatters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +58,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter{
                 .findViewById(R.id.lblListItem);
 
         txtListChild.setText(childText);
+        txtListChild.setTextColor(Color.BLACK);
         return convertView;
     }
 

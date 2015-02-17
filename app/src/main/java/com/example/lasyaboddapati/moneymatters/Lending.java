@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -16,10 +17,16 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Lending extends Activity {
@@ -28,20 +35,190 @@ public class Lending extends Activity {
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, LinkedHashMap<String,String>> listDataChild;
+
+    Map<String, Integer> creds;
+    HashMap<String,Integer> debt;
+    HashMap<String,String> notf;
+    String user="Kaustav";
+    String value;
+    LinkedHashMap<String, String> cr;
+    LinkedHashMap<String, String> d;
+    LinkedHashMap<String, String> n;
+    String key1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lending);
 
-        // get the listview
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, LinkedHashMap<String,String>>();
+
+        // Adding child data
+        listDataHeader.add("Credits");
+        listDataHeader.add("Debts");
+        listDataHeader.add("Notifications");
+
+        LinkedHashMap<String,String> deb = new LinkedHashMap<String,String>();
+        deb.put("Lasya","Lasya--->70");
+        deb.put("Anand","Anand--->80");
+        deb.put("Manoj","Manoj--->90");
+
+
+        LinkedHashMap<String,String> not = new LinkedHashMap<String,String>();
+        not.put("Lasya","Hey send me my money");
+        not.put("Anand","Send me my money bro");
+        not.put("Manoj","where?!!");
+
+
+
+
+        //creds=new HashMap<String,Integer>();
+        debt=new HashMap<String,Integer>();
+        notf=new HashMap<String,String>();
+
+
+        //creds.put("Lasya",40);
+        //creds.put("Manoj",70);
+
+        //debt.put("Lasya",70);
+        //debt.put("Anand",2);
+
+        //notf.put("LASYA","YO!!");
+
+
+        Firebase.setAndroidContext(this);
+        final Firebase myFirebaseRef = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user);
+
+
+        Firebase credcloud=myFirebaseRef.child("Credit");
+        Firebase debtcloud=myFirebaseRef.child("Debts");
+        for(String key: debt.keySet())
+        {
+            debtcloud.child(key).setValue(debt.get(key));
+        }
+        Firebase notifcloud=myFirebaseRef.child("Notifications");
+        for(String key: notf.keySet())
+        {
+            notifcloud.child(key).setValue(notf.get(key));
+        }
+
+
         expListView = (ExpandableListView) findViewById(R.id.exp);
+        //listDataChild.put(listDataHeader.get(1), deb);
+        //listDataChild.put(listDataHeader.get(2), not);
+        cr = new LinkedHashMap<String, String>();
 
-        // preparing list data
-        prepareListData();
-        listAdapter = new com.example.lasyaboddapati.moneymatters.ExpandableListAdapter(this, listDataHeader, listDataChild);
+        //New method
 
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
+
+
+
+        //For Credits
+
+        /*credcloud.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map<String, Object> cred = (Map<String, Object>) snapshot.getValue();
+
+                for(String key: cred.keySet()) {
+
+                    cr.put(key, key+ " owes " + "$"+cred.get(key).toString());
+                }
+                listDataChild.put(listDataHeader.get(0),cr); // Header, Child data
+                    // get the listview
+
+
+                    // preparing list data
+                    //prepareListData();
+                listAdapter = new com.example.lasyaboddapati.moneymatters.ExpandableListAdapter(getApplicationContext(), listDataHeader, listDataChild);
+
+                    // setting list adapter
+                expListView.setAdapter(listAdapter);
+
+
+
+
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });*/
+
+        //FOR DEBTS
+
+        debtcloud.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map<String, Object> de = (Map<String, Object>) snapshot.getValue();
+
+                for(String key: de.keySet()) {
+
+                    d.put(key,"You owe " + key + "$"+de.get(key).toString());
+                }
+                listDataChild.put(listDataHeader.get(1),d); // Header, Child data
+                // get the listview
+
+
+                // preparing list data
+                //prepareListData();
+                listAdapter = new com.example.lasyaboddapati.moneymatters.ExpandableListAdapter(getApplicationContext(), listDataHeader, listDataChild);
+
+                // setting list adapter
+                expListView.setAdapter(listAdapter);
+
+
+
+
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+
+        //For Notifications
+
+       /* notifcloud.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map<String, Object> no = (Map<String, Object>) snapshot.getValue();
+
+                for(String key: no.keySet()) {
+
+                    n.put(key, key +":" +no.get(key).toString());
+                }
+                listDataChild.put(listDataHeader.get(2),n); // Header, Child data
+                // get the listview
+
+
+                // preparing list data
+                //prepareListData();
+                listAdapter = new com.example.lasyaboddapati.moneymatters.ExpandableListAdapter(getApplicationContext(), listDataHeader, listDataChild);
+
+                // setting list adapter
+                expListView.setAdapter(listAdapter);
+
+
+
+
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+        */
+        /*for(String key: cred.keySet())
+        {
+            credcloud.child(key).setValue(cred.get(key));
+        }*/
+
+
+
+
 
     }
 
@@ -57,7 +234,7 @@ public class Lending extends Activity {
 
         // Adding child data
         LinkedHashMap<String,String> cred = new LinkedHashMap<String,String>();
-        cred.put("Lasya","Lasya--->50");
+        cred.put("Lasya",value);
         cred.put("Anand","Anand--->60");
         cred.put("Manoj","Manoj--->40");
 
@@ -142,6 +319,7 @@ public class Lending extends Activity {
 
                                     Toast.makeText(getApplicationContext(),
                                             "Amount Lent!", Toast.LENGTH_SHORT).show();
+
                                 }
 
 

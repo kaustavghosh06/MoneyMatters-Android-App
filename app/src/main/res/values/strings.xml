@@ -12,5 +12,7 @@
     <string name="action_add">Add</string>
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
+    <string name="title_activity_firebase">FirebaseActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
