@@ -94,21 +94,23 @@ public class Lending extends Activity {
 
         Firebase credcloud=myFirebaseRef.child("Credit");
         Firebase debtcloud=myFirebaseRef.child("Debts");
-        for(String key: debt.keySet())
+        /*for(String key: debt.keySet())
         {
             debtcloud.child(key).setValue(debt.get(key));
-        }
+        }*/
         Firebase notifcloud=myFirebaseRef.child("Notifications");
-        for(String key: notf.keySet())
+        /*for(String key: notf.keySet())
         {
             notifcloud.child(key).setValue(notf.get(key));
-        }
+        }*/
 
 
         expListView = (ExpandableListView) findViewById(R.id.exp);
         //listDataChild.put(listDataHeader.get(1), deb);
         //listDataChild.put(listDataHeader.get(2), not);
         cr = new LinkedHashMap<String, String>();
+        d=new LinkedHashMap<String,String>();
+        n=new LinkedHashMap<String,String>();
 
         //New method
 
@@ -149,7 +151,7 @@ public class Lending extends Activity {
 
         //FOR DEBTS
 
-        /*debtcloud.addValueEventListener(new ValueEventListener() {
+        debtcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map<String, Object> de = (Map<String, Object>) snapshot.getValue();
@@ -181,7 +183,7 @@ public class Lending extends Activity {
 
         //For Notifications
 
-       /* notifcloud.addValueEventListener(new ValueEventListener() {
+       notifcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map<String, Object> no = (Map<String, Object>) snapshot.getValue();
@@ -210,7 +212,7 @@ public class Lending extends Activity {
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
         });
-        */
+
         /*for(String key: cred.keySet())
         {
             credcloud.child(key).setValue(cred.get(key));
