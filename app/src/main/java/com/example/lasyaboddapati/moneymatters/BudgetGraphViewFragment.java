@@ -15,6 +15,7 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.LargeValueFormatter;
 import com.github.mikephil.charting.utils.ValueFormatter;
 import com.github.mikephil.charting.utils.XLabels;
 import com.github.mikephil.charting.utils.YLabels;
@@ -97,11 +98,11 @@ public class BudgetGraphViewFragment extends Fragment {
 
 
         BarDataSet budgetSet = new BarDataSet(budgetYVals, "Budget");
-        budgetSet.setBarSpacePercent(20);
+        //budgetSet.setBarSpacePercent(20);
         budgetSet.setColor(Color.GREEN);
 
         BarDataSet expensesSet = new BarDataSet(expenseYVals, "Expenses");
-        expensesSet.setBarSpacePercent(20);
+        //expensesSet.setBarSpacePercent(20);
         expensesSet.setColor(Color.BLUE);
 
         ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
@@ -109,10 +110,14 @@ public class BudgetGraphViewFragment extends Fragment {
         dataSets.add(budgetSet);
 
         BarData data = new BarData(xVals, dataSets);
-        data.setGroupSpace(50);
+        //data.setGroupSpace(50);
+        data.setGroupSpace(110f);
 
         chart.setData(data);
+
         chart.setDrawValueAboveBar(true);
+        chart.setValueFormatter(new LargeValueFormatter());
+
         chart.enableScroll();
         chart.setDescription("");
 
@@ -123,6 +128,7 @@ public class BudgetGraphViewFragment extends Fragment {
 
         //chart.setYRange(-10, chart.getYChartMax(), false);
         //chart.setDrawYLabels(false);
+        chart.setDrawYValues(false);
 
         XLabels xl = chart.getXLabels();
         xl.setPosition(XLabels.XLabelPosition.BOTTOM);
@@ -132,7 +138,7 @@ public class BudgetGraphViewFragment extends Fragment {
         YLabels yl = chart.getYLabels();
         yl.setPosition(YLabels.YLabelPosition.BOTH_SIDED);
         yl.setLabelCount(5);
-        yl.setFormatter(new ValueFormatter() {
+        /*yl.setFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float v) {
                 //return null;
@@ -142,7 +148,8 @@ public class BudgetGraphViewFragment extends Fragment {
                     return String.valueOf((int)v);
                 }
             }
-        });
+        });*/
+        yl.setFormatter(new LargeValueFormatter());
 
         //chart.setDrawValuesForWholeStack(false);
         chart.animateY(1000);

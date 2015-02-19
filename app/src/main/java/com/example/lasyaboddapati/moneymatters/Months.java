@@ -28,4 +28,12 @@ public class Months {
         }
         return values;
     }
+
+    public static int valueOf(String month) {
+        return MONTHS.valueOf(month).ordinal();
+    }
+
+    public static String nameOf(int mm) {
+        return names()[mm-1];
+    }
 }

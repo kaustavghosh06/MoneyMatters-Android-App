@@ -1,5 +1,6 @@
 package com.example.lasyaboddapati.moneymatters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ContentValues;
@@ -47,133 +48,264 @@ public class ExpensesListViewFragment extends Fragment {
     Context context;
     boolean dateValid;
     boolean amountValid;
+    private static ExpensesGraphViewFragment graphViewFragment;
 
     enum CATEGORIES {Bills, Rent, Groceries, Food, Personal, Shopping};
 
-    public static ExpensesListViewFragment newInstance(Context context) {
+    public static ExpensesListViewFragment newInstance(Context context, ExpensesGraphViewFragment graphViewFragment) {
         ExpensesListViewFragment expensesListViewFragment = new ExpensesListViewFragment();
         expensesListViewFragment.context = context;
         adapter = new ExpensesListAdapter(context);
+        expensesListViewFragment.graphViewFragment = graphViewFragment;
         return expensesListViewFragment;
     }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_expandable_list_view, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_expandable_list_view, container, false);
 
-            lv = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
-            lv.setChoiceMode(ExpandableListView.CHOICE_MODE_MULTIPLE_MODAL);
+        lv = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
+        lv.setChoiceMode(ExpandableListView.CHOICE_MODE_MULTIPLE_MODAL);
 
-            lv.setAdapter(adapter);
-            lv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-                @Override
-                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                    if (actionMode != null) {
-                        if (expandableListSelectionType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-                            int flatPosition = parent.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(groupPosition));
-                            parent.setItemChecked(
-                                    flatPosition,
-                                    !parent.isItemChecked(flatPosition));
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            });
-            lv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-                @Override
-                public boolean onChildClick(ExpandableListView parent, View v,
-                                            int groupPosition, int childPosition, long id) {
-                    if (actionMode != null)  {
-                        if (expandableListSelectionType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                            int flatPosition = parent.getFlatListPosition(
-                                    ExpandableListView.getPackedPositionForChild(groupPosition,childPosition));
-                            parent.setItemChecked(
-                                    flatPosition,
-                                    !parent.isItemChecked(flatPosition));
-                        }
+        lv.setAdapter(adapter);
+        lv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (actionMode != null) {
+                    if (expandableListSelectionType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+                        int flatPosition = parent.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(groupPosition));
+                        parent.setItemChecked(
+                                flatPosition,
+                                !parent.isItemChecked(flatPosition));
                         return true;
                     }
-                    return false;
                 }
-            });
-            lv.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                int checkedCount;
-                @Override
-                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                    // Capture total checked items
-                    checkedCount = lv.getCheckedItemCount();
-                    if (checkedCount == 1) {
-                        expandableListSelectionType = ExpandableListView.getPackedPositionType(
-                                lv.getExpandableListPosition(position));
+                return false;
+            }
+        });
+        lv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                if (actionMode != null)  {
+                    if (expandableListSelectionType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                        int flatPosition = parent.getFlatListPosition(
+                                           ExpandableListView.getPackedPositionForChild(groupPosition,childPosition));
+                        parent.setItemChecked(flatPosition, !parent.isItemChecked(flatPosition));
                     }
-                    // Set the CAB title according to total checked items
-                    mode.setTitle(checkedCount + "Selected");
-                    // Hide edit button if multiple items selected
-                    if (checkedCount > 1) {
-                        mode.getMenu().findItem(R.id.action_edit).setVisible(false);
-                    } else {
-                        mode.getMenu().findItem(R.id.action_edit).setVisible(true);
-                    }
-                }
-
-                @Override
-                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    if (checkedCount > 1) {
-                        mode.getMenuInflater().inflate(R.menu.menu_multi_item_delete, menu);
-                    } else {
-                        mode.getMenuInflater().inflate(R.menu.menu_item_edit_detele, menu);
-                    }
-                    actionMode = mode;
                     return true;
                 }
+                return false;
+            }
+        });
+        lv.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            int checkedCount;
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                // Capture total checked items
+                checkedCount = lv.getCheckedItemCount();
+                if (checkedCount == 1) {
+                    expandableListSelectionType = ExpandableListView.getPackedPositionType(
+                            lv.getExpandableListPosition(position));
+                }
+                // Set the CAB title according to total checked items
+                mode.setTitle(checkedCount + "Selected");
+                // Hide edit button if multiple items selected
+                if (checkedCount > 1) {
+                    mode.getMenu().findItem(R.id.action_edit).setVisible(false);
+                } else {
+                    mode.getMenu().findItem(R.id.action_edit).setVisible(true);
+                }
+            }
 
-                @Override
-                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                if (checkedCount > 1) {
+                    mode.getMenuInflater().inflate(R.menu.menu_multi_item_delete, menu);
+                } else {
+                    mode.getMenuInflater().inflate(R.menu.menu_item_edit_detele, menu);
+                }
+                actionMode = mode;
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                     return false;
                 }
 
-                @Override
-                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                    int id = item.getItemId();
-                    SparseBooleanArray checkedItemPositions = lv.getCheckedItemPositions();
-                    //groupsToRemove = new ArrayList<Object>();
-                    groupsToRemove = new ArrayList<Integer>();
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                int id = item.getItemId();
+                SparseBooleanArray checkedItemPositions = lv.getCheckedItemPositions();
+                groupsToRemove = new ArrayList<Integer>();
 
-                    Log.d("CHECKED ITEM POSITIONS", checkedItemPositions.toString());
-                    for (int i = 0; i < checkedItemPositions.size(); i++) {
-                        if (checkedItemPositions.valueAt(i)) {
-                            int position = checkedItemPositions.keyAt(i);
-                            long pos = lv.getExpandableListPosition(position);
-                            int groupPos = ExpandableListView.getPackedPositionGroup(pos);
-                            if (id == R.id.action_delete) {
-                                //groupsToRemove.add(adapter.getGroup(groupPos));
-                                groupsToRemove.add(groupPos);
-                            } else if (id == R.id.action_edit) {
-                                popup_edit_expense_dialog(groupPos);
-                            }
+                Log.d("CHECKED ITEM POSITIONS", checkedItemPositions.toString());
+                for (int i = 0; i < checkedItemPositions.size(); i++) {
+                    if (checkedItemPositions.valueAt(i)) {
+                        int position = checkedItemPositions.keyAt(i);
+                        long pos = lv.getExpandableListPosition(position);
+                        int groupPos = ExpandableListView.getPackedPositionGroup(pos);
+                        if (id == R.id.action_delete) {
+                            groupsToRemove.add(groupPos);
+                        } else if (id == R.id.action_edit) {
+                            popup_edit_expense_dialog(groupPos);
                         }
                     }
-
-                    mode.finish();
-                    return true;
                 }
 
-                @Override
-                public void onDestroyActionMode(ActionMode mode) {
-                    actionMode = null;
-                    if (groupsToRemove!=null) {
-                        adapter.removeItems(groupsToRemove);
-                        groupsToRemove.clear();
+                mode.finish();
+                return true;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                actionMode = null;
+                if (groupsToRemove!=null) {
+                //if (mode.getMenu().getItem(R.id.action_delete).isChecked()) {
+                    adapter.removeItems(groupsToRemove);
+                    groupsToRemove.clear();
+                }
+            }
+        });
+
+        adapter.populateListView();
+        return rootView;
+    }
+
+    protected void pop_up_add_expense_dialog() {
+        dateValid = false;
+        amountValid = false;
+
+        View view = View.inflate(context, R.layout.add_expense_layout, null);
+
+        final String[] categories = {"Bills", "Rent", "Groceries", "Food", "Personal", "Shopping"};
+        final EditText dateEditText = (EditText) view.findViewById(R.id.dateEditText);
+        final Spinner categorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
+        final EditText amountSpentEditText = (EditText) view.findViewById(R.id.amountSpentEditText);
+        final EditText descriptionEditText = (EditText) view.findViewById(R.id.descriptionEditText);
+        categorySpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, categories));
+
+        //final CustomDialogFragment dialogFragment = CustomDialogFragment.newInstance(view);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(view)
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String date = dateEditText.getText().toString();
+                        String category = categorySpinner.getSelectedItem().toString();
+                        float amountSpent = Float.parseFloat(amountSpentEditText.getText().toString());
+                        String description = descriptionEditText.getText().toString();
+                        adapter.addItem(date, category, amountSpent, description);
                     }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) { }
+                });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dateEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String working = s.toString();
+                boolean isValid = true;
+                if (working.length()==2 && before ==0) {
+                    if (working.substring(1,2).matches("[/.-]")) {
+                        working = "0"+working.substring(0,1);
+                    }
+                    if (Integer.parseInt(working) < 1 || Integer.parseInt(working)>12) {
+                        isValid = false;
+                    } else {
+                        if (working.length() == 1) {
+                            working = "0"+working;
+                        }
+                        working+="/";
+                        dateEditText.setText(working);
+                        dateEditText.setSelection(working.length());
+                    }
+                } else if (working.length()==5 && before ==0) {
+                    if (working.substring(4,5).matches("[/.-]")) {
+                        working = working.substring(0,3)+"0"+working.substring(3,4);
+                    }
+                    working+="/";
+                    dateEditText.setText(working);
+                    dateEditText.setSelection(working.length());
+                } else if (working.length()==10 && before ==0) {
+                    int yyyy = Integer.parseInt(working.substring(6));
+                    int mm = Integer.parseInt(working.substring(0,2));
+                    int dd = Integer.parseInt(working.substring(3,5));
+                    //if (yyyy > Calendar.getInstance().get(Calendar.YEAR)) {
+                    //    isValid = false;
+                    //}
+                    //else {
+                    Calendar c = new GregorianCalendar(yyyy, mm, dd);
+                    //c.set(Calendar.YEAR, yyyy);
+                    //c.set(Calendar.MONTH, mm);
+                    Log.d("DATE", c.get(Calendar.MONTH)+"");
+                    Log.d("DATE", c.getActualMaximum(Calendar.DATE)+"");
+                    if (dd<1 || dd>c.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+                        isValid = false;
+                    }
+                    //}
+                } else if (working.length()!=10) {
+                    isValid = false;
                 }
-            });
 
-            adapter.populateListView();
-            return rootView;
-        }
+                if (!isValid) {
+                    dateEditText.setError("Enter a valid date: MM/DD/YYYY");
+                    dateValid = false;
+                } else {
+                    dateEditText.setError(null);
+                    dateValid = true;
+                }
 
-    private void popup_edit_expense_dialog(final int groupPos) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (dateValid && amountValid) {
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                } else {
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                }
+            }
+        });
+
+        final EditText amount = (EditText) view.findViewById(R.id.amountSpentEditText);
+        amount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d("AMOUNT", s.toString().isEmpty() + "");
+                if (s.toString().isEmpty()) {
+                    amount.setError("", context.getDrawable(android.R.drawable.stat_notify_error));
+                    amountValid = false;
+                } else {
+                    amount.setError(null);
+                    amountValid = true;
+                }
+
+                if (dateValid && amountValid) {
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                } else {
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                }
+            }
+        });
+    }
+
+    protected void popup_edit_expense_dialog(final int groupPos) {
         dateValid = true;
         amountValid = true;
 
@@ -194,7 +326,7 @@ public class ExpensesListViewFragment extends Fragment {
         final EditText amount = (EditText) view.findViewById(R.id.amountSpentEditText);
         amount.setText(amountOld);
 
-        final EditText description = (EditText) view.findViewById(R.id.desciptionEditText);
+        final EditText description = (EditText) view.findViewById(R.id.descriptionEditText);
         description.setText(descriptionOld);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -346,13 +478,15 @@ public class ExpensesListViewFragment extends Fragment {
         private HashMap<Long, String> list;
         private HashMap<Long, String[]> details;
         protected SQLiteDatabase db;
+        Context context;
 
         public ExpensesListAdapter(Context context) {
             this.list = new LinkedHashMap<Long, String>();
             this.details = new LinkedHashMap<Long, String[]>();
 
             this.db = new ExpenseDatabase(context).getWritableDatabase();
-            inf = LayoutInflater.from(context);
+            this.context = context;
+            this.inf = LayoutInflater.from(context);
         }
 
         @Override
@@ -441,7 +575,9 @@ public class ExpensesListViewFragment extends Fragment {
             String listItem = date+" : "+category+" : "+amountSpent;
             list.put(rowId, listItem);
             details.put(rowId, new String[] {description});
-            notifyDataSetChanged();
+            filterItems();
+            //notifyDataSetChanged();
+            graphViewFragment.populateGraphView();
         }
 
         public void removeItems(List<Integer> groupsToRemove) {
@@ -455,7 +591,9 @@ public class ExpensesListViewFragment extends Fragment {
                 details.remove(id);
                 deleteFromDatabase(id);
             }
-            notifyDataSetChanged();
+            filterItems();
+            //notifyDataSetChanged();
+            graphViewFragment.populateGraphView();
         }
 
         private void updateListItem(int groupPos, String date, String category, String amount, String description) {
@@ -463,7 +601,9 @@ public class ExpensesListViewFragment extends Fragment {
             list.put(id, date + " : " + category + " : " + amount);
             details.put(id, new String[] {description});
             updateInDatabase(id, date, category, Float.parseFloat(amount), description);
-            notifyDataSetChanged();
+            filterItems();
+            //notifyDataSetChanged();
+            graphViewFragment.populateGraphView();
         }
 
         public long insertIntoDatabase(String date, String category, float amountSpent, String description) {
@@ -474,7 +614,8 @@ public class ExpensesListViewFragment extends Fragment {
             int dd = Integer.parseInt(date.split("[/.-]")[1]);
             int yyyy = Integer.parseInt(date.split("[/.-]")[2]);
 
-            newValues.put(ExpenseDatabase.MONTH_COLUMN, Expenses.MONTHS.values()[mm].toString());
+            //newValues.put(ExpenseDatabase.MONTH_COLUMN, Expenses.MONTHS.values()[mm].toString());
+            newValues.put(ExpenseDatabase.MONTH_COLUMN, Months.nameOf(mm));
             Calendar c = Calendar.getInstance();
             c.set(Calendar.YEAR, yyyy);
             c.set(Calendar.MONTH, mm);
@@ -504,7 +645,8 @@ public class ExpensesListViewFragment extends Fragment {
             int mm = Integer.parseInt(date.split("[/.-]")[0]);
             int dd = Integer.parseInt(date.split("[/.-]")[1]);
             int yyyy = Integer.parseInt(date.split("[/.-]")[2]);
-            newValues.put(ExpenseDatabase.MONTH_COLUMN, Expenses.MONTHS.values()[mm].toString());
+            //newValues.put(ExpenseDatabase.MONTH_COLUMN, Expenses.MONTHS.values()[mm].toString());
+            newValues.put(ExpenseDatabase.MONTH_COLUMN, Months.nameOf(mm));
             Calendar c = Calendar.getInstance();
             c.set(Calendar.YEAR, yyyy);
             c.set(Calendar.MONTH, mm);
@@ -540,7 +682,7 @@ public class ExpensesListViewFragment extends Fragment {
 
             list = new LinkedHashMap<Long, String>(cursor.getCount());
             details = new LinkedHashMap<Long, String[]>(cursor.getCount());
-            Log.d("COUNT", "list size" +list.size()+ "curssor size"+ cursor.getCount());
+            Log.d("COUNT", "list size" +list.size()+ "cursor size"+ cursor.getCount());
 
             while (cursor.moveToNext()) {
                 Long id = cursor.getLong(0);
@@ -552,6 +694,41 @@ public class ExpensesListViewFragment extends Fragment {
                 details.put(id, new String[] {description});
             }
             cursor.close();
+        }
+
+        public void filterItems() {
+            View view = ((Activity)context).getWindow().getDecorView().findViewById(android.R.id.content);
+            Log.d("FILTER", view+"  "+view.findViewById(R.id.MonthSpinner) +"   "+ view.findViewById(R.id.WeekSpinner));
+            String month = ((Spinner) view.findViewById(R.id.MonthSpinner)).getSelectedItem().toString().trim();
+            String week = ((Spinner) view.findViewById(R.id.WeekSpinner)).getSelectedItem().toString().trim();
+
+            String[] resultColumns = {ExpenseDatabase.ID_COLUMN, ExpenseDatabase.DATE_COLUMN, ExpenseDatabase.CATEGORY_COLUMN, ExpenseDatabase.AMOUNT_COLUMN
+                    , ExpenseDatabase.DESCRIPTION_COLUMN};
+            String whereClause = null;
+            if (month != "All" && week != "All") {
+                whereClause = ExpenseDatabase.MONTH_COLUMN + "='" + month + "' AND " + ExpenseDatabase.WEEK_COLUMN + "=" + week.charAt(week.length()-1);
+            } else if (month != "All" && week == "All") {
+                whereClause = ExpenseDatabase.MONTH_COLUMN + "='" + month + "'";
+            } else if (month == "All" && week != "All") {
+                whereClause = ExpenseDatabase.WEEK_COLUMN + "=" + week.charAt(week.length()-1);
+            }
+            Cursor cursor = db.query(ExpenseDatabase.DATABASE_TABLE, resultColumns, whereClause, null, null, null, null);
+
+            list = new LinkedHashMap<Long, String>(cursor.getCount());
+            details = new LinkedHashMap<Long, String[]>(cursor.getCount());
+            Log.d("COUNT", "list size" +list.size()+ "cursor size"+ cursor.getCount());
+
+            while (cursor.moveToNext()) {
+                Long id = cursor.getLong(0);
+                String date = cursor.getString(1);
+                String category = cursor.getString(2);
+                float amount = cursor.getFloat(3);
+                String description = cursor.getString(4);
+                list.put(id, date+" : "+category+" : "+amount);
+                details.put(id, new String[] {description});
+            }
+            cursor.close();
+            notifyDataSetChanged();
         }
 
     }

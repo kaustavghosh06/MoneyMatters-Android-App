@@ -90,7 +90,7 @@ public class ExpensesGraphViewFragment extends Fragment {
         chart.setDrawYLabels(false);
         chart.setDrawLegend(false);
 
-        chart.animateY(1000);
+        chart.animateY(500);
 
         chart.invalidate();
     }

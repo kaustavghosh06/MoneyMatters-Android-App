@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import java.util.Calendar;
@@ -23,75 +24,52 @@ import java.util.GregorianCalendar;
 /**
  * Created by lasyaboddapati on 1/28/15.
  */
-public class Expenses extends Activity implements CustomDialogFragment.CustomDialogListener {
+public class Expenses extends Activity /*implements CustomDialogFragment.CustomDialogListener*/ {
     ExpensesListViewFragment expensesListViewFragment;
     ExpensesGraphViewFragment graphViewFragment;
-    enum MONTHS {All, January, February, March, April, May, June, July, August, September, October, November, December};
-    enum WEEKS {All, Week1, Week2, Week3, Week4};
+    final String[] MONTHS = {"All", "January", "February", "March", "April", "May", "June", "July"
+                           , "August", "September", "October", "November", "December"};
+    final String[] WEEKS = {"All", "Week1", "Week2", "Week3", "Week4"};
 
-    String currentView = "";
-    boolean dateValid;
-    boolean amountValid;
+    //boolean dateValid;
+    //boolean amountValid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expenses);
 
-        //expensesListViewFragment = ExpensesListViewFragment.newInstance(Expenses.this);
+        graphViewFragment = ExpensesGraphViewFragment.newInstance(Expenses.this);
+        expensesListViewFragment = ExpensesListViewFragment.newInstance(Expenses.this, graphViewFragment);
 
         final Spinner MonthSpinner = (Spinner) findViewById(R.id.MonthSpinner);
-        MonthSpinner.setAdapter(new ArrayAdapter<MONTHS>(this, android.R.layout.simple_spinner_item, MONTHS.values()));
-        MonthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Log.d("COEN268", "Month Position selected: " + MonthSpinner.getItemAtPosition(position));
-                //TODO : Filter items according to month selected
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //Log.d("COEN268", "Month Nothing selected");
-                //TODO: Show items for all months
-            }
-        });
+        MonthSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MONTHS));
 
         final Spinner WeekSpinner = (Spinner) findViewById(R.id.WeekSpinner);
-        WeekSpinner.setAdapter(new ArrayAdapter<WEEKS>(this, android.R.layout.simple_spinner_item, WEEKS.values()));
-        WeekSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+        WeekSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, WEEKS));
+
+        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Log.d("COEN268", "Week Position selected: " + WeekSpinner.getItemAtPosition(position));
-                //TODO: Filter items according to week selected
+                //expensesListViewFragment.adapter.filterItems(MonthSpinner.getSelectedItem().toString().trim()
+                //                                            ,WeekSpinner.getSelectedItem().toString().trim());
+                expensesListViewFragment.adapter.filterItems();
             }
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Log.d("COEN268", "Nothing selected");
-                //TODO: Show items for all weeks
-            }
-        });
+            public void onNothingSelected(AdapterView<?> parent) { }
+        };
 
-        /*final String[] ViewType = {"List", "Graph"};
-        final Spinner ViewTypeSpinner = (Spinner) findViewById(R.id.ViewTypeSpinner);
-        ViewTypeSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ViewType));
+        MonthSpinner.setOnItemSelectedListener(listener);
+        WeekSpinner.setOnItemSelectedListener(listener);
 
-        ViewTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+        /*ImageButton filterButton = (ImageButton) findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String viewSelected = ViewTypeSpinner.getItemAtPosition(position).toString();
-                if (viewSelected == "List" && currentView != "List") {
-                    generateListView();
-                    currentView = "List";
-                }
-                else if (viewSelected == "Graph" && currentView != "Graph") {
-                    generateGraphView();
-                    currentView = "Graph";
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //Log.d("COEN268", "Nothing selected");
+            public void onClick(View v) {
+                expensesListViewFragment.adapter.filterItems(MonthSpinner.getSelectedItem().toString(), WeekSpinner.getSelectedItem().toString());
             }
         });*/
+
         generateListView();
         generateGraphView();
     }
@@ -107,7 +85,7 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
         int id = item.getItemId();
 
         if (id == R.id.action_add) {
-            pop_up_add_expense_dialog();
+            expensesListViewFragment.pop_up_add_expense_dialog();
         }
         else if (id == R.id.action_settings) {
             return true;
@@ -119,7 +97,7 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
         return super.onOptionsItemSelected(item);
     }
 
-    private void pop_up_add_expense_dialog() {
+/*    private void pop_up_add_expense_dialog() {
         dateValid = false;
         amountValid = false;
 
@@ -129,7 +107,7 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
         Spinner categorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
         categorySpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories));
 
-        final CustomDialogFragment newFragment = CustomDialogFragment.newInstance(view);
+        final CustomDialogFragment dialogFragment = CustomDialogFragment.newInstance(view);
 
         final EditText date = (EditText) view.findViewById(R.id.dateEditText);
         date.addTextChangedListener(new TextWatcher() {
@@ -195,9 +173,9 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
             @Override
             public void afterTextChanged(Editable s) {
                 if (dateValid && amountValid) {
-                    newFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                    dialogFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
                 } else {
-                    newFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                    dialogFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
                 }
             }
         });
@@ -222,14 +200,13 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
                 }
 
                 if (dateValid && amountValid) {
-                    newFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                }
-                else {
-                    newFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                    dialogFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                } else {
+                    dialogFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
                 }
             }
         });
-        newFragment.show(getFragmentManager(), "dialog");
+        dialogFragment.show(getFragmentManager(), "dialog");
     }
 
     @Override
@@ -239,26 +216,21 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
 
         String category = ((Spinner) view.findViewById(R.id.categorySpinner)).getSelectedItem().toString();
         float amountSpent = Float.parseFloat(((EditText) view.findViewById(R.id.amountSpentEditText)).getText().toString());
-        String description = ((EditText) view.findViewById(R.id.desciptionEditText)).getText().toString();
+        String description = ((EditText) view.findViewById(R.id.descriptionEditText)).getText().toString();
         expensesListViewFragment.adapter.addItem(date, category, amountSpent, description);
-        graphViewFragment.populateGraphView();
     }
 
     @Override
     public void onDialogNegativeClick(CustomDialogFragment dialog) {
         //Toast.makeText(Expenses.this, "cancelled", Toast.LENGTH_SHORT).show();
-    }
+    }*/
 
     private void generateListView() {
-        expensesListViewFragment = ExpensesListViewFragment.newInstance(Expenses.this);
-        //expensesListViewFragment.adapter.populateListView();
         getFragmentManager().beginTransaction().add(R.id.listViewContainer, expensesListViewFragment)
                 .commit();
     }
 
-    //TODO : Generate Graph Layout
     private void generateGraphView() {
-        graphViewFragment = ExpensesGraphViewFragment.newInstance(Expenses.this);
         getFragmentManager().beginTransaction().add(R.id.graphViewContainer, graphViewFragment)
                 .commit();
     }
