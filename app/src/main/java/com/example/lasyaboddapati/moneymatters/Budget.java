@@ -19,7 +19,7 @@ import android.widget.Spinner;
  */
 public class Budget extends Activity implements CustomDialogFragment.CustomDialogListener {
     BudgetListViewFragment budgetListViewFragment;
-    GraphViewFragment graphViewFragment;
+    BudgetGraphViewFragment graphViewFragment;
 
     enum MONTHS {All, January, February, March, April, May, June, July, August, September, October, November, December};
     enum WEEKS {All, Week1, Week2, Week3, Week4};
@@ -30,11 +30,8 @@ public class Budget extends Activity implements CustomDialogFragment.CustomDialo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
-        //deleteDB();
 
-        budgetListViewFragment = BudgetListViewFragment.newInstance(Budget.this);
-
-        final Spinner MonthSpinner = (Spinner) findViewById(R.id.MonthSpinner);
+        /*final Spinner MonthSpinner = (Spinner) findViewById(R.id.MonthSpinner);
         MonthSpinner.setAdapter(new ArrayAdapter<MONTHS>(this, android.R.layout.simple_spinner_item, MONTHS.values()));
         MonthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
@@ -43,7 +40,7 @@ public class Budget extends Activity implements CustomDialogFragment.CustomDialo
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                //TODO: Show items for all months
+                //Show items for all months
             }
         });
 
@@ -68,18 +65,30 @@ public class Budget extends Activity implements CustomDialogFragment.CustomDialo
             public void onNothingSelected(AdapterView<?> parent) {
                 //Log.d("COEN268", "Nothing selected");
             }
-        });
+        });*/
+
+        generateListView();
+        generateGraphView();
     }
 
     private void generateListView() {
+        budgetListViewFragment = BudgetListViewFragment.newInstance(Budget.this);
         budgetListViewFragment.adapter.populateListView();
-        getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, budgetListViewFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        //getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, budgetListViewFragment)
+        //        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        //        .commit();
+        getFragmentManager().beginTransaction().add(R.id.listViewContainer, budgetListViewFragment)
                 .commit();
-
     }
 
     private void generateGraphView() {
+        graphViewFragment = BudgetGraphViewFragment.newInstance(Budget.this);
+        //getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, budgetListViewFragment)
+        //        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        //        .commit();
+        getFragmentManager().beginTransaction().add(R.id.graphViewContainer, graphViewFragment)
+                .commit();
+
     }
 
     @Override
@@ -153,11 +162,8 @@ public class Budget extends Activity implements CustomDialogFragment.CustomDialo
         weeklyBudget[2] = ((EditText) view.findViewById(R.id.week3EditText)).getText().toString();
         weeklyBudget[3] = ((EditText) view.findViewById(R.id.week4EditText)).getText().toString();
 
-        /*weeklyBudget[1] = Float.parseFloat(((EditText) view.findViewById(R.id.week2EditText)).getText().toString());
-        weeklyBudget[2] = Float.parseFloat(((EditText) view.findViewById(R.id.week3EditText)).getText().toString());
-        weeklyBudget[3] = Float.parseFloat(((EditText) view.findViewById(R.id.week4EditText)).getText().toString());*/
-
         budgetListViewFragment.adapter.addItem(month, monthlyBudget, weeklyBudget);
+        graphViewFragment.populateGraphView();
     }
 
     @Override
@@ -165,7 +171,7 @@ public class Budget extends Activity implements CustomDialogFragment.CustomDialo
 
     }
 
-    private void deleteDB() {
+    /*private void deleteDB() {
         Budget.this.deleteDatabase(BudgetDatabase.DATABASE_TABLE);
-    }
+    }*/
 }

@@ -42,14 +42,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.lasyaboddapati.moneymatters.HomeScreen" />
         </activity>
-
-
-
         <activity
             android:name=".FirebaseActivity"
             android:label="@string/title_activity_firebase" >
         </activity>
     </application>
+
     <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

@@ -13,10 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -27,11 +25,10 @@ import java.util.GregorianCalendar;
  */
 public class Expenses extends Activity implements CustomDialogFragment.CustomDialogListener {
     ExpensesListViewFragment expensesListViewFragment;
-    GraphViewFragment graphViewFragment;
+    ExpensesGraphViewFragment graphViewFragment;
     enum MONTHS {All, January, February, March, April, May, June, July, August, September, October, November, December};
     enum WEEKS {All, Week1, Week2, Week3, Week4};
 
-    private SQLiteDatabase db;
     String currentView = "";
     boolean dateValid;
     boolean amountValid;
@@ -41,8 +38,7 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expenses);
 
-        //db = new ExpenseDatabase(Expenses.this).getWritableDatabase();
-        expensesListViewFragment = ExpensesListViewFragment.newInstance(Expenses.this);
+        //expensesListViewFragment = ExpensesListViewFragment.newInstance(Expenses.this);
 
         final Spinner MonthSpinner = (Spinner) findViewById(R.id.MonthSpinner);
         MonthSpinner.setAdapter(new ArrayAdapter<MONTHS>(this, android.R.layout.simple_spinner_item, MONTHS.values()));
@@ -74,7 +70,7 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
             }
         });
 
-        final String[] ViewType = {"List", "Graph"};
+        /*final String[] ViewType = {"List", "Graph"};
         final Spinner ViewTypeSpinner = (Spinner) findViewById(R.id.ViewTypeSpinner);
         ViewTypeSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ViewType));
 
@@ -95,7 +91,9 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
             public void onNothingSelected(AdapterView<?> parent) {
                 //Log.d("COEN268", "Nothing selected");
             }
-        });
+        });*/
+        generateListView();
+        generateGraphView();
     }
 
     @Override
@@ -187,7 +185,6 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
                 if (!isValid) {
                     date.setError("Enter a valid date: MM/DD/YYYY");
                     dateValid = false;
-                    //newFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(enablePositiveButton);
                 } else {
                     date.setError(null);
                     dateValid = true;
@@ -199,8 +196,7 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
             public void afterTextChanged(Editable s) {
                 if (dateValid && amountValid) {
                     newFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                }
-                else {
+                } else {
                     newFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
                 }
             }
@@ -209,14 +205,10 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
         final EditText amount = (EditText) view.findViewById(R.id.amountSpentEditText);
         amount.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -224,7 +216,6 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
                 if (s.toString().isEmpty()) {
                     amount.setError("", getDrawable(android.R.drawable.stat_notify_error));
                     amountValid = false;
-                    //newFragment.dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(enablePositiveButton);
                 } else {
                     amount.setError(null);
                     amountValid = true;
@@ -250,6 +241,7 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
         float amountSpent = Float.parseFloat(((EditText) view.findViewById(R.id.amountSpentEditText)).getText().toString());
         String description = ((EditText) view.findViewById(R.id.desciptionEditText)).getText().toString();
         expensesListViewFragment.adapter.addItem(date, category, amountSpent, description);
+        graphViewFragment.populateGraphView();
     }
 
     @Override
@@ -257,43 +249,17 @@ public class Expenses extends Activity implements CustomDialogFragment.CustomDia
         //Toast.makeText(Expenses.this, "cancelled", Toast.LENGTH_SHORT).show();
     }
 
-    private boolean validateDate(String date) {
-        boolean isValid = true;
-        String[] s = date.toString().split("/");
-        int mm = Integer.parseInt(s[0]);
-        int dd = Integer.parseInt(s[1]);
-        int yyyy = Integer.parseInt(s[2]);
-
-        Calendar c = Calendar.getInstance();
-
-        if (yyyy > c.get(Calendar.YEAR)) {
-            isValid = false;
-        }
-        else if (mm<1 || mm>12) {
-            isValid = false;
-        }
-        else {
-            c.set(Calendar.YEAR, yyyy);
-            c.set(Calendar.MONTH, mm);
-            if (dd<1 || dd>c.getActualMaximum(Calendar.DAY_OF_MONTH)) {
-                isValid = false;
-            }
-        }
-        return isValid;
-    }
-
     private void generateListView() {
-        expensesListViewFragment.adapter.populateListView();
-        getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, expensesListViewFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        expensesListViewFragment = ExpensesListViewFragment.newInstance(Expenses.this);
+        //expensesListViewFragment.adapter.populateListView();
+        getFragmentManager().beginTransaction().add(R.id.listViewContainer, expensesListViewFragment)
                 .commit();
     }
 
     //TODO : Generate Graph Layout
     private void generateGraphView() {
-        graphViewFragment = new GraphViewFragment();
-        getFragmentManager().beginTransaction().replace(R.id.fragmentContainer, graphViewFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        graphViewFragment = ExpensesGraphViewFragment.newInstance(Expenses.this);
+        getFragmentManager().beginTransaction().add(R.id.graphViewContainer, graphViewFragment)
                 .commit();
     }
 

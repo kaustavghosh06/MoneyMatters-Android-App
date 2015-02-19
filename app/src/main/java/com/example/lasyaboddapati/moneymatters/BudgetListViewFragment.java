@@ -1,15 +1,11 @@
 package com.example.lasyaboddapati.moneymatters;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -19,19 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -175,21 +164,16 @@ public class BudgetListViewFragment extends Fragment {
     public static class BudgetListAdapter extends BaseExpandableListAdapter {
 
         private final LayoutInflater inf;
-        //private List<Budget.MONTHS> list;
         HashMap<Budget.MONTHS, String[]> list;
-        //private List<ArrayList<String>> details;
-        //private List<Long> ids;
+        HashMap<Budget.MONTHS, String> monthlyBudgetList;
         protected SQLiteDatabase db;
 
         public BudgetListAdapter(Context context) {
-            //this.list = new ArrayList<Budget.MONTHS>();
             list = new LinkedHashMap<Budget.MONTHS, String[]>(Budget.MONTHS.values().length);
+            monthlyBudgetList = new LinkedHashMap<Budget.MONTHS, String>(Budget.MONTHS.values().length);
             for (int i=1; i< Budget.MONTHS.values().length; i++) {
-                //list.add(Budget.MONTHS.values()[i]);
                 list.put(Budget.MONTHS.values()[i], null);
             }
-            //this.details = new ArrayList<ArrayList<String>>();
-            //this.ids = new ArrayList<Long>();
 
             this.db = new BudgetDatabase(context).getWritableDatabase();
             inf = LayoutInflater.from(context);
@@ -202,12 +186,6 @@ public class BudgetListViewFragment extends Fragment {
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            /*if (details.size() <= groupPosition) {
-                return 0;
-            }
-            else {
-                return details.get(groupPosition).size();
-            }*/
             if (list.get(Budget.MONTHS.values()[groupPosition+1]) == null) {
                 Log.d("GET CHILDREN COUNT", "0");
                 return 0;
@@ -219,13 +197,11 @@ public class BudgetListViewFragment extends Fragment {
 
         @Override
         public Object getGroup(int groupPosition) {
-            //return list.get(groupPosition);
             return list.keySet().toArray()[groupPosition];
         }
 
         @Override
         public Object getChild(int groupPosition, int childPosition) {
-            //return details.get(groupPosition).get(childPosition);
             return list.get(Budget.MONTHS.values()[groupPosition+1])[childPosition];
         }
 
@@ -246,33 +222,54 @@ public class BudgetListViewFragment extends Fragment {
 
         @Override
         public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            ViewHolder holder;
+            ViewHolder weekHolder;
+            ViewHolder amountHolder;
             if (convertView == null) {
-                convertView = inf.inflate(R.layout.custom_list_item_detail, parent, false);
-                holder = new ViewHolder();
-                holder.text = (TextView) convertView.findViewById(R.id.listItemDetail);
-                convertView.setTag(holder);
+                convertView = inf.inflate(R.layout.budget_list_child_item, parent, false);
+                weekHolder = new ViewHolder();
+                amountHolder = new ViewHolder();
+                weekHolder.text = (TextView) convertView.findViewById(R.id.listItemLeft);
+                amountHolder.text = (TextView) convertView.findViewById(R.id.listItemRight);
+                convertView.setTag(R.string.TAG_LEFT, weekHolder);
+                convertView.setTag(R.string.TAG_RIGHT, amountHolder);
             } else {
-                holder = (ViewHolder) convertView.getTag();
+                weekHolder = (ViewHolder) convertView.getTag(R.string.TAG_LEFT);
+                amountHolder = (ViewHolder) convertView.getTag(R.string.TAG_RIGHT);
             }
 
-            holder.text.setText(getChild(groupPosition, childPosition).toString());
+            //weekHolder.text.setText(getChild(groupPosition, childPosition).toString());
+            weekHolder.text.setText("Week "+(childPosition+1));
+            if(getChild(groupPosition, childPosition).toString().isEmpty()) {
+                amountHolder.text.setText("NOT SET");
+            } else {
+                amountHolder.text.setText(getChild(groupPosition, childPosition).toString());
+            }
             return convertView;
         }
 
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-            ViewHolder holder;
+            ViewHolder monthHolder;
+            ViewHolder amountHolder;
             if (convertView == null) {
-                convertView = inf.inflate(R.layout.custom_list_item_header, parent, false);
-                holder = new ViewHolder();
-                holder.text = (TextView) convertView.findViewById(R.id.listItemHeader);
-                convertView.setTag(holder);
+                convertView = inf.inflate(R.layout.budget_list_group_item, parent, false);
+                monthHolder = new ViewHolder();
+                amountHolder = new ViewHolder();
+                monthHolder.text = (TextView) convertView.findViewById(R.id.listItemLeft);
+                amountHolder.text = (TextView) convertView.findViewById(R.id.listItemRight);
+                convertView.setTag(R.string.TAG_LEFT, monthHolder);
+                convertView.setTag(R.string.TAG_RIGHT, amountHolder);
             } else {
-                holder = (ViewHolder) convertView.getTag();
+                monthHolder = (ViewHolder) convertView.getTag(R.string.TAG_LEFT);
+                amountHolder = (ViewHolder) convertView.getTag(R.string.TAG_RIGHT);
             }
 
-            holder.text.setText(getGroup(groupPosition).toString());
+            monthHolder.text.setText(getGroup(groupPosition).toString());
+            if(monthlyBudgetList.get((Budget.MONTHS)getGroup(groupPosition)) != null) {
+                amountHolder.text.setText(monthlyBudgetList.get((Budget.MONTHS) getGroup(groupPosition)).toString());
+            } else {
+                amountHolder.text.setText("NOT SET");
+            }
             return convertView;
         }
 
@@ -289,54 +286,35 @@ public class BudgetListViewFragment extends Fragment {
             insertIntoDatabase(month, monthlyBudget, weeklyBudget);
             displayDb();
 
-            //ArrayList<String> itemDetail = new ArrayList<String >();
             String[] itemDetail = new String[4];
             for(int i=0; i<4; i++) {
-                if(weeklyBudget[i].isEmpty()) {
-                    //itemDetail.add("Week "+(i+1)+"\t\t\t\t\t\t\t\t\t\t"+"NOT SET");
-                    itemDetail[i] = "Week \"+(i+1)+\"\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\"+\"NOT SET";
+                /*if(weeklyBudget[i].isEmpty()) {
+                    itemDetail[i] = "Week "+(i+1)+"\t\t\t\t\t\t\t\t\t\t"+"NOT SET";
                 } else {
-                    //itemDetail.add("Week " +(i+1)+"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + weeklyBudget[i]);
                     itemDetail[i] = "Week " +(i+1)+"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + weeklyBudget[i];
-                }
+                }*/
+                itemDetail[i] = weeklyBudget[i];
             }
             Log.d("ADDITEM BUDGET", Budget.MONTHS.valueOf(month)+"\t"+itemDetail[0]+"|"+itemDetail[1]+"|"+itemDetail[2]+"|"+itemDetail[3]);
             //details.add(Budget.MONTHS.valueOf(month).ordinal()-1, itemDetail);
             list.put(Budget.MONTHS.valueOf(month), itemDetail);
-            //ids.add(rowId);
+            monthlyBudgetList.put(Budget.MONTHS.valueOf(month), monthlyBudget);
             notifyDataSetChanged();
         }
 
-        //public void removeItem(Object groupToRemove) {
         public void removeItem(int groupPos) {
-            /*int position = list.indexOf(groupToRemove);
-            Log.d("REMOVE","removing child "+details.get(position).toArray());
-            details.remove(position);
-            //Log.d("REMOVE","removing group "+groupToRemove);
-            //list.remove(groupToRemove);*/
             list.put(Budget.MONTHS.values()[groupPos], null);
             notifyDataSetChanged();
         }
 
-        /*public void removeItems(List<Object> groupsToRemove) {
-            for (int groupPos=0; groupPos<groupsToRemove.size(); groupPos++) {
-                int position = list.indexOf(groupsToRemove.get(groupPos));
-                Log.d("REMOVE","removing child "+details.get(position).toArray());
-                details.remove(position);
-                //Log.d("REMOVE","removing group "+groupsToRemove.get(groupPos)+" at "+position);
-                //list.remove(groupsToRemove.get(groupPos));
-                long dbID = ids.get(position);
-                deleteFromDatabase(dbID);
-                ids.remove(position);
-            }
-            notifyDataSetChanged();
-        }*/
-
         public void removeItems(List<Integer> groupsToRemove) {
             for (int i=0; i<groupsToRemove.size(); i++) {
                 int groupPos = groupsToRemove.get(i);
-                deleteFromDatabase(Budget.MONTHS.values()[groupPos]);
-                list.put(Budget.MONTHS.values()[groupPos], null);
+                Log.d("REMOVE ITEMS", "groupPos "+groupPos);
+                Log.d("REMOVE ITEMS", "Budget.MONTHS.values()[groupPos] "+Budget.MONTHS.values()[groupPos]);
+                deleteFromDatabase(Budget.MONTHS.values()[groupPos + 1]);
+                list.put(Budget.MONTHS.values()[groupPos+1], null);
+                monthlyBudgetList.put(Budget.MONTHS.values()[groupPos+1], null);
             }
             notifyDataSetChanged();
         }
@@ -376,12 +354,6 @@ public class BudgetListViewFragment extends Fragment {
             c.close();
         }
 
-        /*public void deleteFromDatabase(long id) {
-            String whereClause = BudgetDatabase.ID_COLUMN + " = "+id;
-            int n = db.delete(BudgetDatabase.DATABASE_TABLE, whereClause, null);
-            Log.d("DELETE", "Deleted "+n);
-            //displayDb();
-        }*/
         public void deleteFromDatabase(Budget.MONTHS month) {
             String whereClause = BudgetDatabase.MONTH_COLUMN + " = "+"'"+month+"'";
             int n = db.delete(BudgetDatabase.DATABASE_TABLE, whereClause, null);
@@ -390,7 +362,6 @@ public class BudgetListViewFragment extends Fragment {
         }
 
         public void updateInDatabase(long id, String month, String monthlyBudget, String[] weeklyBudget) {
-            //String whereClause = BudgetDatabase.ID_COLUMN + " = "+id;
             String whereClause = BudgetDatabase.MONTH_COLUMN + " = "+"'"+month+"'";
             ContentValues newValues = new ContentValues();
             //newValues.put(BudgetDatabase.MONTH_COLUMN, month);
@@ -420,18 +391,11 @@ public class BudgetListViewFragment extends Fragment {
         }
 
         public void populateListView() {
-            /*String[] resultColumns = {BudgetDatabase.ID_COLUMN, BudgetDatabase.YEAR_COLUMN, BudgetDatabase.MONTH_COLUMN
-                    , BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK1_COLUMN, BudgetDatabase.WEEK2_COLUMN
-                    , BudgetDatabase.WEEK3_COLUMN, BudgetDatabase.WEEK4_COLUMN};*/
             String[] resultColumns = {BudgetDatabase.MONTH_COLUMN, BudgetDatabase.MONTHLY_BUDGET_COLUMN
                                     , BudgetDatabase.WEEK1_COLUMN, BudgetDatabase.WEEK2_COLUMN
                                     , BudgetDatabase.WEEK3_COLUMN, BudgetDatabase.WEEK4_COLUMN};
             Cursor cursor = db.query(BudgetDatabase.DATABASE_TABLE, resultColumns, null, null, null, null, null);
 
-            //list = new ArrayList<Budget.MONTHS>();
-            //list = new HashMap<Budget.MONTHS, String[]>(Budget.MONTHS.values().length);
-            //details = new ArrayList<ArrayList<String>>(cursor.getCount());
-            //ids = new ArrayList<Long>(cursor.getCount());
             Log.d("COUNT", "list size" +list.size()+ "cursor size"+ cursor.getCount());
 
             while (cursor.moveToNext()) {
@@ -446,21 +410,18 @@ public class BudgetListViewFragment extends Fragment {
                 weeklyBudget[3] = cursor.getString(5);
 
 
-                //ArrayList<String> itemDetails = new ArrayList<String>();
-                String[] itemDetails = new String[4];
+                String[] itemDetail = new String[4];
                 for (int i=0; i<4; i++) {
-                    if (weeklyBudget[i].isEmpty()) {
-                        //itemDetails.add("Week "+(i+1)+"\t\t\t\t\t\t\t\t\t\t"+"NOT SET");
-                        itemDetails[i] = "Week "+(i+1)+"\t\t\t\t\t\t\t\t\t\t"+"NOT SET";
+                    /*if (weeklyBudget[i].isEmpty()) {
+                        itemDetail[i] = "Week "+(i+1)+"\t\t\t\t\t\t\t\t\t\t"+"NOT SET";
                     } else {
-                        //itemDetails.add("Week " + (i + 1) + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + weeklyBudget[i]);
-                        itemDetails[i] = "Week " + (i + 1) + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + weeklyBudget[i];
-                    }
+                        itemDetail[i] = "Week " + (i + 1) + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + weeklyBudget[i];
+                    }*/
+                    itemDetail[i] = weeklyBudget[i];
                 }
-                //details.add(itemDetails);
-                //ids.add(id);
                 Log.d("POPULATE", "Putting in "+Budget.MONTHS.valueOf(month));
-                list.put(Budget.MONTHS.valueOf(month), itemDetails);
+                list.put(Budget.MONTHS.valueOf(month), itemDetail);
+                monthlyBudgetList.put(Budget.MONTHS.valueOf(month), monthlyBudget);
                 Log.d("POPULATE", list.keySet().toArray()[Budget.MONTHS.valueOf(month).ordinal()-1]+" "+list.get(Budget.MONTHS.valueOf(month)).toString());
                 printList();
             }

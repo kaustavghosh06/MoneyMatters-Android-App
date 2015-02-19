@@ -23,21 +23,12 @@ public class ExpenseDatabase extends SQLiteOpenHelper {
     public static final String DATABASE_CREATE = "CREATE TABLE "+DATABASE_TABLE+" ( "
                                                   +ID_COLUMN+" INTEGER PRIMARY KEY AUTOINCREMENT, "
                                                   +DATE_COLUMN+" DATE NOT NULL, "
-                                                  +MONTH_COLUMN+" INTEGER, "
+                                                  +MONTH_COLUMN+" TEXT, "
                                                   +WEEK_COLUMN+" INTEGER, "
                                                   +CATEGORY_COLUMN+" TEXT, "
                                                   +AMOUNT_COLUMN+" REAL, "
                                                   +DESCRIPTION_COLUMN+" TEXT"
                                                   +" )";
-    /*public static final String DATABASE_CREATE = "CREATE TABLE "+DATABASE_TABLE+" ( "
-            +COLUMNS.values()[0].toString()+" INTEGER PRIMARY KEY AUTOINCREMENT, "
-            +COLUMNS.values()[1].toString()+" DATE NOT NULL, "
-            +COLUMNS.values()[2].toString()+" INTEGER, "
-            +COLUMNS.values()[3].toString()+" INTEGER, "
-            +COLUMNS.values()[4].toString()+" TEXT, "
-            +COLUMNS.values()[5].toString()+" REAL, "
-            +COLUMNS.values()[6].toString()+" TEXT"
-            +" )";*/
 
     public ExpenseDatabase(Context context) {
         super(context, DATABASE_TABLE, null, DATABASE_VERSION);
