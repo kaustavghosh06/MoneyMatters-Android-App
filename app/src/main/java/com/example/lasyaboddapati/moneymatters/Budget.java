@@ -3,6 +3,8 @@ package com.example.lasyaboddapati.moneymatters;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -25,6 +28,34 @@ public class Budget extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
+
+        final Button monthButton = (Button) findViewById(R.id.monthButton);
+        final Button yearButton = (Button) findViewById(R.id.yearButton);
+
+        //yearButton.setBackgroundTintMode(PorterDuff.Mode.LIGHTEN);
+        yearButton.setTextColor(Color.BLUE);
+
+        yearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //yearButton.setBackgroundTintMode(PorterDuff.Mode.LIGHTEN);
+                //monthButton.setBackgroundTintMode(PorterDuff.Mode.CLEAR);
+                yearButton.setTextColor(Color.BLUE);
+                monthButton.setTextColor(Color.GRAY);
+                graphViewFragment.populateGraphView("year");
+            }
+        });
+
+        monthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //monthButton.setBackgroundTintMode(PorterDuff.Mode.LIGHTEN);
+                //yearButton.setBackgroundTintMode(PorterDuff.Mode.CLEAR);
+                monthButton.setTextColor(Color.BLUE);
+                yearButton.setTextColor(Color.GRAY);
+                graphViewFragment.populateGraphView("month");
+            }
+        });
 
         graphViewFragment = BudgetGraphViewFragment.newInstance(Budget.this);
         budgetListViewFragment = BudgetListViewFragment.newInstance(Budget.this, graphViewFragment);

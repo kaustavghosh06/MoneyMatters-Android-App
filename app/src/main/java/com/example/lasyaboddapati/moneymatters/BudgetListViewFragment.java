@@ -176,8 +176,6 @@ public class BudgetListViewFragment extends Fragment {
         final EditText week3EditText = (EditText) view.findViewById(R.id.week3EditText);
         final EditText week4EditText = (EditText) view.findViewById(R.id.week4EditText);
 
-        //final CustomDialogFragment dialogFragment = CustomDialogFragment.newInstance(view);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -299,19 +297,12 @@ public class BudgetListViewFragment extends Fragment {
     public static class BudgetListAdapter extends BaseExpandableListAdapter {
 
         private final LayoutInflater inf;
-        //HashMap<Budget.MONTHS, String[]> list;
-        //HashMap<Budget.MONTHS, String> monthlyBudgetList;
         HashMap<String, String[]> list;
         HashMap<String, String> monthlyBudgetList;
 
         protected SQLiteDatabase db;
 
         public BudgetListAdapter(Context context) {
-            //list = new LinkedHashMap<Budget.MONTHS, String[]>(Budget.MONTHS.values().length);
-            //monthlyBudgetList = new LinkedHashMap<Budget.MONTHS, String>(Budget.MONTHS.values().length);
-            //for (int i=1; i< Budget.MONTHS.values().length; i++) {
-            //    list.put(Budget.MONTHS.values()[i], null);
-            //}
             list = new LinkedHashMap<String, String[]>(Months.size());
             monthlyBudgetList = new LinkedHashMap<String, String>(Months.size());
             for (int i=0; i< Months.size(); i++) {
@@ -329,13 +320,10 @@ public class BudgetListViewFragment extends Fragment {
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            //if (list.get(Budget.MONTHS.values()[groupPosition+1]) == null) {
             if (list.get(Months.names()[groupPosition]) == null) {
                 Log.d("GET CHILDREN COUNT", "0");
                 return 0;
             } else {
-                //Log.d("GET CHILDREN COUNT", list.get(Budget.MONTHS.values()[groupPosition+1]).length+"");
-                //return list.get(Budget.MONTHS.values()[groupPosition+1]).length;
                 Log.d("GET CHILDREN COUNT", list.get(Months.names()[groupPosition]).length+"");
                 return list.get(Months.names()[groupPosition]).length;
             }
@@ -348,7 +336,6 @@ public class BudgetListViewFragment extends Fragment {
 
         @Override
         public Object getChild(int groupPosition, int childPosition) {
-            //return list.get(Budget.MONTHS.values()[groupPosition+1])[childPosition];
             return list.get(Months.names()[groupPosition])[childPosition];
         }
 
@@ -407,8 +394,6 @@ public class BudgetListViewFragment extends Fragment {
             }
 
             monthHolder.text.setText(getGroup(groupPosition).toString());
-            //if(monthlyBudgetList.get((Budget.MONTHS)getGroup(groupPosition)) != null) {
-            //    amountHolder.text.setText(monthlyBudgetList.get((Budget.MONTHS) getGroup(groupPosition)).toString());
             if(monthlyBudgetList.get(getGroup(groupPosition)) != null) {
                 amountHolder.text.setText(monthlyBudgetList.get(getGroup(groupPosition)).toString());
             } else {
@@ -451,9 +436,6 @@ public class BudgetListViewFragment extends Fragment {
             insertIntoDatabase(month, monthlyBudget, itemDetail);
             displayDb();
 
-            //Log.d("ADDITEM BUDGET", Budget.MONTHS.valueOf(month)+"\t"+itemDetail[0]+"|"+itemDetail[1]+"|"+itemDetail[2]+"|"+itemDetail[3]);
-            //list.put(Budget.MONTHS.valueOf(month), itemDetail);
-            //monthlyBudgetList.put(Budget.MONTHS.valueOf(month), monthlyBudget);
             Log.d("ADDITEM BUDGET", month+"\t"+itemDetail[0]+"|"+itemDetail[1]+"|"+itemDetail[2]+"|"+itemDetail[3]);
             list.put(month, itemDetail);
             monthlyBudgetList.put(month, monthlyBudget);
@@ -465,10 +447,6 @@ public class BudgetListViewFragment extends Fragment {
             for (int i=0; i<groupsToRemove.size(); i++) {
                 int groupPos = groupsToRemove.get(i);
                 Log.d("REMOVE ITEMS", "groupPos "+groupPos);
-                //Log.d("REMOVE ITEMS", "Budget.MONTHS.values()[groupPos] "+Budget.MONTHS.values()[groupPos]);
-                //deleteFromDatabase(Budget.MONTHS.values()[groupPos + 1]);
-                //list.put(Budget.MONTHS.values()[groupPos+1], null);
-                //monthlyBudgetList.put(Budget.MONTHS.values()[groupPos+1], null);
                 Log.d("REMOVE ITEMS", "Months.names()[groupPos] "+Months.names()[groupPos]);
                 deleteFromDatabase(Months.names()[groupPos]);
                 list.put(Months.names()[groupPos], null);
@@ -500,7 +478,6 @@ public class BudgetListViewFragment extends Fragment {
             c.close();
         }
 
-        //public void deleteFromDatabase(Budget.MONTHS month) {
         public void deleteFromDatabase(final String month) {
             String whereClause = BudgetDatabase.MONTH_COLUMN + " = "+"'"+month+"'";
             int n = db.delete(BudgetDatabase.DATABASE_TABLE, whereClause, null);
@@ -551,10 +528,6 @@ public class BudgetListViewFragment extends Fragment {
                 weeklyBudget[2] = cursor.getString(4);
                 weeklyBudget[3] = cursor.getString(5);
 
-                //Log.d("POPULATE", "Putting in "+Budget.MONTHS.valueOf(month));
-                //list.put(Budget.MONTHS.valueOf(month), itemDetail);
-                //monthlyBudgetList.put(Budget.MONTHS.valueOf(month), monthlyBudget);
-                //Log.d("POPULATE", list.keySet().toArray()[Budget.MONTHS.valueOf(month).ordinal()-1]+" "+list.get(Budget.MONTHS.valueOf(month)).toString());
                 Log.d("POPULATE", "Putting in "+month);
                 list.put(month, weeklyBudget);
                 monthlyBudgetList.put(month, monthlyBudget);
