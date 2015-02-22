@@ -7,16 +7,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * Created by lasyaboddapati on 1/28/15.
  */
 public class HomeScreen extends Activity {
+    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        username= getIntent().getExtras().getString("Username");
+        TextView welcomenote=(TextView) findViewById(R.id.welcome);
+        welcomenote.setText("Welcome "+username);
 
         Button budgetButton = (Button) findViewById(R.id.budget);
         Button expensesButton = (Button) findViewById(R.id.expenses);
@@ -41,7 +46,8 @@ public class HomeScreen extends Activity {
         loanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent loanIntent = new Intent(HomeScreen.this, Lending.class);
+                Intent loanIntent = new Intent(HomeScreen.this, LendStatus.class);
+                loanIntent.putExtra("Username",username);
                 startActivity(loanIntent);    //TODO: loan activity
             }
         });

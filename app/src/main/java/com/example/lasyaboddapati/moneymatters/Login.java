@@ -8,40 +8,91 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
+import java.util.Map;
 
 
 public class Login extends Activity {
+    String cloudpass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Button login=(Button)findViewById(R.id.button);
         final EditText username=(EditText)findViewById(R.id.editText);
         final EditText password=(EditText)findViewById(R.id.editText2);
+        TextView reg=(TextView)findViewById(R.id.reg);
+
+        reg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent registerIntent = new Intent(Login.this, Register.class);
+                startActivity(registerIntent);
+
+            }
+        });
 
         setTitle("Login");
+        Firebase.setAndroidContext(this);
+
+
+
+
+
+
+
 
 
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                if("kaustav".equals(username.getText().toString())&&"ghosh".equals(password.getText().toString()))
-                {
-                    Toast.makeText(getApplicationContext(),"Success",
-                            Toast.LENGTH_SHORT).show();
-                    Intent homeIntent = new Intent(Login.this, HomeScreen.class);
-                    startActivity(homeIntent);
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),"Failed!",
-                            Toast.LENGTH_SHORT).show();
-                }
 
-            }
-        });
+                final String user=username.getText().toString();
+                final String pass=password.getText().toString();
+                //final Firebase usernamecloud = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user);
+                final Firebase passwordcloud = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user+"/PersonalInfo/Password");
+
+                passwordcloud.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+
+                        cloudpass=snapshot.getValue().toString();
+                        if(cloudpass.equals(pass))
+
+                        {
+                            Toast.makeText(getApplicationContext(), "Success",
+                                    Toast.LENGTH_SHORT).show();
+                            Intent homeIntent = new Intent(Login.this, HomeScreen.class);
+                            homeIntent.putExtra("Username",user);
+                            startActivity(homeIntent);
+                        }
+
+                        else
+
+                        {
+                            Toast.makeText(getApplicationContext(), "Failed!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                        System.out.println("The read failed: " + firebaseError.getMessage());
+                    }
+                });
+
+                }
+            });
 
     }
 

@@ -52,6 +52,7 @@ public class Lending extends Activity {
     Firebase lendercloud=null;
     Firebase receivercloud=null;
     String url="https://crackling-inferno-5209.firebaseio.com/";
+    final ArrayList<String> userlist=new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -81,22 +82,31 @@ public class Lending extends Activity {
 
 
 
-        creds=new HashMap<String,Integer>();
+        //creds=new HashMap<String,Integer>();
+
+
+/*
         debt=new HashMap<String,Integer>();
         notf=new HashMap<String,String>();
+*/
 
-
+/*
         creds.put("Lasya",40);
         creds.put("Manoj",70);
+
+        //creds.put("Lasya",40);
+        //creds.put("Manoj",70);
+
 
         debt.put("Lasya",70);
         debt.put("Anand",2);
 
         notf.put("LASYA","YO!!");
 
-
+*/
         Firebase.setAndroidContext(this);
         final Firebase myFirebaseRef = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user);
+        final Firebase userscloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/");
 
 
         Firebase credcloud=myFirebaseRef.child("Credit");
@@ -118,13 +128,39 @@ public class Lending extends Activity {
 
 
         expListView = (ExpandableListView) findViewById(R.id.exp);
+
         //listDataChild.put(listDataHeader.get(1), deb);
         //listDataChild.put(listDataHeader.get(2), not);
         cr = new LinkedHashMap<String, String>();
         d=new LinkedHashMap<String,String>();
         n=new LinkedHashMap<String,String>();
 
-        //New method
+        //For getting UserList
+
+
+        userscloud.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map<String, Object> usersmap = (Map<String, Object>) snapshot.getValue();
+
+                for (String key : usersmap.keySet()) {
+
+                    userlist.add(key);
+                }
+                for(String str: userlist)
+                {
+                    Log.d("user",str);
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
 
 
 
@@ -309,7 +345,7 @@ public class Lending extends Activity {
             final EditText amount = new EditText(this);
             final EditText description = new EditText(this);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_dropdown_item_1line, USERS);
+                    android.R.layout.simple_dropdown_item_1line, userlist);
             final AutoCompleteTextView user1 = new AutoCompleteTextView(this);
             user1.setHint("Enter User ID");
             user1.setAdapter(adapter);
@@ -363,63 +399,7 @@ public class Lending extends Activity {
         }
 
 
-        if(id==R.id.action_sendnotif)
-        {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(Lending.this);
-            alertDialog.setTitle("Send Notification");
-            alertDialog.setMessage("Enter the Notification you want to send to your friend");
 
-           /* final EditText input = new EditText(Lending.this);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT);
-            input.setLayoutParams(lp);
-            alertDialog.setView(input);*/
-
-            final String[] USERS = new String[] {
-                    "User1", "User2", "User3", "User4", "User5"
-            };
-
-            //final EditText user = new EditText(this);
-
-            final EditText message = new EditText(this);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_dropdown_item_1line, USERS);
-            final AutoCompleteTextView user = new AutoCompleteTextView(this);
-            user.setHint("Enter User ID");
-            user.setAdapter(adapter);
-
-
-
-
-            message.setHint("Enter The Message");
-            LinearLayout layout = new LinearLayout(getApplicationContext());
-            layout.setOrientation(LinearLayout.VERTICAL);
-            layout.addView(user);
-            layout.addView(message);
-            alertDialog.setView(layout);
-
-
-            alertDialog.setPositiveButton("YES",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                                    Toast.makeText(getApplicationContext(),
-                                            "Notification Sent!", Toast.LENGTH_SHORT).show();
-                                }
-
-
-                    });
-
-            alertDialog.setNegativeButton("CANCEL",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-
-            alertDialog.show();
-        }
 
 
         //noinspection SimplifiableIfStatement

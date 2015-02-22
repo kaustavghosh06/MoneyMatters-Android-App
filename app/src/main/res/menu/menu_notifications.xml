@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ghosh.kaustav.moneymatters.Lending">
-    <item android:id="@+id/action_lend" android:title="Lend"
+    <item android:id="@+id/action_notf" android:title="Send Notifications"
         android:showAsAction="ifRoom"
         android:orderInCategory="100"/>
 

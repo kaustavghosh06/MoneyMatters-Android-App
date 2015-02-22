@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Register"
-        android:id="@+id/textView6"
+        android:id="@+id/reg"
         android:layout_below="@+id/button"
         android:layout_alignEnd="@+id/textView" />
 
