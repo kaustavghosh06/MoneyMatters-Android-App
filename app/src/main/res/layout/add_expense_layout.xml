@@ -22,75 +22,20 @@
         android:layout_height="wrap_content"
         android:inputType="date"
         android:textSize="20sp"
-        android:hint="mm/dd/yyyy"
+        android:hint="mm/dd"
         android:gravity="center"
         android:id="@+id/dateEditText"
         android:layout_alignBottom="@id/dateTextView"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:padding="@dimen/activity_margin"/>
-    <!--<EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberSigned"
-        android:textSize="20sp"
-        android:hint="yyyy"
-        android:gravity="center"
-        android:id="@+id/yyyy"
-        android:layout_alignBottom="@id/dateTextView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:padding="@dimen/activity_margin"/>
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberSigned"
-        android:textSize="20sp"
-        android:hint="mm"
-        android:gravity="center"
-        android:id="@+id/mm"
-        android:layout_alignBottom="@id/yyyy"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@id/yyyy"
-        android:padding="@dimen/activity_margin"/>
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberSigned"
-        android:textSize="20sp"
-        android:hint="dd"
-        android:gravity="center"
-        android:id="@+id/dd"
-        android:layout_alignBottom="@id/mm"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@id/mm"
-        android:padding="@dimen/activity_margin"/>-->
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Category"
-        android:id="@+id/categoryTextView"
-        android:layout_below="@+id/dateTextView"
-        android:layout_alignParentStart="true"
-        android:textSize="20sp"
-        android:padding="@dimen/activity_margin" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/categorySpinner"
-        android:textSize="20sp"
-        android:layout_below="@id/dateEditText"
-        android:layout_alignParentEnd="true"
-        android:padding="@dimen/activity_margin" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Amount Spent"
         android:id="@+id/amountSpentTextView"
-        android:layout_below="@+id/categoryTextView"
+        android:layout_below="@+id/dateTextView"
         android:layout_alignParentStart="true"
         android:textSize="20sp"
         android:padding="@dimen/activity_margin" />

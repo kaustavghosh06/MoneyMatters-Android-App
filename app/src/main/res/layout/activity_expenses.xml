@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentTop="true"
-        android:id="@+id/SpinnerLayout">
+        android:id="@+id/filters">
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,16 +28,25 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="200dp"
         android:id="@+id/graphViewContainer"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_weight="1" />
+        android:layout_below="@id/filters"
+        android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:id="@+id/monthDisplay"
+        android:layout_below="@id/graphViewContainer"
+        android:background="@android:color/holo_blue_light"
+        android:paddingLeft="@dimen/activity_horizontal_margin"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listViewContainer"
-        android:layout_weight="1"/>
+        android:layout_below="@id/monthDisplay"/>
 
-</LinearLayout>
+</RelativeLayout>

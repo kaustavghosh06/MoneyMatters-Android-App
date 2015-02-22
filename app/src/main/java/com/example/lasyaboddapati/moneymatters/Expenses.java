@@ -1,30 +1,23 @@
 package com.example.lasyaboddapati.moneymatters;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 
 /**
  * Created by lasyaboddapati on 1/28/15.
  */
 public class Expenses extends Activity /*implements CustomDialogFragment.CustomDialogListener*/ {
+    //ExpensesExpandableListViewFragment expensesListViewFragment;
     ExpensesListViewFragment expensesListViewFragment;
     ExpensesGraphViewFragment graphViewFragment;
     final String[] MONTHS = {"All", "January", "February", "March", "April", "May", "June", "July"
@@ -38,37 +31,54 @@ public class Expenses extends Activity /*implements CustomDialogFragment.CustomD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expenses);
-
+        //deleteDB();
         graphViewFragment = ExpensesGraphViewFragment.newInstance(Expenses.this);
+        //expensesListViewFragment = ExpensesExpandableListViewFragment.newInstance(Expenses.this, graphViewFragment);
         expensesListViewFragment = ExpensesListViewFragment.newInstance(Expenses.this, graphViewFragment);
+
 
         final Spinner MonthSpinner = (Spinner) findViewById(R.id.MonthSpinner);
         MonthSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MONTHS));
+        MonthSpinner.setSelection(Calendar.getInstance().get(Calendar.MONTH)+1);
 
         final Spinner WeekSpinner = (Spinner) findViewById(R.id.WeekSpinner);
         WeekSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, WEEKS));
 
+        TextView monthDisplay = (TextView) findViewById(R.id.monthDisplay);
+        if (MonthSpinner.getSelectedItem()=="All") {
+            monthDisplay.setText(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+        } else {
+            monthDisplay.setText(MonthSpinner.getSelectedItem().toString()+ ", "
+                    + Calendar.getInstance().get(Calendar.YEAR));
+        }
+
         AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //expensesListViewFragment.adapter.filterItems(MonthSpinner.getSelectedItem().toString().trim()
-                //                                            ,WeekSpinner.getSelectedItem().toString().trim());
                 expensesListViewFragment.adapter.filterItems();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         };
 
-        MonthSpinner.setOnItemSelectedListener(listener);
-        WeekSpinner.setOnItemSelectedListener(listener);
-
-        /*ImageButton filterButton = (ImageButton) findViewById(R.id.filterButton);
-        filterButton.setOnClickListener(new View.OnClickListener() {
+        MonthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                expensesListViewFragment.adapter.filterItems(MonthSpinner.getSelectedItem().toString(), WeekSpinner.getSelectedItem().toString());
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0){
+                    WeekSpinner.setEnabled(false);
+                    WeekSpinner.setSelection(0);
+                } else {
+                    WeekSpinner.setEnabled(true);
+                }
+                expensesListViewFragment.adapter.filterItems();
             }
-        });*/
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        WeekSpinner.setOnItemSelectedListener(listener);
 
         generateListView();
         generateGraphView();
@@ -235,4 +245,7 @@ public class Expenses extends Activity /*implements CustomDialogFragment.CustomD
                 .commit();
     }
 
+    private void deleteDB() {
+        Expenses.this.deleteDatabase(ExpenseDatabase.DATABASE_TABLE);
+    }
 }

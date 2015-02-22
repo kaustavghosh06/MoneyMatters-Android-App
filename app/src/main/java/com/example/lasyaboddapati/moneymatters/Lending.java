@@ -39,7 +39,7 @@ public class Lending extends Activity {
     Map<String, Integer> creds;
     HashMap<String,Integer> debt;
     HashMap<String,String> notf;
-    String user="Kaustav";
+    String user="kaustav1992";
     String value;
     LinkedHashMap<String, String> cr;
     LinkedHashMap<String, String> d;
@@ -81,18 +81,18 @@ public class Lending extends Activity {
 
 
 
-        //creds=new HashMap<String,Integer>();
+        creds=new HashMap<String,Integer>();
         debt=new HashMap<String,Integer>();
         notf=new HashMap<String,String>();
 
 
-        //creds.put("Lasya",40);
-        //creds.put("Manoj",70);
+        creds.put("Lasya",40);
+        creds.put("Manoj",70);
 
-        //debt.put("Lasya",70);
-        //debt.put("Anand",2);
+        debt.put("Lasya",70);
+        debt.put("Anand",2);
 
-        //notf.put("LASYA","YO!!");
+        notf.put("LASYA","YO!!");
 
 
         Firebase.setAndroidContext(this);
@@ -100,16 +100,21 @@ public class Lending extends Activity {
 
 
         Firebase credcloud=myFirebaseRef.child("Credit");
+        for(String key: creds.keySet())
+        {
+            credcloud.child(key).setValue(creds.get(key));
+        }
+
         Firebase debtcloud=myFirebaseRef.child("Debts");
-        /*for(String key: debt.keySet())
+        for(String key: debt.keySet())
         {
             debtcloud.child(key).setValue(debt.get(key));
-        }*/
+        }
         Firebase notifcloud=myFirebaseRef.child("Notifications");
-        /*for(String key: notf.keySet())
+        for(String key: notf.keySet())
         {
             notifcloud.child(key).setValue(notf.get(key));
-        }*/
+        }
 
 
         expListView = (ExpandableListView) findViewById(R.id.exp);
@@ -220,10 +225,7 @@ public class Lending extends Activity {
             }
         });
 
-        /*for(String key: cred.keySet())
-        {
-            credcloud.child(key).setValue(cred.get(key));
-        }*/
+
 
 
 

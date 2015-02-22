@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -31,24 +32,65 @@ import java.util.Calendar;
 public class BudgetGraphViewFragment extends Fragment {
     private SQLiteDatabase budgetDB;
     private SQLiteDatabase expenseDB;
+
     BarChart chart;
     ArrayList<String> xVals;
     ArrayList<BarEntry> budgetYVals;
     ArrayList<BarEntry> expenseYVals;
     Context context;
 
+    ImageButton prev;
+    ImageButton next;
+
+    String currMonth;
+
     public static BudgetGraphViewFragment newInstance(Context context) {
         BudgetGraphViewFragment budgetGraphViewFragment = new BudgetGraphViewFragment();
         budgetGraphViewFragment.budgetDB = new BudgetDatabase(context).getReadableDatabase();
         budgetGraphViewFragment.expenseDB = new ExpenseDatabase(context).getReadableDatabase();
         budgetGraphViewFragment.context = context;
+
+        int mm = Calendar.getInstance().get(Calendar.MONTH);
+        budgetGraphViewFragment.currMonth = Months.nameOf(mm+1);
+
         return budgetGraphViewFragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_graph_view, container, false);
+        View rootView = inflater.inflate(R.layout.budget_graph_view, container, false);
         chart = (BarChart) rootView.findViewById(R.id.chart);
+        prev = (ImageButton) rootView.findViewById(R.id.prev);
+        next = (ImageButton) rootView.findViewById(R.id.next);
+
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String prevMonth = Months.names()[Months.valueOf(currMonth) - 1];
+                Log.d("PREV", currMonth+" -> "+prevMonth);
+                currMonth = prevMonth;
+                populateGraphView("month");
+                if (currMonth == Months.names()[0]) {
+                    prev.setEnabled(false);
+                }
+                next.setEnabled(true);
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String nextMonth = Months.names()[Months.valueOf(currMonth)+1];
+                Log.d("PREV", currMonth+" -> "+nextMonth);
+                currMonth = nextMonth;
+                populateGraphView("month");
+                if (currMonth == Months.names()[11]) {
+                    next.setEnabled(false);
+                }
+                prev.setEnabled(true);
+            }
+        });
+
         populateGraphView();
         return rootView;
     }
@@ -59,11 +101,16 @@ public class BudgetGraphViewFragment extends Fragment {
         Button yearButton = (Button) view.findViewById(R.id.yearButton);
         Log.d("YEAR", yearButton.getCurrentTextColor()+"");
         Log.d("MONTH", monthButton.getCurrentTextColor()+"");
-        if (yearButton.getCurrentTextColor() == Color.BLUE) {
-            Log.d("YEAR", yearButton.getCurrentTextColor()+"");
+
+        if (!yearButton.isEnabled()) {
+            Log.d("YEAR COLOR", yearButton.getCurrentTextColor()+"");
+            prev.setVisibility(View.GONE);
+            next.setVisibility(View.GONE);
             populateGraphView("year");
-        } else if (monthButton.getCurrentTextColor() == Color.BLUE) {
-            Log.d("MONTH", monthButton.getCurrentTextColor()+"");
+        } else if (!monthButton.isEnabled()) {
+            Log.d("MONTH COLOR", monthButton.getCurrentTextColor()+"");
+            prev.setVisibility(View.VISIBLE);
+            next.setVisibility(View.VISIBLE);
             populateGraphView("month");
         }
     }
@@ -74,9 +121,13 @@ public class BudgetGraphViewFragment extends Fragment {
         expenseYVals = new ArrayList<BarEntry>();
 
         if (viewType == "year") {
+            prev.setVisibility(View.GONE);
+            next.setVisibility(View.GONE);
             populateYearGraphView();
         } else if (viewType == "month") {
-            populateMonthGraphView();
+            prev.setVisibility(View.VISIBLE);
+            next.setVisibility(View.VISIBLE);
+            populateMonthGraphView(currMonth);
         } else {
             Log.e("ERR", "Invalid View Type "+viewType);
         }
@@ -100,7 +151,6 @@ public class BudgetGraphViewFragment extends Fragment {
         chart.setValueFormatter(new LargeValueFormatter());
 
         chart.enableScroll();
-        chart.setDescription("");
 
         chart.setPinchZoom(false);
         chart.setDrawGridBackground(false);
@@ -149,12 +199,11 @@ public class BudgetGraphViewFragment extends Fragment {
             expenseCursor.close();
             expenseYVals.add(new BarEntry(monthlyExpense, i, month));
         }
+        chart.setDescription("");
 
     }
 
-    public void populateMonthGraphView() {
-        int mm = Calendar.getInstance().get(Calendar.MONTH);
-        String month = Months.nameOf(mm+1);
+    public void populateMonthGraphView(String month) {
         Log.d("MONTH", month);
 
         String[] budgetResultColumns = {BudgetDatabase.WEEK1_COLUMN, BudgetDatabase.WEEK2_COLUMN
@@ -167,7 +216,6 @@ public class BudgetGraphViewFragment extends Fragment {
                 String week = "Week "+(i+1);
                 Log.d("WEEK", "Week "+week+" budget = "+weeklyBudget);
                 budgetYVals.add(new BarEntry(weeklyBudget, i, week));
-                xVals.add(week);
             }
         }
         budgetCursor.close();
@@ -183,8 +231,12 @@ public class BudgetGraphViewFragment extends Fragment {
         }
         for (int i = 0; i < 4; i++) {
            expenseYVals.add(new BarEntry(weeklyExpenses[i], i, "Week " + (i + 1)));
+           String week = "Week "+(i+1);
+           xVals.add(week);
         }
         expenseCursor.close();
+
+        chart.setDescription(month);
     }
 
 }

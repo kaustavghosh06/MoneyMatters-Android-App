@@ -32,16 +32,17 @@ public class Budget extends Activity {
         final Button monthButton = (Button) findViewById(R.id.monthButton);
         final Button yearButton = (Button) findViewById(R.id.yearButton);
 
-        //yearButton.setBackgroundTintMode(PorterDuff.Mode.LIGHTEN);
         yearButton.setTextColor(Color.BLUE);
+        yearButton.setEnabled(false);
+        monthButton.setTextColor(Color.GRAY);
 
         yearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //yearButton.setBackgroundTintMode(PorterDuff.Mode.LIGHTEN);
-                //monthButton.setBackgroundTintMode(PorterDuff.Mode.CLEAR);
                 yearButton.setTextColor(Color.BLUE);
+                yearButton.setEnabled(false);
                 monthButton.setTextColor(Color.GRAY);
+                monthButton.setEnabled(true);
                 graphViewFragment.populateGraphView("year");
             }
         });
@@ -49,10 +50,10 @@ public class Budget extends Activity {
         monthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //monthButton.setBackgroundTintMode(PorterDuff.Mode.LIGHTEN);
-                //yearButton.setBackgroundTintMode(PorterDuff.Mode.CLEAR);
                 monthButton.setTextColor(Color.BLUE);
+                monthButton.setEnabled(false);
                 yearButton.setTextColor(Color.GRAY);
+                yearButton.setEnabled(true);
                 graphViewFragment.populateGraphView("month");
             }
         });
@@ -73,29 +74,6 @@ public class Budget extends Activity {
         getFragmentManager().beginTransaction().add(R.id.graphViewContainer, graphViewFragment)
                 .commit();
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_budget, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_add) {
-            budgetListViewFragment.pop_up_add_budget_dialog();
-        }
-        else if (id == R.id.action_settings) {
-            return true;
-        }
-        else if (id == R.id.action_help) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /*private void deleteDB() {

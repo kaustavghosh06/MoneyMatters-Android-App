@@ -14,7 +14,7 @@ public class ExpenseDatabase extends SQLiteOpenHelper {
     public static final String DATE_COLUMN = "DATE";
     public static final String MONTH_COLUMN = "MONTH";
     public static final String WEEK_COLUMN = "WEEK";
-    public static final String CATEGORY_COLUMN = "CATEGORY";
+    //public static final String CATEGORY_COLUMN = "CATEGORY";
     public static final String AMOUNT_COLUMN = "AMOUNT";
     public static final String DESCRIPTION_COLUMN = "DESCRIPTION";
 
@@ -25,7 +25,7 @@ public class ExpenseDatabase extends SQLiteOpenHelper {
                                                   +DATE_COLUMN+" DATE NOT NULL, "
                                                   +MONTH_COLUMN+" TEXT, "
                                                   +WEEK_COLUMN+" INTEGER, "
-                                                  +CATEGORY_COLUMN+" TEXT, "
+                                                  //+CATEGORY_COLUMN+" TEXT, "
                                                   +AMOUNT_COLUMN+" REAL, "
                                                   +DESCRIPTION_COLUMN+" TEXT"
                                                   +" )";

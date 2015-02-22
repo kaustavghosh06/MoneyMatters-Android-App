@@ -2,12 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical" >
-    <!--tools:context="com.example.lasyaboddapati.moneymatters.Expenses$GraphViewFragment">-->
 
-    <!--<com.echo.holographlibrary.BarGraph
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/graph"/>-->
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart"
         android:layout_width="match_parent"

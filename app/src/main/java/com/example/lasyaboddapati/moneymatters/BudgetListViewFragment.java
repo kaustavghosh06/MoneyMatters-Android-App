@@ -7,27 +7,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.Spinner;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,10 +32,7 @@ import java.util.List;
 public class BudgetListViewFragment extends Fragment {
     static BudgetListAdapter adapter;
     private static ExpandableListView lv;
-    private int expandableListSelectionType;
-    private ActionMode actionMode;
-    List<Integer> groupsToRemove;
-    Context context;
+    static Context context;
     private static BudgetGraphViewFragment graphViewFragment;
 
     public static BudgetListViewFragment newInstance(Context context, BudgetGraphViewFragment graphViewFragment) {
@@ -55,247 +46,14 @@ public class BudgetListViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_expandable_list_view, container, false);
-
         lv = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
         lv.setChoiceMode(ExpandableListView.CHOICE_MODE_MULTIPLE_MODAL);
-
         lv.setAdapter(adapter);
-        lv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                if (actionMode != null) {
-                    if (expandableListSelectionType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-                        int flatPosition = parent.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(groupPosition));
-                        parent.setItemChecked(
-                                flatPosition,
-                                !parent.isItemChecked(flatPosition));
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-        lv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                if (actionMode != null)  {
-                    if (expandableListSelectionType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                        int flatPosition = parent.getFlatListPosition(
-                                ExpandableListView.getPackedPositionForChild(groupPosition,childPosition));
-                        parent.setItemChecked(
-                                flatPosition,
-                                !parent.isItemChecked(flatPosition));
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-        lv.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-            int checkedCount;
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                // Capture total checked items
-                checkedCount = lv.getCheckedItemCount();
-                if (checkedCount == 1) {
-                    expandableListSelectionType = ExpandableListView.getPackedPositionType(
-                            lv.getExpandableListPosition(position));
-                }
-                // Set the CAB title according to total checked items
-                mode.setTitle(checkedCount + "Selected");
-                // Hide edit button if multiple items selected
-                if (checkedCount > 1) {
-                    mode.getMenu().findItem(R.id.action_edit).setVisible(false);
-                } else {
-                    mode.getMenu().findItem(R.id.action_edit).setVisible(true);
-                }
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                if (checkedCount > 1) {
-                    mode.getMenuInflater().inflate(R.menu.menu_multi_item_delete, menu);
-                } else {
-                    mode.getMenuInflater().inflate(R.menu.menu_item_edit_detele, menu);
-                }
-                actionMode = mode;
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                int id = item.getItemId();
-                SparseBooleanArray checkedItemPositions = lv.getCheckedItemPositions();
-                groupsToRemove = new ArrayList<Integer>();
-
-                Log.d("CHECKED ITEM POSITIONS", checkedItemPositions.toString());
-                for (int i = 0; i < checkedItemPositions.size(); i++) {
-                    if (checkedItemPositions.valueAt(i)) {
-                        int position = checkedItemPositions.keyAt(i);
-                        long pos = lv.getExpandableListPosition(position);
-                        int groupPos = ExpandableListView.getPackedPositionGroup(pos);
-                        if (id == R.id.action_delete) {
-                            groupsToRemove.add(groupPos);
-                        } else if (id == R.id.action_edit) {
-                            popup_edit_budget_dialog(groupPos);
-                        }
-                    }
-                }
-
-                mode.finish();
-                return true;
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                actionMode = null;
-                if (groupsToRemove!=null) {
-                    adapter.removeItems(groupsToRemove);
-                    groupsToRemove.clear();
-                }
-            }
-        });
-
         adapter.populateListView();
         return rootView;
     }
 
-    protected void pop_up_add_budget_dialog() {
-        final View view = View.inflate(context, R.layout.add_budget_layout, null);
-        final Spinner monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
-        monthSpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, Months.names()));
-        final EditText monthlyBudgetEditText = (EditText) view.findViewById(R.id.monthlyBudgetEditText);
-        final EditText week1EditText = (EditText) view.findViewById(R.id.week1EditText);
-        final EditText week2EditText = (EditText) view.findViewById(R.id.week2EditText);
-        final EditText week3EditText = (EditText) view.findViewById(R.id.week3EditText);
-        final EditText week4EditText = (EditText) view.findViewById(R.id.week4EditText);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(view)
-               .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                   public void onClick(DialogInterface dialog, int id) {
-                       String month = monthSpinner.getSelectedItem().toString();
-                       String monthlyBudget = monthlyBudgetEditText.getText().toString();
-                       String[] weeklyBudget = new String[4];
-                       weeklyBudget[0] = week1EditText.getText().toString();
-                       weeklyBudget[1] = week2EditText.getText().toString();
-                       weeklyBudget[2] = week3EditText.getText().toString();
-                       weeklyBudget[3] = week4EditText.getText().toString();
-                       adapter.addItem(month, monthlyBudget, weeklyBudget);
-                   }
-               })
-               .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                   public void onClick(DialogInterface dialog, int id) { }
-               });
-
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-
-        if (monthlyBudgetEditText.getText().toString().isEmpty()) {
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-        }
-
-        monthlyBudgetEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty()) {
-                    monthlyBudgetEditText.setError("Enter monthly budget", context.getDrawable(android.R.drawable.stat_notify_error));
-                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else {
-                    monthlyBudgetEditText.setError(null);
-                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                }
-
-            }
-        });
-
-    }
-
-    protected void popup_edit_budget_dialog(final int groupPos) {
-        final String monthlyBudgetOld = adapter.monthlyBudgetList.get(adapter.getGroup(groupPos)).toString();
-        final String month = adapter.getGroup(groupPos).toString();
-        final String[] weeklyBudgetOld = new String[4];
-
-        for (int i=0; i<4; i++) {
-            weeklyBudgetOld[i] = adapter.getChild(groupPos, i).toString();
-        }
-
-        final View view = View.inflate(context, R.layout.add_budget_layout, null);
-        final Spinner monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
-        final EditText monthlyBudgetEditText = (EditText) view.findViewById(R.id.monthlyBudgetEditText);
-        final EditText week1EditText = (EditText) view.findViewById(R.id.week1EditText);
-        final EditText week2EditText = (EditText) view.findViewById(R.id.week2EditText);
-        final EditText week3EditText = (EditText) view.findViewById(R.id.week3EditText);
-        final EditText week4EditText = (EditText) view.findViewById(R.id.week4EditText);
-
-        monthSpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, new String[] {month}));
-        monthlyBudgetEditText.setText(monthlyBudgetOld);
-        week1EditText.setText(weeklyBudgetOld[0]);
-        week2EditText.setText(weeklyBudgetOld[1]);
-        week3EditText.setText(weeklyBudgetOld[2]);
-        week4EditText.setText(weeklyBudgetOld[3]);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(view)
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //String month = monthSpinner.getSelectedItem().toString();
-                        String monthlyBudgetNew = monthlyBudgetEditText.getText().toString();
-                        String[] weeklyBudgetNew = new String[4];
-                        weeklyBudgetNew[0] = week1EditText.getText().toString();
-                        weeklyBudgetNew[1] = week2EditText.getText().toString();
-                        weeklyBudgetNew[2] = week3EditText.getText().toString();
-                        weeklyBudgetNew[3] = week4EditText.getText().toString();
-                        adapter.addItem(month, monthlyBudgetNew, weeklyBudgetNew);
-                        //TODO: add check to check weekly budgets add up correctly
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) { }
-                });
-
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-
-        if (monthlyBudgetEditText.getText().toString().isEmpty()) {
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-        }
-
-        monthlyBudgetEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty()) {
-                    monthlyBudgetEditText.setError("Enter monthly budget", context.getDrawable(android.R.drawable.stat_notify_error));
-                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else {
-                    monthlyBudgetEditText.setError(null);
-                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                }
-
-            }
-        });
-    }
-
     public static class BudgetListAdapter extends BaseExpandableListAdapter {
-
         private final LayoutInflater inf;
         HashMap<String, String[]> list;
         HashMap<String, String> monthlyBudgetList;
@@ -377,11 +135,11 @@ public class BudgetListViewFragment extends Fragment {
         }
 
         @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
             ViewHolder monthHolder;
             ViewHolder amountHolder;
             if (convertView == null) {
-                convertView = inf.inflate(R.layout.budget_list_group_item, parent, false);
+                convertView = inf.inflate(R.layout.budget_list_group_item, null);
                 monthHolder = new ViewHolder();
                 amountHolder = new ViewHolder();
                 monthHolder.text = (TextView) convertView.findViewById(R.id.listItemLeft);
@@ -393,11 +151,49 @@ public class BudgetListViewFragment extends Fragment {
                 amountHolder = (ViewHolder) convertView.getTag(R.string.TAG_RIGHT);
             }
 
+            ImageButton editButton = (ImageButton) convertView.findViewById(R.id.editButton);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (monthlyBudgetList.get(getGroup(groupPosition)) == null) {
+                        popup_add_budget_dialog(groupPosition);
+                    } else {
+                        popup_edit_budget_dialog(groupPosition);
+                    }
+                }
+            });
+            editButton.setFocusable(false);
+
+            ImageButton deleteButton = (ImageButton) convertView.findViewById(R.id.deleteButton);
+            final View finalConvertView = convertView;
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                            .setMessage("Delete?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    removeItem(groupPosition);
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) { }
+                            });
+
+                    final AlertDialog dialog = builder.create();
+                    dialog.show();                }
+            });
+            deleteButton.setFocusable(false);
+
             monthHolder.text.setText(getGroup(groupPosition).toString());
             if(monthlyBudgetList.get(getGroup(groupPosition)) != null) {
                 amountHolder.text.setText(monthlyBudgetList.get(getGroup(groupPosition)).toString());
+                amountHolder.text.setTextSize(20);
+                amountHolder.text.setTextColor(Color.BLACK);
             } else {
-                amountHolder.text.setText("NOT SET");
+                amountHolder.text.setText("Not Set");
+                amountHolder.text.setTextSize(15);
+                amountHolder.text.setTextColor(Color.GRAY);
             }
             return convertView;
         }
@@ -424,7 +220,6 @@ public class BudgetListViewFragment extends Fragment {
             }
 
             float remainingWeekly = Float.parseFloat(monthlyBudget) - totalWeekly;
-
             if (weeksSet < 4) {
                 for (int i = 0; i < 4; i++) {
                     if (weeklyBudget[i].isEmpty()) {
@@ -439,6 +234,14 @@ public class BudgetListViewFragment extends Fragment {
             Log.d("ADDITEM BUDGET", month+"\t"+itemDetail[0]+"|"+itemDetail[1]+"|"+itemDetail[2]+"|"+itemDetail[3]);
             list.put(month, itemDetail);
             monthlyBudgetList.put(month, monthlyBudget);
+            notifyDataSetChanged();
+            graphViewFragment.populateGraphView();
+        }
+
+        public void removeItem(int groupPos) {
+            deleteFromDatabase(Months.names()[groupPos]);
+            list.put(Months.names()[groupPos], null);
+            monthlyBudgetList.put(Months.names()[groupPos], null);
             notifyDataSetChanged();
             graphViewFragment.populateGraphView();
         }
@@ -541,6 +344,134 @@ public class BudgetListViewFragment extends Fragment {
             for (int i=0; i< list.size(); i++) {
                 Log.d("LIST", i+" "+list.keySet().toArray()[i]+" "+Months.names()[i]+" "+list.get(Months.names()[i]));
             }
+        }
+
+        protected void popup_add_budget_dialog(int groupPosition) {
+            final View view = View.inflate(context, R.layout.add_budget_layout, null);
+            TextView monthTextView = (TextView) view.findViewById(R.id.monthTextView);
+            final EditText monthlyBudgetEditText = (EditText) view.findViewById(R.id.monthlyBudgetEditText);
+            final EditText week1EditText = (EditText) view.findViewById(R.id.week1EditText);
+            final EditText week2EditText = (EditText) view.findViewById(R.id.week2EditText);
+            final EditText week3EditText = (EditText) view.findViewById(R.id.week3EditText);
+            final EditText week4EditText = (EditText) view.findViewById(R.id.week4EditText);
+
+            final String month = getGroup(groupPosition).toString();
+            monthTextView.setText("Budget for "+month+" "+ Calendar.getInstance().get(Calendar.YEAR));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setView(view)
+                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            String monthlyBudget = monthlyBudgetEditText.getText().toString();
+                            String[] weeklyBudget = new String[4];
+                            weeklyBudget[0] = week1EditText.getText().toString();
+                            weeklyBudget[1] = week2EditText.getText().toString();
+                            weeklyBudget[2] = week3EditText.getText().toString();
+                            weeklyBudget[3] = week4EditText.getText().toString();
+                            adapter.addItem(month, monthlyBudget, weeklyBudget);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) { }
+                    });
+
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            if (monthlyBudgetEditText.getText().toString().isEmpty()) {
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+            }
+
+            monthlyBudgetEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(s.toString().isEmpty()) {
+                        monthlyBudgetEditText.setError("Enter monthly budget", context.getDrawable(android.R.drawable.stat_notify_error));
+                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                    } else {
+                        monthlyBudgetEditText.setError(null);
+                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                    }
+
+                }
+            });
+
+        }
+
+        protected void popup_edit_budget_dialog(final int groupPos) {
+            final String monthlyBudgetOld = monthlyBudgetList.get(getGroup(groupPos)).toString();
+            final String month = getGroup(groupPos).toString();
+            final String[] weeklyBudgetOld = new String[4];
+
+            for (int i=0; i<4; i++) {
+                weeklyBudgetOld[i] = getChild(groupPos, i).toString();
+            }
+
+            final View view = View.inflate(context, R.layout.add_budget_layout, null);
+            TextView monthTextView = (TextView) view.findViewById(R.id.monthTextView);
+            final EditText monthlyBudgetEditText = (EditText) view.findViewById(R.id.monthlyBudgetEditText);
+            final EditText week1EditText = (EditText) view.findViewById(R.id.week1EditText);
+            final EditText week2EditText = (EditText) view.findViewById(R.id.week2EditText);
+            final EditText week3EditText = (EditText) view.findViewById(R.id.week3EditText);
+            final EditText week4EditText = (EditText) view.findViewById(R.id.week4EditText);
+
+            monthTextView.setText("Budget for "+month+" "+ Calendar.getInstance().get(Calendar.YEAR));
+            monthlyBudgetEditText.setText(monthlyBudgetOld);
+            week1EditText.setText(weeklyBudgetOld[0]);
+            week2EditText.setText(weeklyBudgetOld[1]);
+            week3EditText.setText(weeklyBudgetOld[2]);
+            week4EditText.setText(weeklyBudgetOld[3]);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setView(view)
+                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            String monthlyBudgetNew = monthlyBudgetEditText.getText().toString();
+                            String[] weeklyBudgetNew = new String[4];
+                            weeklyBudgetNew[0] = week1EditText.getText().toString();
+                            weeklyBudgetNew[1] = week2EditText.getText().toString();
+                            weeklyBudgetNew[2] = week3EditText.getText().toString();
+                            weeklyBudgetNew[3] = week4EditText.getText().toString();
+                            adapter.addItem(month, monthlyBudgetNew, weeklyBudgetNew);
+                            //TODO: add check to check weekly budgets add up correctly
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) { }
+                    });
+
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            if (monthlyBudgetEditText.getText().toString().isEmpty()) {
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+            }
+
+            monthlyBudgetEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(s.toString().isEmpty()) {
+                        monthlyBudgetEditText.setError("Enter monthly budget", context.getDrawable(android.R.drawable.stat_notify_error));
+                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                    } else {
+                        monthlyBudgetEditText.setError(null);
+                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                    }
+
+                }
+            });
         }
 
     }

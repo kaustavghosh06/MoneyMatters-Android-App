@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,94 +21,66 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- * Created by lasyaboddapati on 1/30/15.
- * A fragment that contains the Expandable List View of expenses
+ * Created by lasyaboddapati on 2/20/15.
  */
 public class ExpensesListViewFragment extends Fragment {
-    static ExpensesListAdapter adapter;
-    private static ExpandableListView lv;
-    private int expandableListSelectionType;
-    private ActionMode actionMode;
-    List<Integer> groupsToRemove;
     Context context;
-    boolean dateValid;
-    boolean amountValid;
+    static ExpensesListAdapter adapter;
+    private static ListView lv;
     private static ExpensesGraphViewFragment graphViewFragment;
 
-    enum CATEGORIES {Bills, Rent, Groceries, Food, Personal, Shopping};
+    private ActionMode actionMode;
+    List<Integer> groupsToRemove;
+    boolean dateValid;
+    boolean amountValid;
 
     public static ExpensesListViewFragment newInstance(Context context, ExpensesGraphViewFragment graphViewFragment) {
         ExpensesListViewFragment expensesListViewFragment = new ExpensesListViewFragment();
         expensesListViewFragment.context = context;
-        adapter = new ExpensesListAdapter(context);
+        adapter = new ExpensesListAdapter(context, R.layout.expenses_list_item);
         expensesListViewFragment.graphViewFragment = graphViewFragment;
         return expensesListViewFragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_expandable_list_view, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_list_view, container, false);
 
-        lv = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
+        lv = (ListView) rootView.findViewById(R.id.listView);
         lv.setChoiceMode(ExpandableListView.CHOICE_MODE_MULTIPLE_MODAL);
-
         lv.setAdapter(adapter);
-        lv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                if (actionMode != null) {
-                    if (expandableListSelectionType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-                        int flatPosition = parent.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(groupPosition));
-                        parent.setItemChecked(
-                                flatPosition,
-                                !parent.isItemChecked(flatPosition));
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-        lv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                if (actionMode != null)  {
-                    if (expandableListSelectionType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                        int flatPosition = parent.getFlatListPosition(
-                                           ExpandableListView.getPackedPositionForChild(groupPosition,childPosition));
-                        parent.setItemChecked(flatPosition, !parent.isItemChecked(flatPosition));
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
         lv.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             int checkedCount;
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 // Capture total checked items
                 checkedCount = lv.getCheckedItemCount();
-                if (checkedCount == 1) {
-                    expandableListSelectionType = ExpandableListView.getPackedPositionType(
-                            lv.getExpandableListPosition(position));
-                }
                 // Set the CAB title according to total checked items
                 mode.setTitle(checkedCount + "Selected");
                 // Hide edit button if multiple items selected
@@ -131,8 +104,8 @@ public class ExpensesListViewFragment extends Fragment {
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                    return false;
-                }
+                return false;
+            }
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -144,12 +117,10 @@ public class ExpensesListViewFragment extends Fragment {
                 for (int i = 0; i < checkedItemPositions.size(); i++) {
                     if (checkedItemPositions.valueAt(i)) {
                         int position = checkedItemPositions.keyAt(i);
-                        long pos = lv.getExpandableListPosition(position);
-                        int groupPos = ExpandableListView.getPackedPositionGroup(pos);
                         if (id == R.id.action_delete) {
-                            groupsToRemove.add(groupPos);
+                            groupsToRemove.add(position);
                         } else if (id == R.id.action_edit) {
-                            popup_edit_expense_dialog(groupPos);
+                            popup_edit_expense_dialog(position);
                         }
                     }
                 }
@@ -162,7 +133,6 @@ public class ExpensesListViewFragment extends Fragment {
             public void onDestroyActionMode(ActionMode mode) {
                 actionMode = null;
                 if (groupsToRemove!=null) {
-                //if (mode.getMenu().getItem(R.id.action_delete).isChecked()) {
                     adapter.removeItems(groupsToRemove);
                     groupsToRemove.clear();
                 }
@@ -179,23 +149,18 @@ public class ExpensesListViewFragment extends Fragment {
 
         View view = View.inflate(context, R.layout.add_expense_layout, null);
 
-        final String[] categories = {"Bills", "Rent", "Groceries", "Food", "Personal", "Shopping"};
         final EditText dateEditText = (EditText) view.findViewById(R.id.dateEditText);
-        final Spinner categorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
         final EditText amountSpentEditText = (EditText) view.findViewById(R.id.amountSpentEditText);
         final EditText descriptionEditText = (EditText) view.findViewById(R.id.descriptionEditText);
-        categorySpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, categories));
 
-        //final CustomDialogFragment dialogFragment = CustomDialogFragment.newInstance(view);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String date = dateEditText.getText().toString();
-                        String category = categorySpinner.getSelectedItem().toString();
-                        float amountSpent = Float.parseFloat(amountSpentEditText.getText().toString());
+                        String amountSpent = amountSpentEditText.getText().toString();
                         String description = descriptionEditText.getText().toString();
-                        adapter.addItem(date, category, amountSpent, description);
+                        adapter.addItem(date, amountSpent, description);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -228,13 +193,13 @@ public class ExpensesListViewFragment extends Fragment {
                         dateEditText.setSelection(working.length());
                     }
                 } else if (working.length()==5 && before ==0) {
-                    if (working.substring(4,5).matches("[/.-]")) {
-                        working = working.substring(0,3)+"0"+working.substring(3,4);
+                    if (working.substring(4, 5).matches("[/.-]")) {
+                        working = working.substring(0, 3) + "0" + working.substring(3, 4);
                     }
-                    working+="/";
+                    //working += "/";
                     dateEditText.setText(working);
                     dateEditText.setSelection(working.length());
-                } else if (working.length()==10 && before ==0) {
+                /*} else if (working.length()==10 && before ==0) {
                     int yyyy = Integer.parseInt(working.substring(6));
                     int mm = Integer.parseInt(working.substring(0,2));
                     int dd = Integer.parseInt(working.substring(3,5));
@@ -253,10 +218,13 @@ public class ExpensesListViewFragment extends Fragment {
                     //}
                 } else if (working.length()!=10) {
                     isValid = false;
+                }*/
+                } else if(working.length() != 5) {
+                    isValid = false;
                 }
 
                 if (!isValid) {
-                    dateEditText.setError("Enter a valid date: MM/DD/YYYY");
+                    dateEditText.setError("Enter a valid date: MM/DD");
                     dateValid = false;
                 } else {
                     dateEditText.setError(null);
@@ -305,23 +273,18 @@ public class ExpensesListViewFragment extends Fragment {
         });
     }
 
-    protected void popup_edit_expense_dialog(final int groupPos) {
+    protected void popup_edit_expense_dialog(final int position) {
         dateValid = true;
         amountValid = true;
 
-        String[] group = adapter.getGroup(groupPos).toString().split(":");
-        final String dateOld = group[0].trim();
-        final String categoryOld = group[1].trim();
-        final String amountOld = group[2].trim();
-        final String descriptionOld = adapter.getChild(groupPos, 0).toString().trim();
+        String[] expense = (String[]) adapter.getItem(position);
+        final String dateOld = expense[0].trim();
+        final String amountOld = expense[1].trim();
+        final String descriptionOld = expense[2].trim();
 
         View view = View.inflate(context, R.layout.add_expense_layout, null);
         final EditText date = (EditText) view.findViewById(R.id.dateEditText);
         date.setText(dateOld);
-
-        final Spinner categorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
-        categorySpinner.setAdapter(new ArrayAdapter<CATEGORIES>(context, android.R.layout.simple_spinner_item, CATEGORIES.values()));
-        categorySpinner.setSelection(CATEGORIES.valueOf(categoryOld).ordinal());
 
         final EditText amount = (EditText) view.findViewById(R.id.amountSpentEditText);
         amount.setText(amountOld);
@@ -334,10 +297,9 @@ public class ExpensesListViewFragment extends Fragment {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String dateNew = date.getText().toString();
-                        String categoryNew = categorySpinner.getSelectedItem().toString();
                         String amountNew = amount.getText().toString();
                         String descriptionNew = description.getText().toString();
-                        adapter.updateListItem(groupPos, dateNew, categoryNew, amountNew, descriptionNew);
+                        adapter.updateListItem(position, dateNew, amountNew, descriptionNew);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -364,7 +326,7 @@ public class ExpensesListViewFragment extends Fragment {
                         if (working.length() == 1) {
                             working = "0"+working;
                         }
-                        working+="/";
+                        //working+="/";
                         date.setText(working);
                         date.setSelection(working.length());
                     }
@@ -375,7 +337,7 @@ public class ExpensesListViewFragment extends Fragment {
                     working+="/";
                     date.setText(working);
                     date.setSelection(working.length());
-                } else if (working.length()==10 && before ==0) {
+                /*} else if (working.length()==10 && before ==0) {
                     int yyyy = Integer.parseInt(working.substring(6));
                     int mm = Integer.parseInt(working.substring(0,2));
                     int dd = Integer.parseInt(working.substring(3,5));
@@ -383,19 +345,22 @@ public class ExpensesListViewFragment extends Fragment {
                     //    isValid = false;
                     //}
                     //else {
-                        Calendar c = new GregorianCalendar(yyyy, mm, dd);
-                        Log.d("DATE", c.get(Calendar.MONTH)+"");
-                        Log.d("DATE", c.getActualMaximum(Calendar.DATE)+"");
-                        if (dd<1 || dd>c.getActualMaximum(Calendar.DAY_OF_MONTH)) {
-                            isValid = false;    //TODO: Not working (check Feb 30)
-                        }
+                    Calendar c = new GregorianCalendar(yyyy, mm, dd);
+                    Log.d("DATE", c.get(Calendar.MONTH)+"");
+                    Log.d("DATE", c.getActualMaximum(Calendar.DATE)+"");
+                    if (dd<1 || dd>c.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+                        isValid = false;    //TODO: Not working (check Feb 30)
+                    }
                     //}
                 } else if (working.length()!=10) {
+                    isValid = false;
+                }*/
+                } else if(working.length() != 5) {
                     isValid = false;
                 }
 
                 if (!isValid) {
-                    date.setError("Enter a valid date: MM/DD/YYYY");
+                    date.setError("Enter a valid date: MM/DD");
                     dateValid = false;
                 } else {
                     date.setError(null);
@@ -411,20 +376,6 @@ public class ExpensesListViewFragment extends Fragment {
                 } else {
                     dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
                 }
-            }
-        });
-
-        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if ((categorySpinner.getSelectedItem().toString().trim() != categoryOld) && dateValid && amountValid) {
-                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -472,159 +423,107 @@ public class ExpensesListViewFragment extends Fragment {
         dialog.show();
     }
 
-    public static class ExpensesListAdapter extends BaseExpandableListAdapter {
-
-        private final LayoutInflater inf;
-        private HashMap<Long, String> list;
-        private HashMap<Long, String[]> details;
+    public static class ExpensesListAdapter extends ArrayAdapter {
+        private LinkedHashMap<Long, String[]> expenses;
         protected SQLiteDatabase db;
         Context context;
 
-        public ExpensesListAdapter(Context context) {
-            this.list = new LinkedHashMap<Long, String>();
-            this.details = new LinkedHashMap<Long, String[]>();
+        static final int DATE = 0;
+        static final int AMOUNT = 1;
+        static final int DESCRIPTION = 2;
 
+        public ExpensesListAdapter(Context context, int resource) {
+            super(context, resource);
+            this.expenses = new LinkedHashMap<Long, String[]>();
             this.db = new ExpenseDatabase(context).getWritableDatabase();
             this.context = context;
-            this.inf = LayoutInflater.from(context);
+            populateListView();
         }
 
         @Override
-        public int getGroupCount() {
-            return list.size();
-        }
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View row = inflater.inflate(R.layout.expenses_list_item, null);
 
-        @Override
-        public int getChildrenCount(int groupPosition) {
-            if(details.values().toArray()[groupPosition] == null) {
-                return 0;
-            } else {
-                return ((String[])details.values().toArray()[groupPosition]).length;
+            long id = (long) expenses.keySet().toArray()[position];
+            Log.d("GET VIEWWWWWWWWWWW", id+"  "+position+ "      "+Integer.parseInt(expenses.get(id)[DATE].split("[./-]")[2]));
+
+            TextView date = (TextView) row.findViewById(R.id.date);
+            SimpleDateFormat newDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            Date MyDate=null;
+            try {
+                MyDate = newDateFormat.parse(expenses.get(id)[DATE]);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+            newDateFormat.applyPattern("EEEE, MMM d");
+            String dateFormatted = newDateFormat.format(MyDate);
+            date.setText(dateFormatted);
+
+            TextView amount = (TextView) row.findViewById(R.id.amount);
+            amount.setText("$"+expenses.get(id)[AMOUNT]);
+
+            TextView description = (TextView) row.findViewById(R.id.description);
+            description.setText(expenses.get(id)[DESCRIPTION]);
+
+            return row;
         }
 
         @Override
-        public Object getGroup(int groupPosition) {
-            return list.values().toArray()[groupPosition];
+        public Object getItem(int position) {
+            long id = (long) expenses.keySet().toArray()[position];
+            return expenses.get(id);
         }
 
         @Override
-        public Object getChild(int groupPosition, int childPosition) {
-            return ((String[])details.values().toArray()[groupPosition])[childPosition];
+        public int getCount() {
+            return expenses.size();
         }
 
-        @Override
-        public long getGroupId(int groupPosition) {
-            return (long)list.keySet().toArray()[groupPosition];
-        }
-
-        @Override
-        public long getChildId(int groupPosition, int childPosition) {
-                return childPosition;
-            }
-
-        @Override
-        public boolean hasStableIds() {
-                return true;
-            }
-
-        @Override
-        public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = inf.inflate(R.layout.expenses_list_child_item, parent, false);
-                holder = new ViewHolder();
-                holder.text = (TextView) convertView.findViewById(R.id.listItemDetail);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            holder.text.setText(getChild(groupPosition, childPosition).toString());
-            return convertView;
-        }
-
-        @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = inf.inflate(R.layout.expenses_list_group_item, parent, false);
-                holder = new ViewHolder();
-                holder.text = (TextView) convertView.findViewById(R.id.listItemHeader);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            holder.text.setText(getGroup(groupPosition).toString());
-            return convertView;
-
-        }
-
-        @Override
-        public boolean isChildSelectable(int groupPosition, int childPosition) {
-                return false;
-            }
-
-        private class ViewHolder {
-            TextView text;
-        }
-
-        public void addItem(String date, String category, float amountSpent, String description) {
-            long rowId = insertIntoDatabase(date, category, amountSpent, description);
-            String listItem = date+" : "+category+" : "+amountSpent;
-            list.put(rowId, listItem);
-            details.put(rowId, new String[] {description});
+        public void addItem(String date, String amount, String description) {
+            insertIntoDatabase(date, amount, description);
+            //expenses.put(rowId, new String[] {date, amount,description});
             filterItems();
             //notifyDataSetChanged();
-            graphViewFragment.populateGraphView();
+            //graphViewFragment.populateGraphView();
         }
 
         public void removeItems(List<Integer> groupsToRemove) {
             long[] ids = new long[groupsToRemove.size()];
             for (int i=0; i<groupsToRemove.size(); i++) {
-                ids[i] = (long) list.keySet().toArray()[groupsToRemove.get(i)];
+                ids[i] = (long) expenses.keySet().toArray()[groupsToRemove.get(i)];
             }
             for (int i=0; i<ids.length; i++) {
                 Long id = ids[i];
-                list.remove(id);
-                details.remove(id);
                 deleteFromDatabase(id);
             }
             filterItems();
-            //notifyDataSetChanged();
-            graphViewFragment.populateGraphView();
+            //graphViewFragment.populateGraphView();
         }
 
-        private void updateListItem(int groupPos, String date, String category, String amount, String description) {
-            long id = (long) list.keySet().toArray()[groupPos];
-            list.put(id, date + " : " + category + " : " + amount);
-            details.put(id, new String[] {description});
-            updateInDatabase(id, date, category, Float.parseFloat(amount), description);
+        private void updateListItem(int groupPos, String date, String amount, String description) {
+            long id = (long) expenses.keySet().toArray()[groupPos];
+            updateInDatabase(id, date, amount, description);
             filterItems();
-            //notifyDataSetChanged();
-            graphViewFragment.populateGraphView();
+            //graphViewFragment.populateGraphView();
         }
 
-        public long insertIntoDatabase(String date, String category, float amountSpent, String description) {
+        public long insertIntoDatabase(String date, String amount, String description) {
             ContentValues newValues = new ContentValues();
-            newValues.put(ExpenseDatabase.DATE_COLUMN, date);
 
             int mm = Integer.parseInt(date.split("[/.-]")[0]);
             int dd = Integer.parseInt(date.split("[/.-]")[1]);
-            int yyyy = Integer.parseInt(date.split("[/.-]")[2]);
 
-            //newValues.put(ExpenseDatabase.MONTH_COLUMN, Expenses.MONTHS.values()[mm].toString());
             newValues.put(ExpenseDatabase.MONTH_COLUMN, Months.nameOf(mm));
             Calendar c = Calendar.getInstance();
-            c.set(Calendar.YEAR, yyyy);
             c.set(Calendar.MONTH, mm);
             c.set(Calendar.DATE, dd);
             int week = c.get(Calendar.WEEK_OF_MONTH);
-            newValues.put(ExpenseDatabase.WEEK_COLUMN, week);
+            date = date+"/"+c.get(Calendar.YEAR);
 
-            newValues.put(ExpenseDatabase.CATEGORY_COLUMN, category);
-            newValues.put(ExpenseDatabase.AMOUNT_COLUMN, amountSpent);
+            newValues.put(ExpenseDatabase.DATE_COLUMN, date);
+            newValues.put(ExpenseDatabase.WEEK_COLUMN, week);
+            newValues.put(ExpenseDatabase.AMOUNT_COLUMN, amount);
             newValues.put(ExpenseDatabase.DESCRIPTION_COLUMN, description);
             Log.d("INSERT", "inserting into db");
             return db.insert(ExpenseDatabase.DATABASE_TABLE, null, newValues);
@@ -637,25 +536,25 @@ public class ExpensesListViewFragment extends Fragment {
             //displayDb();
         }
 
-        public void updateInDatabase(long id, String date, String category, float amountSpent, String description) {
+        public void updateInDatabase(long id, String date, String amount, String description) {
             String whereClause = ExpenseDatabase.ID_COLUMN + " = "+id;
             ContentValues newValues = new ContentValues();
-            newValues.put(ExpenseDatabase.DATE_COLUMN, date);
 
             int mm = Integer.parseInt(date.split("[/.-]")[0]);
             int dd = Integer.parseInt(date.split("[/.-]")[1]);
-            int yyyy = Integer.parseInt(date.split("[/.-]")[2]);
+            //int yyyy = Integer.parseInt(date.split("[/.-]")[2]);
             //newValues.put(ExpenseDatabase.MONTH_COLUMN, Expenses.MONTHS.values()[mm].toString());
             newValues.put(ExpenseDatabase.MONTH_COLUMN, Months.nameOf(mm));
             Calendar c = Calendar.getInstance();
-            c.set(Calendar.YEAR, yyyy);
+            //c.set(Calendar.YEAR, yyyy);
             c.set(Calendar.MONTH, mm);
             c.set(Calendar.DATE, dd);
             int week = c.get(Calendar.WEEK_OF_MONTH);
+            date = date+"/"+c.get(Calendar.YEAR);
 
+            newValues.put(ExpenseDatabase.DATE_COLUMN, date);
             newValues.put(ExpenseDatabase.WEEK_COLUMN, week);
-            newValues.put(ExpenseDatabase.CATEGORY_COLUMN, category);
-            newValues.put(ExpenseDatabase.AMOUNT_COLUMN, amountSpent);
+            newValues.put(ExpenseDatabase.AMOUNT_COLUMN, amount);
             newValues.put(ExpenseDatabase.DESCRIPTION_COLUMN, description);
             int n = db.update(ExpenseDatabase.DATABASE_TABLE, newValues, whereClause, null);
             Log.d("DELETE", "Deleted "+n);
@@ -668,42 +567,46 @@ public class ExpensesListViewFragment extends Fragment {
                 Log.d("DB", "DATE "+c.getString(1));
                 Log.d("DB", "MONTH "+c.getString(2));
                 Log.d("DB", "WEEK "+c.getString(3));
-                Log.d("DB", "CATEGORY "+c.getString(4));
-                Log.d("DB", "AMOUNT "+c.getString(5));
-                Log.d("DB", "DESCRIPTION "+c.getString(6));
+                Log.d("DB", "AMOUNT "+c.getString(4));
+                Log.d("DB", "DESCRIPTION "+c.getString(5));
             }
             c.close();
         }
 
         public void populateListView() {
-            String[] resultColumns = {ExpenseDatabase.ID_COLUMN, ExpenseDatabase.DATE_COLUMN, ExpenseDatabase.CATEGORY_COLUMN, ExpenseDatabase.AMOUNT_COLUMN
-                    , ExpenseDatabase.DESCRIPTION_COLUMN};
+            String[] resultColumns = {ExpenseDatabase.ID_COLUMN, ExpenseDatabase.DATE_COLUMN
+                                    , ExpenseDatabase.AMOUNT_COLUMN, ExpenseDatabase.DESCRIPTION_COLUMN};
             Cursor cursor = db.query(ExpenseDatabase.DATABASE_TABLE, resultColumns, null, null, null, null, null);
 
-            list = new LinkedHashMap<Long, String>(cursor.getCount());
-            details = new LinkedHashMap<Long, String[]>(cursor.getCount());
-            Log.d("COUNT", "list size" +list.size()+ "cursor size"+ cursor.getCount());
+            expenses = new LinkedHashMap<Long, String[]>(cursor.getCount());
+            Log.d("populateListView COUNT", "list size" +expenses.size()+ "cursor size"+ cursor.getCount());
 
             while (cursor.moveToNext()) {
                 Long id = cursor.getLong(0);
                 String date = cursor.getString(1);
-                String category = cursor.getString(2);
-                float amount = cursor.getFloat(3);
-                String description = cursor.getString(4);
-                list.put(id, date+" : "+category+" : "+amount);
-                details.put(id, new String[] {description});
+                String amount = cursor.getString(2);
+                String description = cursor.getString(3);
+                expenses.put(id, new String[] {date, amount, description});
             }
+            Log.d("populateListView After COUNT", "list size" +expenses.size()+ "cursor size"+ cursor.getCount());
             cursor.close();
         }
 
         public void filterItems() {
             View view = ((Activity)context).getWindow().getDecorView().findViewById(android.R.id.content);
             Log.d("FILTER", view+"  "+view.findViewById(R.id.MonthSpinner) +"   "+ view.findViewById(R.id.WeekSpinner));
+
             String month = ((Spinner) view.findViewById(R.id.MonthSpinner)).getSelectedItem().toString().trim();
             String week = ((Spinner) view.findViewById(R.id.WeekSpinner)).getSelectedItem().toString().trim();
+            TextView monthDisplay = (TextView) view.findViewById(R.id.monthDisplay);
+            if (month=="All") {
+                monthDisplay.setText(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+            } else {
+                monthDisplay.setText(month + ", " + Calendar.getInstance().get(Calendar.YEAR));
+            }
 
-            String[] resultColumns = {ExpenseDatabase.ID_COLUMN, ExpenseDatabase.DATE_COLUMN, ExpenseDatabase.CATEGORY_COLUMN, ExpenseDatabase.AMOUNT_COLUMN
-                    , ExpenseDatabase.DESCRIPTION_COLUMN};
+            String[] resultColumns = {ExpenseDatabase.ID_COLUMN, ExpenseDatabase.DATE_COLUMN, ExpenseDatabase.AMOUNT_COLUMN
+                                    , ExpenseDatabase.DESCRIPTION_COLUMN};
             String whereClause = null;
             if (month != "All" && week != "All") {
                 whereClause = ExpenseDatabase.MONTH_COLUMN + "='" + month + "' AND " + ExpenseDatabase.WEEK_COLUMN + "=" + week.charAt(week.length()-1);
@@ -714,21 +617,23 @@ public class ExpensesListViewFragment extends Fragment {
             }
             Cursor cursor = db.query(ExpenseDatabase.DATABASE_TABLE, resultColumns, whereClause, null, null, null, null);
 
-            list = new LinkedHashMap<Long, String>(cursor.getCount());
-            details = new LinkedHashMap<Long, String[]>(cursor.getCount());
-            Log.d("COUNT", "list size" +list.size()+ "cursor size"+ cursor.getCount());
+            expenses = new LinkedHashMap<Long, String[]>(cursor.getCount());
+            Log.d("filterItems COUNT", "list size" +expenses.size()+ "cursor size"+ cursor.getCount());
 
             while (cursor.moveToNext()) {
                 Long id = cursor.getLong(0);
                 String date = cursor.getString(1);
-                String category = cursor.getString(2);
-                float amount = cursor.getFloat(3);
-                String description = cursor.getString(4);
-                list.put(id, date+" : "+category+" : "+amount);
-                details.put(id, new String[] {description});
+                String amount = cursor.getString(2);
+                String description = cursor.getString(3);
+                expenses.put(id, new String[] {date, amount, description});
+                Log.d("filterItems", id+"  ");
             }
             cursor.close();
             notifyDataSetChanged();
+            Log.d("filterItems COUNT AFTER", "list size" +expenses.size()+ "cursor size"+ cursor.getCount());
+
+            graphViewFragment.populateGraphView(month);
+
         }
 
     }
