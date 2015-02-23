@@ -1,7 +1,11 @@
 package com.example.lasyaboddapati.moneymatters;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -40,15 +44,17 @@ public class SystemNotificationFragment extends Fragment {
     static SQLiteDatabase budgetDB;
     static SQLiteDatabase notificationsDB;
 
+    static int WEEKLY_NOTIFICATION_ID = 1;
+    static int MONTHLY_NOTIFICATION_ID = 2;
 
     public static Fragment newInstance(Context context) {
         SystemNotificationFragment systemNotificationFragment = new SystemNotificationFragment();
-        systemNotificationFragment.context=context;
         initialize(context);
         return systemNotificationFragment;
     }
 
-    public static void initialize(Context context){
+    public static void initialize(Context context1){
+        context = context1;
         adapter = new SystemNotificationsListAdapter(context, R.layout.custom_list_item);
         expenseDB = new ExpenseDatabase(context).getReadableDatabase();
         budgetDB = new BudgetDatabase(context).getReadableDatabase();
@@ -166,17 +172,37 @@ public class SystemNotificationFragment extends Fragment {
                 //adapter.addItem(date, "Weekly Budget Limit!", "You have reached your expense limit for the week");
                 insertIntoDatabase(date, "Weekly Budget Limit!", "You have reached your expense limit for the week");
                 Log.d("WEEKLY ", "Weekly Budget Limit!");
+                notify_user(WEEKLY_NOTIFICATION_ID, "Weekly budget limit reached");
             }
 
             if (monthlyExpense >= monthlyBudget) {
                 //adapter.addItem(date, "Monthly Budget Limit!", "You have reached your expense limit for "+month);
                 insertIntoDatabase(date, "Monthly Budget Limit!", "You have reached your expense limit for " + month);
-                Log.d("MONTHLY", "Monthly Budget Limit");
+                Log.d("MONTHLY", "Monthly Budget Limit!");
+                notify_user(MONTHLY_NOTIFICATION_ID, "Monthly budget limit reached");
             }
         }
     }
 
-    public static long insertIntoDatabase(String date, String title, String message) {
+    private static void notify_user(int id, String message){
+        Intent resultIntent = new Intent(context, Notifications.class);
+        //TODO : set tab to System Notifications
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
+
+        Notification notification = new Notification.Builder(context)
+                .setContentTitle("Money Matters")
+                .setContentText(message)
+                .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .build();
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(id, notification);
+        Log.d("NOTIFY", "user notified");
+    }
+
+    private static long insertIntoDatabase(String date, String title, String message) {
         ContentValues newValues = new ContentValues();
         newValues.put(SystemNotificationsDatabase.DATE_COLUMN, date);
         newValues.put(SystemNotificationsDatabase.TITLE_COLUMN, title);
@@ -185,14 +211,14 @@ public class SystemNotificationFragment extends Fragment {
         return notificationsDB.insert(SystemNotificationsDatabase.DATABASE_TABLE, null, newValues);
     }
 
-    public static void deleteFromDatabase(long id) {
+    private static void deleteFromDatabase(long id) {
         String whereClause = SystemNotificationsDatabase.ID_COLUMN + " = "+id;
         int n = notificationsDB.delete(SystemNotificationsDatabase.DATABASE_TABLE, whereClause, null);
         Log.d("DELETE", "Deleted "+n);
         //displayDb();
     }
 
-    public void displayDb() {
+    private void displayDb() {
         Cursor c = notificationsDB.rawQuery("SELECT * FROM "+SystemNotificationsDatabase.DATABASE_TABLE, null);
         while (c.moveToNext()) {
             Log.d("DB", "ID "+c.getString(0));
