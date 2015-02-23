@@ -11,11 +11,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private Context _context;
     String username;
+    int pos;
 
-    public ViewPagerAdapter(Context context, FragmentManager fm,String user) {
+    public ViewPagerAdapter(Context context, FragmentManager fm,String user,int pos) {
         super(fm);
         _context=context;
         username=user;
+        this.pos=pos;
 
     }
     @Override

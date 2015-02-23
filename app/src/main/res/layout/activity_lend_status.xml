@@ -44,7 +44,10 @@
     <include layout="@layout/indicator" android:layout_width="fill_parent" android:layout_height="wrap_content"  />
 
     <android.support.v4.view.ViewPager
-        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:layout_width="fill_parent" android:layout_height="400dp"
         android:textColor="@color/Black"
         android:id="@+id/viewPager" />
+
+
+
 </LinearLayout>

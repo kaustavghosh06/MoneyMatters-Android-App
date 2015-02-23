@@ -10,11 +10,14 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -37,6 +40,7 @@ public class LendStatus extends FragmentActivity {
     Firebase lendercloud=null;
     Firebase receivercloud=null;
     String user;
+    int pos=0;
     final ArrayList<String> userlist=new ArrayList<String>();
 
 
@@ -82,6 +86,35 @@ public class LendStatus extends FragmentActivity {
 
         setUpView();
         setTab();
+        TextView b1=(TextView)findViewById(R.id.textView1);
+        TextView b2=(TextView)findViewById(R.id.textView2);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                pos=0;
+                _mViewPager.setCurrentItem(pos);
+
+                //findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
+                //findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
+
+
+
+
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                pos=1;
+                _mViewPager.setCurrentItem(pos);
+
+                //findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
+                //findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
+
+            }
+        });
 
 
 
@@ -94,8 +127,14 @@ public class LendStatus extends FragmentActivity {
     }
     private void setUpView(){
         _mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        _adapter = new ViewPagerAdapter(getApplicationContext(),getSupportFragmentManager(),user);
+        _adapter = new ViewPagerAdapter(getApplicationContext(),getSupportFragmentManager(),user,pos);
         _mViewPager.setAdapter(_adapter);
+        /*_mViewPager.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                return true;
+            }
+        });*/
         _mViewPager.setCurrentItem(0);
     }
     @Override
@@ -149,7 +188,7 @@ public class LendStatus extends FragmentActivity {
                             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
                             lendercloud.child("Credit").child(timeStamp).setValue(descr+":"+receiver+":"+amt);
-                            receivercloud.child("Debts").child(timeStamp).setValue(descr+":"+lender+":"+amt);
+                            receivercloud.child("Debts").child(timeStamp).setValue(descr + ":" + lender + ":" + amt);
 
 
 

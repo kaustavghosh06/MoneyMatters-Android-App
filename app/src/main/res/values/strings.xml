@@ -13,15 +13,13 @@
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
     <string name="title_activity_firebase">FirebaseActivity</string>
-
     <string name="TAG_LEFT"></string>
     <string name="TAG_RIGHT"></string>
-
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_lend_status">LendStatus</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_notifications">Notifications</string>
-
+    <string name="title_activity_dashboard">Dashboard</string>
 
 </resources>

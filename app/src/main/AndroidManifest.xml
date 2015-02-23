@@ -12,6 +12,7 @@
         <activity android:name=".Login" >
             <intent-filter android:label="@string/title_activity_login" >
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,6 +47,10 @@
         <activity
             android:name=".Notifications"
             android:label="@string/title_activity_notifications" >
+        </activity>
+        <activity
+            android:name=".Dashboard"
+            android:label="@string/title_activity_dashboard" >
         </activity>
     </application>
 

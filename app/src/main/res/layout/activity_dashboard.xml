@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/White"
+    android:orientation="vertical" >
+
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="fill_parent" android:layout_height="wrap_content"
+        android:id="@+id/viewPager"
+        android:layout_alignParentTop="true"
+        />
+
+    <TableLayout
+        style="@style/layout_f_w"
+        android:stretchColumns="*"
+        android:id="@+id/tabs"
+        android:layout_alignParentBottom="true">
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:background="#dddddd"
+            style="@style/layout_wrap">
+
+            <!-- First Tab -->
+            <LinearLayout
+                style="@style/layout_f_w"
+                android:id="@+id/first_text"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    style="@style/text_title"
+                    android:text="Tab1"
+                    android:textColor="@color/DarkViolet"/>
+            </LinearLayout>
+
+            <!-- Second Tab -->
+            <LinearLayout
+                style="@style/layout_f_w"
+                android:id="@+id/second_text"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/text_title"
+                    android:text="Tab2"
+                    android:textColor="@color/DarkViolet"/>
+
+            </LinearLayout>
+            <!-- Third Tab -->
+            <LinearLayout
+                style="@style/layout_f_w"
+                android:id="@+id/third_text"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/text_title"
+                    android:text="Tab3"
+                    android:textColor="@color/DarkViolet"/>
+            </LinearLayout>
+
+            <!-- Fourth Tab -->
+            <LinearLayout
+                style="@style/layout_f_w"
+                android:id="@+id/fourth_text"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView4"
+                    style="@style/text_title"
+                    android:text="Tab4"
+                    android:textColor="@color/DarkViolet"/>
+            </LinearLayout>
+
+            <!-- Fifth Tab -->
+            <LinearLayout
+                style="@style/layout_f_w"
+                android:id="@+id/fifth_text"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView5"
+                    style="@style/text_title"
+                    android:text="Tab5"
+                    android:textColor="@color/DarkViolet"/>
+            </LinearLayout>
+
+        </TableRow>
+    </TableLayout>
+
+    <!-- Include Tab Indicator  -->
+    <include layout="@layout/dashboard_indicator" android:id="@+id/indicator" android:layout_width="fill_parent" android:layout_height="wrap_content"
+        android:layout_above="@id/tabs"/>
+
+
+</RelativeLayout>

@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -32,6 +33,7 @@ public class Notifications extends FragmentActivity {
     private ViewPager _mViewPager;
     private ViewPagerAdapter2 _adapter;
     final ArrayList<String> userlist=new ArrayList<String>();
+    int pos=0;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,36 @@ public class Notifications extends FragmentActivity {
             @Override
             public void onCancelled(FirebaseError firebaseError) {
                 System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+
+        TextView b1=(TextView)findViewById(R.id.textView1);
+        TextView b2=(TextView)findViewById(R.id.textView2);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                pos=0;
+                _mViewPager.setCurrentItem(pos);
+
+                findViewById(R.id.first_tab).setVisibility(View.VISIBLE);
+                findViewById(R.id.second_tab).setVisibility(View.INVISIBLE);
+
+
+
+
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                pos=1;
+                _mViewPager.setCurrentItem(pos);
+
+                findViewById(R.id.first_tab).setVisibility(View.INVISIBLE);
+                findViewById(R.id.second_tab).setVisibility(View.VISIBLE);
+
             }
         });
     }
@@ -166,7 +198,7 @@ public class Notifications extends FragmentActivity {
         _mViewPager.setAdapter(_adapter);
         _mViewPager.setCurrentItem(0);
     }
-    private void setTab(){
+    public void setTab(){
         _mViewPager.setOnPageChangeListener(new OnPageChangeListener(){
 
             @Override
