@@ -26,12 +26,13 @@ public class HomeScreen extends Activity {
         Button budgetButton = (Button) findViewById(R.id.budget);
         Button expensesButton = (Button) findViewById(R.id.expenses);
         Button loanButton = (Button) findViewById(R.id.loan);
+        Button notificationsButton = (Button) findViewById(R.id.notifications);
 
         budgetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent budgetIntent = new Intent(HomeScreen.this, Budget.class);
-                startActivity(budgetIntent);  //TODO: Implement Budget activity
+                startActivity(budgetIntent);
             }
         });
 
@@ -48,7 +49,15 @@ public class HomeScreen extends Activity {
             public void onClick(View v) {
                 Intent loanIntent = new Intent(HomeScreen.this, LendStatus.class);
                 loanIntent.putExtra("Username",username);
-                startActivity(loanIntent);    //TODO: loan activity
+                startActivity(loanIntent);
+            }
+        });
+
+        notificationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent notificationsIntent = new Intent(HomeScreen.this, Notifications.class);
+                startActivity(notificationsIntent);
             }
         });
     }

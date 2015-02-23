@@ -1,27 +1,18 @@
 package com.example.lasyaboddapati.moneymatters;
 
-import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by kaustav1992 on 2/22/15.
@@ -47,7 +38,7 @@ public class CustomListAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View row = inflater.inflate(R.layout.expenses_list_item, null);
+        View row = inflater.inflate(R.layout.custom_list_item, null);
 
         String value=list.get(position);
 
@@ -70,7 +61,7 @@ public class CustomListAdapter extends ArrayAdapter {
 
 
 
-        TextView date = (TextView) row.findViewById(R.id.date);
+        TextView date = (TextView) row.findViewById(R.id.listItemLeft);
         SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyyMMdd");
         Date MyDate = null;
         try {
@@ -87,7 +78,7 @@ public class CustomListAdapter extends ArrayAdapter {
             date.setText(user+":"+desc);
         }
 
-        TextView amount = (TextView) row.findViewById(R.id.amount);
+        TextView amount = (TextView) row.findViewById(R.id.listItemRight);
         if(user.equals("0"))
         {
             amount.setText(amt);

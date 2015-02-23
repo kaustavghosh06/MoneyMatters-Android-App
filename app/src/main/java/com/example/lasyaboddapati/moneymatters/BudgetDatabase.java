@@ -9,9 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by lasyaboddapati on 2/8/15.
  */
 public class BudgetDatabase extends SQLiteOpenHelper {
-    public enum COLUMNS {/*ID, YEAR,*/ MONTH, MONTHLY_BUDGET_COLUMN, WEEK1_BUDGET, WEEK2_BUDGET, WEEK3_BUDGET, WEEK4_BUDGET};
-    //public static final String ID_COLUMN = "ID";
-    //public static final String YEAR_COLUMN = "YEAR";
     public static final String MONTH_COLUMN = "MONTH";
     public static final String MONTHLY_BUDGET_COLUMN = "MONTHLY_BUDGET";
     public static final String WEEK1_COLUMN = "WEEK1_BUDGET";
@@ -22,8 +19,7 @@ public class BudgetDatabase extends SQLiteOpenHelper {
     public static final String DATABASE_TABLE = "BUDGET";
     public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_CREATE = "CREATE TABLE "+DATABASE_TABLE+" ( "
-            //+ID_COLUMN+" INTEGER PRIMARY KEY AUTOINCREMENT, "
-            //+YEAR_COLUMN+" INTEGER, "
+
             +MONTH_COLUMN+" TEXT NOT NULL PRIMARY KEY, "
             +MONTHLY_BUDGET_COLUMN+" INTEGER, "
             +WEEK1_COLUMN+" INTEGER, "

@@ -29,6 +29,8 @@ public class Budget extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
 
+        //deleteDB();
+
         final Button monthButton = (Button) findViewById(R.id.monthButton);
         final Button yearButton = (Button) findViewById(R.id.yearButton);
 
@@ -76,7 +78,7 @@ public class Budget extends Activity {
 
     }
 
-    /*private void deleteDB() {
+    private void deleteDB() {
         Budget.this.deleteDatabase(BudgetDatabase.DATABASE_TABLE);
-    }*/
+    }
 }

@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,28 +20,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -63,13 +52,15 @@ public class ExpensesListViewFragment extends Fragment {
     public static ExpensesListViewFragment newInstance(Context context, ExpensesGraphViewFragment graphViewFragment) {
         ExpensesListViewFragment expensesListViewFragment = new ExpensesListViewFragment();
         expensesListViewFragment.context = context;
-        adapter = new ExpensesListAdapter(context, R.layout.expenses_list_item);
+        adapter = new ExpensesListAdapter(context, R.layout.custom_list_item);
         expensesListViewFragment.graphViewFragment = graphViewFragment;
         return expensesListViewFragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
         View rootView = inflater.inflate(R.layout.fragment_list_view, container, false);
 
         lv = (ListView) rootView.findViewById(R.id.listView);
@@ -432,23 +423,29 @@ public class ExpensesListViewFragment extends Fragment {
         static final int AMOUNT = 1;
         static final int DESCRIPTION = 2;
 
+        SQLiteDatabase expenseDB;
+        SQLiteDatabase budgetDB;
+
         public ExpensesListAdapter(Context context, int resource) {
             super(context, resource);
             this.expenses = new LinkedHashMap<Long, String[]>();
             this.db = new ExpenseDatabase(context).getWritableDatabase();
             this.context = context;
             populateListView();
+
+            expenseDB = new ExpenseDatabase(context).getReadableDatabase();
+            budgetDB = new BudgetDatabase(context).getReadableDatabase();
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = inflater.inflate(R.layout.expenses_list_item, null);
+            View row = inflater.inflate(R.layout.custom_list_item, null);
 
             long id = (long) expenses.keySet().toArray()[position];
             Log.d("GET VIEWWWWWWWWWWW", id+"  "+position+ "      "+Integer.parseInt(expenses.get(id)[DATE].split("[./-]")[2]));
 
-            TextView date = (TextView) row.findViewById(R.id.date);
+            TextView date = (TextView) row.findViewById(R.id.listItemLeft);
             SimpleDateFormat newDateFormat = new SimpleDateFormat("MM/dd/yyyy");
             Date MyDate=null;
             try {
@@ -460,7 +457,7 @@ public class ExpensesListViewFragment extends Fragment {
             String dateFormatted = newDateFormat.format(MyDate);
             date.setText(dateFormatted);
 
-            TextView amount = (TextView) row.findViewById(R.id.amount);
+            TextView amount = (TextView) row.findViewById(R.id.listItemRight);
             amount.setText("$"+expenses.get(id)[AMOUNT]);
 
             TextView description = (TextView) row.findViewById(R.id.description);
@@ -481,11 +478,14 @@ public class ExpensesListViewFragment extends Fragment {
         }
 
         public void addItem(String date, String amount, String description) {
+            date = date+"/"+Calendar.getInstance().get(Calendar.YEAR);
             insertIntoDatabase(date, amount, description);
             //expenses.put(rowId, new String[] {date, amount,description});
             filterItems();
             //notifyDataSetChanged();
             //graphViewFragment.populateGraphView();
+
+            SystemNotificationFragment.limit_exceeded_check(date, expenseDB, budgetDB);
         }
 
         public void removeItems(List<Integer> groupsToRemove) {
@@ -506,6 +506,7 @@ public class ExpensesListViewFragment extends Fragment {
             updateInDatabase(id, date, amount, description);
             filterItems();
             //graphViewFragment.populateGraphView();
+            SystemNotificationFragment.limit_exceeded_check(date, expenseDB, budgetDB);
         }
 
         public long insertIntoDatabase(String date, String amount, String description) {
@@ -519,7 +520,7 @@ public class ExpensesListViewFragment extends Fragment {
             c.set(Calendar.MONTH, mm);
             c.set(Calendar.DATE, dd);
             int week = c.get(Calendar.WEEK_OF_MONTH);
-            date = date+"/"+c.get(Calendar.YEAR);
+            //date = date+"/"+c.get(Calendar.YEAR);
 
             newValues.put(ExpenseDatabase.DATE_COLUMN, date);
             newValues.put(ExpenseDatabase.WEEK_COLUMN, week);
@@ -550,7 +551,6 @@ public class ExpensesListViewFragment extends Fragment {
             c.set(Calendar.MONTH, mm);
             c.set(Calendar.DATE, dd);
             int week = c.get(Calendar.WEEK_OF_MONTH);
-            date = date+"/"+c.get(Calendar.YEAR);
 
             newValues.put(ExpenseDatabase.DATE_COLUMN, date);
             newValues.put(ExpenseDatabase.WEEK_COLUMN, week);

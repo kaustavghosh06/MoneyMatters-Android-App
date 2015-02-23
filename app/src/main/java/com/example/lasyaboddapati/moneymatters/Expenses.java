@@ -17,15 +17,11 @@ import java.util.Calendar;
  * Created by lasyaboddapati on 1/28/15.
  */
 public class Expenses extends Activity /*implements CustomDialogFragment.CustomDialogListener*/ {
-    //ExpensesExpandableListViewFragment expensesListViewFragment;
     ExpensesListViewFragment expensesListViewFragment;
     ExpensesGraphViewFragment graphViewFragment;
     final String[] MONTHS = {"All", "January", "February", "March", "April", "May", "June", "July"
                            , "August", "September", "October", "November", "December"};
     final String[] WEEKS = {"All", "Week1", "Week2", "Week3", "Week4"};
-
-    //boolean dateValid;
-    //boolean amountValid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +29,6 @@ public class Expenses extends Activity /*implements CustomDialogFragment.CustomD
         setContentView(R.layout.activity_expenses);
         //deleteDB();
         graphViewFragment = ExpensesGraphViewFragment.newInstance(Expenses.this);
-        //expensesListViewFragment = ExpensesExpandableListViewFragment.newInstance(Expenses.this, graphViewFragment);
         expensesListViewFragment = ExpensesListViewFragment.newInstance(Expenses.this, graphViewFragment);
 
 

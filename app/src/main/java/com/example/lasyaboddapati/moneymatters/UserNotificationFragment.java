@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.firebase.client.DataSnapshot;
@@ -15,10 +14,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class UserNotificationFragment extends Fragment {
     ListView listView ;
@@ -67,7 +63,7 @@ public class UserNotificationFragment extends Fragment {
                 //ArrayAdapter<String> adapter = new ArrayAdapter<String>(context1,
                         //R.layout.simplerow, dArr);
 
-                adapter = new CustomListAdapter(context1, R.layout.expenses_list_item,d);
+                adapter = new CustomListAdapter(context1, R.layout.custom_list_item,d);
 
 
 
