@@ -54,6 +54,7 @@ public class ExpensesListViewFragment extends Fragment {
         expensesListViewFragment.context = context;
         adapter = new ExpensesListAdapter(context, R.layout.custom_list_item);
         expensesListViewFragment.graphViewFragment = graphViewFragment;
+        SystemNotificationFragment.initialize(context);
         return expensesListViewFragment;
     }
 
@@ -84,11 +85,7 @@ public class ExpensesListViewFragment extends Fragment {
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                if (checkedCount > 1) {
-                    mode.getMenuInflater().inflate(R.menu.menu_multi_item_delete, menu);
-                } else {
-                    mode.getMenuInflater().inflate(R.menu.menu_item_edit_detele, menu);
-                }
+                mode.getMenuInflater().inflate(R.menu.menu_item_edit_detele, menu);
                 actionMode = mode;
                 return true;
             }
@@ -423,18 +420,12 @@ public class ExpensesListViewFragment extends Fragment {
         static final int AMOUNT = 1;
         static final int DESCRIPTION = 2;
 
-        SQLiteDatabase expenseDB;
-        SQLiteDatabase budgetDB;
-
         public ExpensesListAdapter(Context context, int resource) {
             super(context, resource);
             this.expenses = new LinkedHashMap<Long, String[]>();
             this.db = new ExpenseDatabase(context).getWritableDatabase();
             this.context = context;
             populateListView();
-
-            expenseDB = new ExpenseDatabase(context).getReadableDatabase();
-            budgetDB = new BudgetDatabase(context).getReadableDatabase();
         }
 
         @Override
@@ -485,7 +476,7 @@ public class ExpensesListViewFragment extends Fragment {
             //notifyDataSetChanged();
             //graphViewFragment.populateGraphView();
 
-            SystemNotificationFragment.limit_exceeded_check(date, expenseDB, budgetDB);
+            SystemNotificationFragment.limit_exceeded_check(date);
         }
 
         public void removeItems(List<Integer> groupsToRemove) {
@@ -506,7 +497,7 @@ public class ExpensesListViewFragment extends Fragment {
             updateInDatabase(id, date, amount, description);
             filterItems();
             //graphViewFragment.populateGraphView();
-            SystemNotificationFragment.limit_exceeded_check(date, expenseDB, budgetDB);
+            SystemNotificationFragment.limit_exceeded_check(date);
         }
 
         public long insertIntoDatabase(String date, String amount, String description) {
@@ -520,7 +511,9 @@ public class ExpensesListViewFragment extends Fragment {
             c.set(Calendar.MONTH, mm);
             c.set(Calendar.DATE, dd);
             int week = c.get(Calendar.WEEK_OF_MONTH);
-            //date = date+"/"+c.get(Calendar.YEAR);
+            if (week == 5) {
+                week = 4;
+            }
 
             newValues.put(ExpenseDatabase.DATE_COLUMN, date);
             newValues.put(ExpenseDatabase.WEEK_COLUMN, week);

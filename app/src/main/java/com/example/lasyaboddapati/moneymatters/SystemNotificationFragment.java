@@ -36,14 +36,23 @@ public class SystemNotificationFragment extends Fragment {
     List<Integer> groupsToRemove;
     static Context context;
 
-    //static SQLiteDatabase expenseDB;
-    //static SQLiteDatabase budgetDB;
+    static SQLiteDatabase expenseDB;
+    static SQLiteDatabase budgetDB;
+    static SQLiteDatabase notificationsDB;
+
 
     public static Fragment newInstance(Context context) {
         SystemNotificationFragment systemNotificationFragment = new SystemNotificationFragment();
         systemNotificationFragment.context=context;
-        adapter = new SystemNotificationsListAdapter(context, R.layout.custom_list_item);
+        initialize(context);
         return systemNotificationFragment;
+    }
+
+    public static void initialize(Context context){
+        adapter = new SystemNotificationsListAdapter(context, R.layout.custom_list_item);
+        expenseDB = new ExpenseDatabase(context).getReadableDatabase();
+        budgetDB = new BudgetDatabase(context).getReadableDatabase();
+        notificationsDB = new SystemNotificationsDatabase(context).getWritableDatabase();
     }
 
     @Override
@@ -77,7 +86,6 @@ public class SystemNotificationFragment extends Fragment {
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                int id = item.getItemId();
                 SparseBooleanArray checkedItemPositions = lv.getCheckedItemPositions();
                 groupsToRemove = new ArrayList<Integer>();
 
@@ -107,9 +115,7 @@ public class SystemNotificationFragment extends Fragment {
         return rootView;
     }
 
-    public static void limit_exceeded_check(String date, SQLiteDatabase expenseDB, SQLiteDatabase budgetDB) {
-        //expenseDB = new ExpenseDatabase(context).getReadableDatabase();
-        //budgetDB = new BudgetDatabase(context).getReadableDatabase();
+    public static void limit_exceeded_check(String date) {
         Log.d("limit_exceeded_check", expenseDB+"");
         Log.d("limit_exceeded_check", budgetDB+"");
 
@@ -119,7 +125,7 @@ public class SystemNotificationFragment extends Fragment {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MONTH, mm);
         c.set(Calendar.DATE, dd);
-        int week = (c.get(Calendar.WEEK_OF_MONTH))+1;
+        int week = (c.get(Calendar.WEEK_OF_MONTH));
         Log.d("limit_exceeded_check", "week is "+week);
 
         String[] budgetResultColumns = null;
@@ -127,49 +133,78 @@ public class SystemNotificationFragment extends Fragment {
             case 1: budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK1_COLUMN};
             case 2: budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK2_COLUMN};
             case 3: budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK3_COLUMN};
-            case 4: budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK4_COLUMN};
+            case 4:
+            case 5: budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK4_COLUMN};
         }
         Log.d("limit_exceeded_check", "budgetResultColumns is "+budgetResultColumns.toString());
         String budgetWhereClause = BudgetDatabase.MONTH_COLUMN + " = " + "'" + month + "'";
         Cursor budgetCursor = budgetDB.query(BudgetDatabase.DATABASE_TABLE, budgetResultColumns, budgetWhereClause, null, null, null, null);
-        float monthlyBudget = 0;
-        float weeklyBudget = 0;
-        while (budgetCursor.moveToNext()) {
-            monthlyBudget = budgetCursor.getFloat(0);
-            weeklyBudget = budgetCursor.getFloat(1);
-        }
-        budgetCursor.close();
+        if(budgetCursor.getCount() > 0) {
+            float monthlyBudget = 0;
+            float weeklyBudget = 0;
+            while (budgetCursor.moveToNext()) {
+                monthlyBudget = budgetCursor.getFloat(0);
+                weeklyBudget = budgetCursor.getFloat(1);
+            }
+            budgetCursor.close();
 
-        String[] expensesResultColumns = {ExpenseDatabase.AMOUNT_COLUMN, ExpenseDatabase.WEEK_COLUMN};
-        String expensesWhereClause = ExpenseDatabase.MONTH_COLUMN + " = " + "'" + month + "'";
-        Cursor expenseCursor = expenseDB.query(ExpenseDatabase.DATABASE_TABLE, expensesResultColumns, expensesWhereClause, null, null, null, null);
-        float monthlyExpense = 0;
-        float weeklyExpense = 0;
-        while (expenseCursor.moveToNext()) {
-            float amount = expenseCursor.getFloat(0);
-            monthlyExpense += amount;
-            if(expenseCursor.getInt(1) == week) {
-                weeklyExpense += amount;
+            String[] expensesResultColumns = {ExpenseDatabase.AMOUNT_COLUMN, ExpenseDatabase.WEEK_COLUMN};
+            String expensesWhereClause = ExpenseDatabase.MONTH_COLUMN + " = " + "'" + month + "'";
+            Cursor expenseCursor = expenseDB.query(ExpenseDatabase.DATABASE_TABLE, expensesResultColumns, expensesWhereClause, null, null, null, null);
+            float monthlyExpense = 0;
+            float weeklyExpense = 0;
+            while (expenseCursor.moveToNext()) {
+                float amount = expenseCursor.getFloat(0);
+                monthlyExpense += amount;
+                if (expenseCursor.getInt(1) == week) {
+                    weeklyExpense += amount;
+                }
+            }
+            expenseCursor.close();
+
+            if (weeklyExpense >= weeklyBudget) {
+                //adapter.addItem(date, "Weekly Budget Limit!", "You have reached your expense limit for the week");
+                insertIntoDatabase(date, "Weekly Budget Limit!", "You have reached your expense limit for the week");
+                Log.d("WEEKLY ", "Weekly Budget Limit!");
+            }
+
+            if (monthlyExpense >= monthlyBudget) {
+                //adapter.addItem(date, "Monthly Budget Limit!", "You have reached your expense limit for "+month);
+                insertIntoDatabase(date, "Monthly Budget Limit!", "You have reached your expense limit for " + month);
+                Log.d("MONTHLY", "Monthly Budget Limit");
             }
         }
-        expenseCursor.close();
+    }
 
-        if (weeklyExpense >= weeklyBudget) {
-            adapter.addItem(date, "Weekly Budget Limit!", "You have reached your expense limit for the week");
-            Log.d("WEEKLY ", "Weekly Budget Limit!" );
+    public static long insertIntoDatabase(String date, String title, String message) {
+        ContentValues newValues = new ContentValues();
+        newValues.put(SystemNotificationsDatabase.DATE_COLUMN, date);
+        newValues.put(SystemNotificationsDatabase.TITLE_COLUMN, title);
+        newValues.put(SystemNotificationsDatabase.MESSAGE_COLUMN, message);
+        Log.d("INSERT", "inserting into db");
+        return notificationsDB.insert(SystemNotificationsDatabase.DATABASE_TABLE, null, newValues);
+    }
+
+    public static void deleteFromDatabase(long id) {
+        String whereClause = SystemNotificationsDatabase.ID_COLUMN + " = "+id;
+        int n = notificationsDB.delete(SystemNotificationsDatabase.DATABASE_TABLE, whereClause, null);
+        Log.d("DELETE", "Deleted "+n);
+        //displayDb();
+    }
+
+    public void displayDb() {
+        Cursor c = notificationsDB.rawQuery("SELECT * FROM "+SystemNotificationsDatabase.DATABASE_TABLE, null);
+        while (c.moveToNext()) {
+            Log.d("DB", "ID "+c.getString(0));
+            Log.d("DB", "DATE "+c.getString(1));
+            Log.d("DB", "TITLE "+c.getString(4));
+            Log.d("DB", "MESSAGE "+c.getString(5));
         }
-
-        if (monthlyExpense >= monthlyBudget) {
-            adapter.addItem(date, "Monthly Budget Limit!", "You have reached your expense limit for "+month);
-            Log.d("MONTHLY", "Monthly Budget Limit");
-        }
-
-
+        c.close();
     }
 
     public static class SystemNotificationsListAdapter extends ArrayAdapter {
         private LinkedHashMap<Long, String[]> notifications;
-        protected SQLiteDatabase db;
         Context context;
 
         static final int DATE = 0;
@@ -179,7 +214,6 @@ public class SystemNotificationFragment extends Fragment {
         public SystemNotificationsListAdapter(Context context, int resource) {
             super(context, resource);
             this.notifications = new LinkedHashMap<Long, String[]>();
-            this.db = new SystemNotificationsDatabase(context).getWritableDatabase();
             this.context = context;
             populateListView();
         }
@@ -225,8 +259,7 @@ public class SystemNotificationFragment extends Fragment {
             return notifications.size();
         }
 
-        public void addItem(String date, String title, String message) {
-            long id = insertIntoDatabase(date, title, message);
+        public void addItem(long id, String date, String title, String message) {
             notifications.put(id, new String[] {date, title, message});
             notifyDataSetChanged();
         }
@@ -239,39 +272,13 @@ public class SystemNotificationFragment extends Fragment {
             for (int i=0; i<ids.length; i++) {
                 Long id = ids[i];
                 notifications.remove(id);
-                deleteFromDatabase(id);
+                SystemNotificationFragment.deleteFromDatabase(id);
             }
             notifyDataSetChanged();
         }
 
-        public long insertIntoDatabase(String date, String title, String message) {
-            ContentValues newValues = new ContentValues();
-            newValues.put(SystemNotificationsDatabase.DATE_COLUMN, date);
-            newValues.put(SystemNotificationsDatabase.TITLE_COLUMN, title);
-            newValues.put(SystemNotificationsDatabase.MESSAGE_COLUMN, message);
-            Log.d("INSERT", "inserting into db");
-            return db.insert(SystemNotificationsDatabase.DATABASE_TABLE, null, newValues);
-        }
-
-        public void deleteFromDatabase(long id) {
-            String whereClause = SystemNotificationsDatabase.ID_COLUMN + " = "+id;
-            int n = db.delete(SystemNotificationsDatabase.DATABASE_TABLE, whereClause, null);
-            Log.d("DELETE", "Deleted "+n);
-            //displayDb();
-        }
-
-        public void displayDb() {
-            Cursor c = db.rawQuery("SELECT * FROM "+SystemNotificationsDatabase.DATABASE_TABLE, null);
-            while (c.moveToNext()) {
-                Log.d("DB", "ID "+c.getString(0));
-                Log.d("DB", "DATE "+c.getString(1));
-                Log.d("DB", "TITLE "+c.getString(4));
-                Log.d("DB", "MESSAGE "+c.getString(5));
-            }
-            c.close();
-        }
-
         public void populateListView() {
+            SQLiteDatabase db = new SystemNotificationsDatabase(context).getReadableDatabase();
             String[] resultColumns = {SystemNotificationsDatabase.ID_COLUMN, SystemNotificationsDatabase.DATE_COLUMN
                     , SystemNotificationsDatabase.TITLE_COLUMN, SystemNotificationsDatabase.MESSAGE_COLUMN};
             Cursor cursor = db.query(SystemNotificationsDatabase.DATABASE_TABLE, resultColumns, null, null, null, null, null);
@@ -279,12 +286,16 @@ public class SystemNotificationFragment extends Fragment {
             notifications = new LinkedHashMap<Long, String[]>(cursor.getCount());
             Log.d("populateListView COUNT", "list size" + notifications.size()+ "cursor size"+ cursor.getCount());
 
-            while (cursor.moveToNext()) {
-                Long id = cursor.getLong(0);
-                String date = cursor.getString(1);
-                String title = cursor.getString(2);
-                String message = cursor.getString(3);
-                notifications.put(id, new String[] {date, title, message});
+            if(cursor.getCount() > 0) {
+                cursor.moveToLast();
+                //while (cursor.moveToPrevious()) {
+                do {
+                    Long id = cursor.getLong(0);
+                    String date = cursor.getString(1);
+                    String title = cursor.getString(2);
+                    String message = cursor.getString(3);
+                    notifications.put(id, new String[]{date, title, message});
+                } while (cursor.moveToPrevious());
             }
             Log.d("populateListView After COUNT", "list size" + notifications.size()+ "cursor size"+ cursor.getCount());
             cursor.close();
