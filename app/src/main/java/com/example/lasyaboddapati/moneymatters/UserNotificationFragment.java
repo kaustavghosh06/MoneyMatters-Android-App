@@ -23,8 +23,9 @@ import java.util.Set;
 public class UserNotificationFragment extends Fragment {
     ListView listView ;
     String user="kaustav1992";
+    static CustomListAdapter adapter;
     //LinkedHashMap<String, String> d;
-    Set<String> d= new HashSet<String>();
+    //Set<String> d= new HashSet<String>();
     static Context context1;
 
     public static Fragment newInstance(Context context) {
@@ -52,16 +53,21 @@ public class UserNotificationFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map<String, Object> de = (Map<String, Object>) snapshot.getValue();
+                ArrayList<String> d= new ArrayList<String>();
 
-                for(String key: de.keySet()) {
+                if(de!=null) {
+                    for (String key : de.keySet()) {
 
-                    d.add(key + ":" + de.get(key).toString());
+                        d.add(key + "-" + de.get(key).toString());
+                    }
+                    String[] dArr = new String[d.size()];
+                    dArr = d.toArray(dArr);
                 }
-                String[] dArr = new String[d.size()];
-                dArr = d.toArray(dArr);
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context1,
-                        R.layout.simplerow, dArr);
+                //ArrayAdapter<String> adapter = new ArrayAdapter<String>(context1,
+                        //R.layout.simplerow, dArr);
+
+                adapter = new CustomListAdapter(context1, R.layout.expenses_list_item,d);
 
 
 

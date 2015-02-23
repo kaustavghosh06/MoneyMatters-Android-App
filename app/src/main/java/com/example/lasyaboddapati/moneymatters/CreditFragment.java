@@ -24,8 +24,9 @@ public class CreditFragment extends Fragment {
     ListView listView ;
     static String user;
     //LinkedHashMap<String, String> d;
-   Set<String> c= new HashSet<String>();
+   //Set<String> c= new HashSet<String>();
     static Context context1;
+    static CustomListAdapter adapter;
 
     public static Fragment newInstance(Context context,String username) {
         CreditFragment f = new CreditFragment();
@@ -51,16 +52,21 @@ public class CreditFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map<String, Object> de = (Map<String, Object>) snapshot.getValue();
+                ArrayList<String> c= new ArrayList<String>();
 
-                for (String key : de.keySet()) {
+                if(de!=null) {
 
-                    c.add(key+ " owes " + "$"+de.get(key).toString());
+                    for (String key : de.keySet()) {
+
+                        c.add(key + "-" + de.get(key).toString());
+                    }
                 }
-                String[] cArr = new String[c.size()];
-                cArr = c.toArray(cArr);
+                //String[] cArr = new String[c.size()];
+                //cArr = c.toArray(cArr);
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context1,
-                        R.layout.simplerow, cArr);
+                //ArrayAdapter<String> adapter = new ArrayAdapter<String>(context1,
+                        //R.layout.simplerow, cArr);
+                adapter = new CustomListAdapter(context1, R.layout.expenses_list_item,c);
 
 
                 // Assign adapter to ListView

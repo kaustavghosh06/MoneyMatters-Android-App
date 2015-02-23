@@ -22,7 +22,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 public class LendStatus extends FragmentActivity {
@@ -143,8 +145,11 @@ public class LendStatus extends FragmentActivity {
                             descr=description.getText().toString();
                             lendercloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+lender);
                             receivercloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+receiver);
-                            lendercloud.child("Credit").child(descr+":"+receiver).setValue(amt);
-                            receivercloud.child("Debts").child(descr+":"+lender).setValue(amt);
+
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+                            lendercloud.child("Credit").child(timeStamp).setValue(descr+":"+receiver+":"+amt);
+                            receivercloud.child("Debts").child(timeStamp).setValue(descr+":"+lender+":"+amt);
 
 
 

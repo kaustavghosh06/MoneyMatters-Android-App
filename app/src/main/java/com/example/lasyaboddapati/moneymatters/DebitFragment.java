@@ -14,6 +14,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -24,13 +25,15 @@ public class DebitFragment extends Fragment {
     ListView listView ;
     static String user;
     //LinkedHashMap<String, String> d;
-    Set<String> d= new HashSet<String>();
+    //Set<String> d= new HashSet<String>();
     static Context context1;
+    static CustomListAdapter adapter;
 
     public static Fragment newInstance(Context context,String username) {
         DebitFragment f = new DebitFragment();
         context1=context;
         user=username;
+
 
         return f;
     }
@@ -53,16 +56,19 @@ public class DebitFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map<String, Object> de = (Map<String, Object>) snapshot.getValue();
+                ArrayList<String> d= new ArrayList<String>();
+                if(de!=null) {
+                    for (String key : de.keySet()) {
 
-                for(String key: de.keySet()) {
-
-                    d.add("You owe " + key + " $" + de.get(key).toString());
+                        d.add(key + "-" + de.get(key).toString());
+                    }
                 }
-                String[] dArr = new String[d.size()];
-                dArr = d.toArray(dArr);
+                //String[] dArr = new String[d.size()];
+                //dArr = d.toArray(dArr);
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context1,
-                        R.layout.simplerow, dArr);
+                /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(context1,
+                        R.layout.simplerow, dArr);*/
+                adapter = new CustomListAdapter(context1, R.layout.expenses_list_item,d);
 
 
 

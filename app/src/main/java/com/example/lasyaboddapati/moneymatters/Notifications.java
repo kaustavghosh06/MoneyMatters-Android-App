@@ -22,7 +22,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 public class Notifications extends FragmentActivity {
@@ -128,8 +130,9 @@ public class Notifications extends FragmentActivity {
                             String notf=message.getText().toString();
 
                             Firebase receivercloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+receiver);
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
-                            receivercloud.child("Notifications").child(loginUser).setValue(notf);
+                            receivercloud.child("Notifications").child(timeStamp).setValue(notf+":"+"0"+":"+loginUser);
 
 
                         }
