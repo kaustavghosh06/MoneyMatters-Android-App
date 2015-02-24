@@ -50,7 +50,10 @@ public class DebitFragment extends Fragment {
         debtcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Map<String, Object> de = (Map<String, Object>) snapshot.getValue();
+                Map<String, Object> de=null;
+                if(!(snapshot.getValue().toString()).equals("true")) {
+                    de = (Map<String, Object>) snapshot.getValue();
+                }
                 ArrayList<String> d= new ArrayList<String>();
                 if(de!=null) {
                     for (String key : de.keySet()) {

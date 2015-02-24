@@ -2,18 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.firebase/firebase-client-jvm/2.2.0/98ee8e40df7889d5913885424ad608174b537d86/firebase-client-jvm-2.2.0.jar"
+        jar="/Users/kaustav1992/Desktop/MoneyMatters/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="98ee8e40df7889d5913885424ad608174b537d86">
-        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/firebase-client-jvm-2.2.0-bba8645e35d97c95c4047601f8db8bed1c797790.jar" />
-    </item>
-    <item
-        jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.2.2/3c8f6018eaa72d43b261181e801e6f8676c16ef6/jackson-databind-2.2.2.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
-        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/jackson-databind-2.2.2-856b28771edf29ab7d629835593d6f36fdf67d95.jar" />
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/kaustav1992/Desktop/MoneyMatters/app/build/intermediates/pre-dexed/debug/classes-7823bd08756d751f4fecf0cd80478f80b8c5ba00.jar" />
     </item>
     <item
         jar="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
@@ -23,25 +16,11 @@
         <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/classes-ee2b32a41d2a0ad634ee5b8510bd9b9eeb84e09e.jar" />
     </item>
     <item
-        jar="/Users/kaustav1992/Documents/MoneyMatters/app/libs/mpandroidchartlibrary-1-7-4.jar"
+        jar="/Users/kaustav1992/Desktop/MoneyMatters/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="c685e45ac6491e51640ce3571606ac22dfd4a6a3">
-        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/mpandroidchartlibrary-1-7-4-055c07b7784af962b683b1012d42cd22a900dd86.jar" />
-    </item>
-    <item
-        jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.firebase/tubesock/0.0.11/d37cb67277928cf59344b4196af8d9cee1f1a27c/tubesock-0.0.11.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="d37cb67277928cf59344b4196af8d9cee1f1a27c">
-        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/tubesock-0.0.11-8d7b6c7d36d1437b234074edb02648abd8f66ff8.jar" />
-    </item>
-    <item
-        jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.firebase/firebase-client-android/2.2.0/3dfbd3df303f65feb6b6ed808df9e6b75b267f4f/firebase-client-android-2.2.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="3dfbd3df303f65feb6b6ed808df9e6b75b267f4f">
-        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/firebase-client-android-2.2.0-0c277c1ddeaea43c3a4eb409041d6acd059ccf1f.jar" />
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/kaustav1992/Desktop/MoneyMatters/app/build/intermediates/pre-dexed/debug/classes-44a671c4e7f7df1c07be5a9b19f732e49fa3b8f0.jar" />
     </item>
     <item
         jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.2.2/285cb9c666f0f0f3dd8a1be04e1f457eb7b15113/jackson-annotations-2.2.2.jar"
@@ -58,11 +37,60 @@
         <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/classes-a557b508d615d69849be00091810666f67d0dd48.jar" />
     </item>
     <item
-        jar="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.2.2/d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b/jackson-core-2.2.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
+        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/jackson-core-2.2.2-8fcd807988b43d43a4f81b1a6b4b7a456d3ed54c.jar" />
+    </item>
+    <item
+        jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.firebase/firebase-client-jvm/2.2.0/98ee8e40df7889d5913885424ad608174b537d86/firebase-client-jvm-2.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="98ee8e40df7889d5913885424ad608174b537d86">
+        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/firebase-client-jvm-2.2.0-bba8645e35d97c95c4047601f8db8bed1c797790.jar" />
+    </item>
+    <item
+        jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.2.2/3c8f6018eaa72d43b261181e801e6f8676c16ef6/jackson-databind-2.2.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
+        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/jackson-databind-2.2.2-856b28771edf29ab7d629835593d6f36fdf67d95.jar" />
+    </item>
+    <item
+        jar="/Users/kaustav1992/Desktop/MoneyMatters/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-f9605b2a15c875cf96ad71b47383fd1754c00678.jar" />
+        <dex dex="/Users/kaustav1992/Desktop/MoneyMatters/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-3698728e4746acdbcab29aa1751989f83914f9fd.jar" />
+    </item>
+    <item
+        jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.firebase/tubesock/0.0.11/d37cb67277928cf59344b4196af8d9cee1f1a27c/tubesock-0.0.11.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d37cb67277928cf59344b4196af8d9cee1f1a27c">
+        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/tubesock-0.0.11-8d7b6c7d36d1437b234074edb02648abd8f66ff8.jar" />
+    </item>
+    <item
+        jar="/Users/kaustav1992/Documents/MoneyMatters/app/libs/mpandroidchartlibrary-1-7-4.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c685e45ac6491e51640ce3571606ac22dfd4a6a3">
+        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/mpandroidchartlibrary-1-7-4-055c07b7784af962b683b1012d42cd22a900dd86.jar" />
+    </item>
+    <item
+        jar="/Users/kaustav1992/Desktop/MoneyMatters/app/libs/mpandroidchartlibrary-1-7-4.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c685e45ac6491e51640ce3571606ac22dfd4a6a3">
+        <dex dex="/Users/kaustav1992/Desktop/MoneyMatters/app/build/intermediates/pre-dexed/debug/mpandroidchartlibrary-1-7-4-a67a4c79e23ba0e7afb502b3266af6ee358a1900.jar" />
+    </item>
+    <item
+        jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.firebase/firebase-client-android/2.2.0/3dfbd3df303f65feb6b6ed808df9e6b75b267f4f/firebase-client-android-2.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="3dfbd3df303f65feb6b6ed808df9e6b75b267f4f">
+        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/firebase-client-android-2.2.0-0c277c1ddeaea43c3a4eb409041d6acd059ccf1f.jar" />
     </item>
     <item
         jar="/Users/kaustav1992/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
@@ -72,11 +100,11 @@
         <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-73f97d289e73e8a03fa2c4159092c315c350bed3.jar" />
     </item>
     <item
-        jar="/Users/kaustav1992/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.2.2/d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b/jackson-core-2.2.2.jar"
+        jar="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
-        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/jackson-core-2.2.2-8fcd807988b43d43a4f81b1a6b4b7a456d3ed54c.jar" />
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/Users/kaustav1992/Documents/MoneyMatters/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-f9605b2a15c875cf96ad71b47383fd1754c00678.jar" />
     </item>
 
 </items>

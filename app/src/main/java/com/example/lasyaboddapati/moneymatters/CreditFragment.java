@@ -3,6 +3,7 @@ package com.example.lasyaboddapati.moneymatters;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,11 @@ public class CreditFragment extends Fragment {
         creditcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Map<String, Object> de = (Map<String, Object>) snapshot.getValue();
+                Map<String, Object> de=null;
+                Log.d("name", snapshot.getValue().toString());
+                if(!(snapshot.getValue().toString()).equals("true")) {
+                    de = (Map<String, Object>) snapshot.getValue();
+                }
                 ArrayList<String> c= new ArrayList<String>();
 
                 if(de!=null) {
