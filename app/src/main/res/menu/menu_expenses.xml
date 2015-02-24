@@ -3,8 +3,6 @@
     tools:context="com.example.lasyaboddapati.moneymatters.Budget">
     <item android:id="@+id/action_add" android:title="@string/action_add" android:icon="@android:drawable/ic_menu_add"
         android:orderInCategory="100" android:showAsAction="always" />
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="400" android:showAsAction="never" />
     <item android:id="@+id/action_help" android:title="@string/action_help"
         android:orderInCategory="500" android:showAsAction="never" />
 </menu>
