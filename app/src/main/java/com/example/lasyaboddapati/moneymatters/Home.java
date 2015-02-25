@@ -15,23 +15,28 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Home extends Activity implements OnItemClickListener {
 
     static final String EXTRA_MAP = "map";
+    String username;
 
     static final LauncherIcon[] ICONS = {
-            new LauncherIcon(R.drawable.favicon, "Metro", "metro.png"),
-            new LauncherIcon(R.drawable.money, "RER", "rer.png"),
-            new LauncherIcon(R.drawable.money, "Bus", "bus.png"),
-            new LauncherIcon(R.drawable.money, "Noctilien", "noctilien.png"),
+            new LauncherIcon(R.drawable.expenses, "Expenses", "metro.png"),
+            new LauncherIcon(R.drawable.budget, "Budget", "rer.png"),
+            new LauncherIcon(R.drawable.creditdebit, "Credits/Debits", "bus.png"),
+            new LauncherIcon(R.drawable.notifications, "User/System Notifications", "noctilien.png"),
+            new LauncherIcon(R.drawable.addfriend, "Add Friends", "noctilien.png"),
+            new LauncherIcon(R.drawable.settings, "Settings", "noctilien.png"),
 
     };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+       setContentView(R.layout.activity_home);
+        username= getIntent().getExtras().getString("Username");
 
         GridView gridview = (GridView) findViewById(R.id.dashboard_grid);
         gridview.setAdapter(new ImageAdapter(this));
@@ -48,9 +53,41 @@ public class Home extends Activity implements OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        Intent intent = new Intent(this, Login.class);
+
+        if(position==0)
+        {
+            Intent intent = new Intent(this, Expenses.class);
+            startActivity(intent);
+        }
+        else if(position==1)
+        {
+            Intent intent = new Intent(this, Budget.class);
+            startActivity(intent);
+        }
+        else if(position==2)
+        {
+            Intent intent = new Intent(this, LendStatus.class);
+            intent.putExtra("Username",username);
+            startActivity(intent);
+        }
+        else if(position==3)
+        {
+            Intent intent = new Intent(this, Notifications.class);
+            intent.putExtra("Username",username);
+            startActivity(intent);
+        }
+        else if(position==4)
+        {
+            Toast.makeText(getApplicationContext(),"Not yet implemented",Toast.LENGTH_LONG).show();
+
+        }
+        else if(position==5)
+        {
+            Toast.makeText(getApplicationContext(),"Not yet implemented",Toast.LENGTH_LONG).show();
+        }
+
         //intent.putExtra(EXTRA_MAP, ICONS[position].map);
-        startActivity(intent);
+
     }
 
     static class LauncherIcon {

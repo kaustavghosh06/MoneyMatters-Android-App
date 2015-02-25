@@ -72,7 +72,7 @@ public class Login extends Activity {
                         {
                             Toast.makeText(getApplicationContext(), "Success",
                                     Toast.LENGTH_SHORT).show();
-                            Intent homeIntent = new Intent(Login.this, HomeScreen.class);
+                            Intent homeIntent = new Intent(Login.this, Home.class);
                             homeIntent.putExtra("Username",user);
                             startActivity(homeIntent);
                         }

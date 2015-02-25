@@ -18,16 +18,16 @@ import java.util.Map;
 
 public class UserNotificationFragment extends Fragment {
     ListView listView ;
-    String user="kaustav1992";
+    static String user;
     static CustomListAdapter adapter;
     //LinkedHashMap<String, String> d;
     //Set<String> d= new HashSet<String>();
     static Context context1;
 
-    public static Fragment newInstance(Context context) {
+    public static Fragment newInstance(Context context,String username) {
         UserNotificationFragment f = new UserNotificationFragment();
         context1=context;
-
+        user=username;
         return f;
     }
 
@@ -48,7 +48,10 @@ public class UserNotificationFragment extends Fragment {
         notifcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Map<String, Object> de = (Map<String, Object>) snapshot.getValue();
+                Map<String, Object> de=null;
+                if(!(snapshot.getValue().toString()).equals("true")){
+                    de=(Map<String, Object>) snapshot.getValue();
+                }
                 ArrayList<String> d= new ArrayList<String>();
 
                 if(de!=null) {

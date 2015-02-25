@@ -11,9 +11,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class ViewPagerAdapter2 extends FragmentPagerAdapter {
     private Context _context;
 
-    public ViewPagerAdapter2(Context context, FragmentManager fm) {
+    String username;
+
+    public ViewPagerAdapter2(Context context, FragmentManager fm,String user) {
         super(fm);
         _context=context;
+        username=user;
 
     }
     @Override
@@ -21,7 +24,7 @@ public class ViewPagerAdapter2 extends FragmentPagerAdapter {
         Fragment f = new Fragment();
         switch(position){
             case 0:
-                f=UserNotificationFragment.newInstance(_context);
+                f=UserNotificationFragment.newInstance(_context,username);
                 break;
             case 1:
                 f=SystemNotificationFragment.newInstance(_context);

@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.Map;
 
 public class Notifications extends FragmentActivity {
-    String loginUser="kaustav1992";
+    String loginUser;
     private ViewPager _mViewPager;
     private ViewPagerAdapter2 _adapter;
     final ArrayList<String> userlist=new ArrayList<String>();
@@ -39,6 +39,7 @@ public class Notifications extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+        loginUser=getIntent().getExtras().getString("Username");
         setUpView();
         setTab();
         //For getting UserList
@@ -194,7 +195,7 @@ public class Notifications extends FragmentActivity {
 
     private void setUpView(){
         _mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        _adapter = new ViewPagerAdapter2(getApplicationContext(),getSupportFragmentManager());
+        _adapter = new ViewPagerAdapter2(getApplicationContext(),getSupportFragmentManager(),loginUser);
         _mViewPager.setAdapter(_adapter);
         _mViewPager.setCurrentItem(0);
     }
