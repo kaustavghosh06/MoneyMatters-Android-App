@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +34,8 @@ public class Notifications extends FragmentActivity {
     String loginUser;
     private ViewPager _mViewPager;
     private ViewPagerAdapter2 _adapter;
-    final ArrayList<String> userlist=new ArrayList<String>();
+    ArrayList<String> userlist;
+
     int pos=0;
     /** Called when the activity is first created. */
     @Override
@@ -49,16 +52,21 @@ public class Notifications extends FragmentActivity {
         userscloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+
                 Map<String, Object> usersmap = (Map<String, Object>) snapshot.getValue();
+                userlist=new ArrayList<String>();
+
+
 
                 for (String key : usersmap.keySet()) {
 
                     userlist.add(key);
                 }
-                for(String str: userlist)
+                userlist.remove(loginUser);
+                /*for(String str: userlist)
                 {
                     Log.d("user", str);
-                }
+                }*/
 
 
 
@@ -141,6 +149,32 @@ public class Notifications extends FragmentActivity {
             user.setHint("Enter User ID");
             user.setAdapter(adapter);
 
+            user.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(!userlist.contains(s.toString()))
+                    {
+                        user.setError("User doesn't exist");
+                    }
+                    else
+                    {
+                        user.setError(null);
+                    }
+
+
+                }
+            });
+
 
 
 
@@ -166,6 +200,8 @@ public class Notifications extends FragmentActivity {
                             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
                             receivercloud.child("Notifications").child(timeStamp).setValue(notf+":"+"0"+":"+loginUser);
+
+
 
 
                         }

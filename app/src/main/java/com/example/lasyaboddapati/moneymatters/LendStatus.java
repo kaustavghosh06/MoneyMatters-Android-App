@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +43,7 @@ public class LendStatus extends FragmentActivity {
     Firebase receivercloud=null;
     String user;
     int pos=0;
-    final ArrayList<String> userlist=new ArrayList<String>();
+    ArrayList<String> userlist;
 
 
     /** Called when the activity is first created. */
@@ -61,11 +63,13 @@ public class LendStatus extends FragmentActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map<String, Object> usersmap = (Map<String, Object>) snapshot.getValue();
+                userlist=new ArrayList<String>();
 
                 for (String key : usersmap.keySet()) {
 
                     userlist.add(key);
                 }
+                userlist.remove(user);
                 for(String str: userlist)
                 {
                     Log.d("user", str);
@@ -158,6 +162,31 @@ public class LendStatus extends FragmentActivity {
             user1.setHint("Enter User ID");
             user1.setAdapter(adapter);
 
+            user1.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(!userlist.contains(s.toString()))
+                    {
+                        user1.setError("User doesn't exist");
+                    }
+                    else
+                    {
+                        user1.setError(null);
+                    }
+
+                }
+            });
+
 
 
             amount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -170,6 +199,8 @@ public class LendStatus extends FragmentActivity {
             layout.addView(amount);
             layout.addView(description);
             alertDialog.setView(layout);
+
+
 
 
             alertDialog.setPositiveButton("YES",
