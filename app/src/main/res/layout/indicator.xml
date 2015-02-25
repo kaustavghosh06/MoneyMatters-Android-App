@@ -7,21 +7,23 @@
         style="@style/layout_f_w"
         android:stretchColumns="*" >
         <TableRow
-            android:background="#dddddd"
+            android:background="#ff39e18d"
             android:id="@+id/tableRow1"
             style="@style/layout_wrap" >
 
             <!-- First Tab indicator -->
             <LinearLayout
                 style="@style/indicator_style"
-                android:id="@+id/first_tab" >
+                android:id="@+id/first_tab"
+                android:background="#FF34C376">
             </LinearLayout>
 
             <!-- Second Tab indicator -->
             <LinearLayout
                 style="@style/indicator_style"
                 android:id="@+id/second_tab"
-                android:visibility="invisible" >
+                android:visibility="invisible"
+                android:background="#FF34C376" >
             </LinearLayout>
         </TableRow>
     </TableLayout>
@@ -29,6 +31,7 @@
     <!-- Bottom line -->
     <LinearLayout
         style="@style/h_line"
+        android:background="#FF34C376"
         android:orientation="vertical" >
     </LinearLayout>
 

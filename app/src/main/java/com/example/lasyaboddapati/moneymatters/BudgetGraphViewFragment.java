@@ -41,6 +41,8 @@ public class BudgetGraphViewFragment extends Fragment {
 
     ImageButton prev;
     ImageButton next;
+    Button monthButton;
+    Button yearButton;
 
     String currMonth;
 
@@ -59,9 +61,38 @@ public class BudgetGraphViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.budget_graph_view, container, false);
+
+        monthButton = (Button) rootView.findViewById(R.id.monthButton);
+        yearButton = (Button) rootView.findViewById(R.id.yearButton);
         chart = (BarChart) rootView.findViewById(R.id.chart);
         prev = (ImageButton) rootView.findViewById(R.id.prev);
         next = (ImageButton) rootView.findViewById(R.id.next);
+
+        yearButton.setTextColor(Color.parseColor("#ff166441"));
+        yearButton.setEnabled(false);
+        monthButton.setTextColor(Color.GRAY);
+
+        yearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                yearButton.setTextColor(Color.parseColor("#ff166441"));
+                yearButton.setEnabled(false);
+                monthButton.setTextColor(Color.GRAY);
+                monthButton.setEnabled(true);
+                populateGraphView("year");
+            }
+        });
+
+        monthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                monthButton.setTextColor(Color.parseColor("#ff166441"));
+                monthButton.setEnabled(false);
+                yearButton.setTextColor(Color.GRAY);
+                yearButton.setEnabled(true);
+                populateGraphView("month");
+            }
+        });
 
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,9 +127,6 @@ public class BudgetGraphViewFragment extends Fragment {
     }
 
     public void populateGraphView() {
-        View view = ((Activity)context).getWindow().getDecorView().findViewById(android.R.id.content);
-        Button monthButton = (Button) view.findViewById(R.id.monthButton);
-        Button yearButton = (Button) view.findViewById(R.id.yearButton);
         Log.d("YEAR", yearButton.getCurrentTextColor()+"");
         Log.d("MONTH", monthButton.getCurrentTextColor()+"");
 
@@ -133,10 +161,10 @@ public class BudgetGraphViewFragment extends Fragment {
         }
 
         BarDataSet budgetSet = new BarDataSet(budgetYVals, "Budget");
-        budgetSet.setColor(Color.GREEN);
+        budgetSet.setColor(Color.parseColor("#FF30B36E"));
 
         BarDataSet expensesSet = new BarDataSet(expenseYVals, "Expenses");
-        expensesSet.setColor(Color.BLUE);
+        expensesSet.setColor(Color.parseColor("#ff39e18d"));
 
         ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
         dataSets.add(expensesSet);

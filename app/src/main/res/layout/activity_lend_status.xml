@@ -17,11 +17,13 @@
             <LinearLayout
                 style="@style/layout_f_w"
                 android:id="@+id/first_text"
+                android:background="#ff39e18d"
                 android:orientation="vertical" >
 
                 <TextView
                     android:id="@+id/textView1"
                     style="@style/text_title"
+                    android:textColor="@color/Black"
                     android:text="Debits" />
             </LinearLayout>
 
@@ -29,11 +31,13 @@
             <LinearLayout
                 style="@style/layout_f_w"
                 android:id="@+id/second_text"
+                android:background="#ff39e18d"
                 android:orientation="vertical" >
 
                 <TextView
                     android:id="@+id/textView2"
                     style="@style/text_title"
+                    android:textColor="@color/Black"
                     android:text="Credits" />
 
             </LinearLayout>

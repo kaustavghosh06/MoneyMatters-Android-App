@@ -10,7 +10,7 @@
         android:stretchColumns="*" >
         <TableRow
             android:id="@+id/tableRow1"
-            android:background="#dddddd"
+            android:background="#ff39e18d"
             style="@style/layout_wrap">
 
             <!-- First Tab -->
@@ -22,6 +22,7 @@
                 <TextView
                     android:id="@+id/textView1"
                     style="@style/text_title"
+                    android:textColor="@color/Black"
                     android:text="User Notifications" />
             </LinearLayout>
 
@@ -34,6 +35,7 @@
                 <TextView
                     android:id="@+id/textView2"
                     style="@style/text_title"
+                    android:textColor="@color/Black"
                     android:text="System Notifications" />
 
             </LinearLayout>

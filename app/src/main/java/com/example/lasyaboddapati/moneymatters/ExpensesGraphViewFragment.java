@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,6 +56,7 @@ public class ExpensesGraphViewFragment extends Fragment {
         }
         BarDataSet set = new BarDataSet(yVals, "Expenses");
         set.setBarSpacePercent(30);
+        set.setColor(Color.parseColor("#ff39e18d"));
 
         ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
         dataSets.add(set);

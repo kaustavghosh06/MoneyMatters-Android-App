@@ -30,36 +30,6 @@ public class Budget extends Activity {
         setContentView(R.layout.activity_budget);
 
         //deleteDB();
-
-        final Button monthButton = (Button) findViewById(R.id.monthButton);
-        final Button yearButton = (Button) findViewById(R.id.yearButton);
-
-        yearButton.setTextColor(Color.BLUE);
-        yearButton.setEnabled(false);
-        monthButton.setTextColor(Color.GRAY);
-
-        yearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                yearButton.setTextColor(Color.BLUE);
-                yearButton.setEnabled(false);
-                monthButton.setTextColor(Color.GRAY);
-                monthButton.setEnabled(true);
-                graphViewFragment.populateGraphView("year");
-            }
-        });
-
-        monthButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                monthButton.setTextColor(Color.BLUE);
-                monthButton.setEnabled(false);
-                yearButton.setTextColor(Color.GRAY);
-                yearButton.setEnabled(true);
-                graphViewFragment.populateGraphView("month");
-            }
-        });
-
         graphViewFragment = BudgetGraphViewFragment.newInstance(Budget.this);
         budgetListViewFragment = BudgetListViewFragment.newInstance(Budget.this, graphViewFragment);
 
