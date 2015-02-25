@@ -238,15 +238,18 @@ public class BudgetGraphViewFragment extends Fragment {
                 , BudgetDatabase.WEEK3_COLUMN, BudgetDatabase.WEEK4_COLUMN};
         String budgetWhereClause = BudgetDatabase.MONTH_COLUMN + " = " + "'" + month + "'";
         Cursor budgetCursor = budgetDB.query(BudgetDatabase.DATABASE_TABLE, budgetResultColumns, budgetWhereClause, null, null, null, null);
+        float[] weeklyBudget = new float[4];
         while (budgetCursor.moveToNext()) {
-            for (int i=0; i<4; i++) {
-                float weeklyBudget = budgetCursor.getFloat(i);
-                String week = "Week "+(i+1);
-                Log.d("WEEK", "Week "+week+" budget = "+weeklyBudget);
-                budgetYVals.add(new BarEntry(weeklyBudget, i, week));
+            for (int i = 0; i < 4; i++) {
+                weeklyBudget[i] = budgetCursor.getFloat(i);
             }
         }
         budgetCursor.close();
+        for (int i=0; i<4; i++) {
+            String week = "Week " + (i + 1);
+            Log.d("WEEK", "Week " + week + " budget = " + weeklyBudget[i]);
+            budgetYVals.add(new BarEntry(weeklyBudget[i], i, week));
+        }
 
         String[] expensesResultColumns = {ExpenseDatabase.WEEK_COLUMN, ExpenseDatabase.AMOUNT_COLUMN};
         String expensesWhereClause = ExpenseDatabase.MONTH_COLUMN + " = " + "'" + month + "'";
