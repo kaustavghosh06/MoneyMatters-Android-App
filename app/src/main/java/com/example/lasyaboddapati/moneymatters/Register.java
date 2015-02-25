@@ -59,6 +59,7 @@ public class Register extends Activity {
                     final Firebase myFirebaseRef = new Firebase("https://crackling-inferno-5209.firebaseio.com/");
                     myFirebaseRef.child(susername).setValue(true);
                     myFirebaseRef.child(susername).child("Credit").setValue("true");
+
                     myFirebaseRef.child(susername).child("Debts").setValue("true");
                     myFirebaseRef.child(susername).child("Notifications").setValue("true");
                     myFirebaseRef.child(susername).child("PersonalInfo").setValue("true");

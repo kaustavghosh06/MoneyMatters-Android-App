@@ -51,46 +51,50 @@ public class Login extends Activity {
             public void onClick(View v) {
                 // Perform action on click
 
-                final String user=username.getText().toString();
-                final String pass=password.getText().toString();
-                //final Firebase usernamecloud = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user);
-                final Firebase passwordcloud = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user+"/PersonalInfo/Password");
+                final String user = username.getText().toString();
+                final String pass = password.getText().toString();
 
-                passwordcloud.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
+                if (user.isEmpty() || pass.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please enter username and password", Toast.LENGTH_LONG).show();
+                } else {
+                    //final Firebase usernamecloud = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user);
+                    final Firebase passwordcloud = new Firebase("https://crackling-inferno-5209.firebaseio.com/" + user + "/PersonalInfo/Password");
 
-                        cloudpass=snapshot.getValue().toString();
-                        if(cloudpass.equals(pass))
+                    passwordcloud.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
 
-                        {
-                            Toast.makeText(getApplicationContext(), "Success",
-                                    Toast.LENGTH_SHORT).show();
-                            SharedPreferences sharedPref = getSharedPreferences("Credentials",Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putString("Username", user);
-                            editor.commit();
+                            cloudpass = snapshot.getValue().toString();
+                            if (cloudpass.equals(pass))
 
-                            Intent homeIntent = new Intent(Login.this, Home.class);
-                            //homeIntent.putExtra("Username",user);
-                            startActivity(homeIntent);
+                            {
+                                Toast.makeText(getApplicationContext(), "Success",
+                                        Toast.LENGTH_SHORT).show();
+                                SharedPreferences sharedPref = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putString("Username", user);
+                                editor.commit();
+
+                                Intent homeIntent = new Intent(Login.this, Home.class);
+                                //homeIntent.putExtra("Username",user);
+                                startActivity(homeIntent);
+                            } else
+
+                            {
+                                Toast.makeText(getApplicationContext(), "Failed!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
                         }
 
-                        else
-
-                        {
-                            Toast.makeText(getApplicationContext(), "Failed!",
-                                    Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+                            System.out.println("The read failed: " + firebaseError.getMessage());
                         }
-
-                    }
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-                        System.out.println("The read failed: " + firebaseError.getMessage());
-                    }
-                });
+                    });
 
                 }
+            }
             });
 
     }
