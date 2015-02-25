@@ -2,8 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#5F70CD44">
+    android:layout_height="fill_parent">
 
     <GridView
         android:id="@+id/dashboard_grid"

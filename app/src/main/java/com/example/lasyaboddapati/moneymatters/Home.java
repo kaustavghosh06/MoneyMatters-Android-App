@@ -27,13 +27,12 @@ public class Home extends Activity implements OnItemClickListener {
     String username;
 
     static final LauncherIcon[] ICONS = {
-            new LauncherIcon(R.drawable.expenses, "Expenses", "metro.png"),
-            new LauncherIcon(R.drawable.budget, "Budget", "rer.png"),
-            new LauncherIcon(R.drawable.creditdebit, "Credits/Debits", "bus.png"),
-            new LauncherIcon(R.drawable.notifications, "User/System Notifications", "noctilien.png"),
-            new LauncherIcon(R.drawable.addfriend, "Add Friends", "noctilien.png"),
-            new LauncherIcon(R.drawable.settings, "Settings", "noctilien.png"),
-
+            new LauncherIcon(R.drawable.ic_action_av_my_library_books, "Budget", "budget.png"),
+            new LauncherIcon(R.drawable.ic_action_action_receipt, "Expenses", "expenses.png"),
+            new LauncherIcon(R.drawable.ic_action_action_thumbs_up_down, "Credits/Debits", "loans.png"),
+            new LauncherIcon(R.drawable.ic_action_action_question_answer, "Notifications", "notifications.png"),
+            new LauncherIcon(R.drawable.ic_action_social_people, "Friends", "friends.png"),
+            new LauncherIcon(R.drawable.ic_action_action_settings, "Settings", "settings.png")
     };
 
     @Override
@@ -62,12 +61,12 @@ public class Home extends Activity implements OnItemClickListener {
 
         if(position==0)
         {
-            Intent intent = new Intent(this, Expenses.class);
+            Intent intent = new Intent(this, Budget.class);
             startActivity(intent);
         }
         else if(position==1)
         {
-            Intent intent = new Intent(this, Budget.class);
+            Intent intent = new Intent(this, Expenses.class);
             startActivity(intent);
         }
         else if(position==2)
@@ -91,7 +90,6 @@ public class Home extends Activity implements OnItemClickListener {
         {
             Toast.makeText(getApplicationContext(),"Not yet implemented",Toast.LENGTH_LONG).show();
         }
-
         //intent.putExtra(EXTRA_MAP, ICONS[position].map);
 
     }

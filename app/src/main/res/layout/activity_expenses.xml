@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:id="@+id/monthDisplay"
+        android:textColor="@color/White"
         android:layout_below="@id/graphViewContainer"
         android:background="#ff39e18d"
         android:paddingLeft="@dimen/activity_horizontal_margin"/>

@@ -130,7 +130,7 @@ public class BudgetListViewFragment extends Fragment {
             }
 
             weekHolder.text.setText("Week "+(childPosition+1));
-            amountHolder.text.setText(getChild(groupPosition, childPosition).toString());
+            amountHolder.text.setText("$"+getChild(groupPosition, childPosition).toString());
             return convertView;
         }
 
@@ -187,12 +187,12 @@ public class BudgetListViewFragment extends Fragment {
 
             monthHolder.text.setText(getGroup(groupPosition).toString());
             if(monthlyBudgetList.get(getGroup(groupPosition)) != null) {
-                amountHolder.text.setText(monthlyBudgetList.get(getGroup(groupPosition)).toString());
-                amountHolder.text.setTextSize(20);
+                amountHolder.text.setText("$"+monthlyBudgetList.get(getGroup(groupPosition)).toString());
+                //amountHolder.text.setTextSize(20);
                 amountHolder.text.setTextColor(Color.BLACK);
             } else {
-                amountHolder.text.setText("Not Set");
-                amountHolder.text.setTextSize(15);
+                amountHolder.text.setText("$0");
+                //amountHolder.text.setTextSize(15);
                 amountHolder.text.setTextColor(Color.GRAY);
             }
             return convertView;

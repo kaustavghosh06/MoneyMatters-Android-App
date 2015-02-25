@@ -14,6 +14,7 @@
             android:id="@+id/yearButton"
             android:textSize="15sp"
             android:text="Year"
+            android:textStyle="bold"
             android:gravity="center"
             android:layout_weight="1"
             style="?android:attr/buttonBarButtonStyle"
@@ -23,6 +24,7 @@
             android:layout_height="match_parent"
             android:id="@+id/monthButton"
             android:textSize="15sp"
+            android:textStyle="bold"
             android:text="Month"
             android:gravity="center"
             android:layout_weight="1"
@@ -36,25 +38,25 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/buttons"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
     
     <ImageButton
-        android:layout_width="10dp"
-        android:layout_height="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:id="@+id/prev"
-        android:src="@android:drawable/ic_media_previous"
-        android:layout_marginLeft="5dp"/>
+        style="?android:attr/buttonBarStyle"
+        android:src="@drawable/ic_image_navigate_before"/>
 
     <ImageButton
-        android:layout_width="10dp"
-        android:layout_height="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:id="@+id/next"
-        android:src="@android:drawable/ic_media_next"
-        android:layout_marginRight="5dp"/>
+        android:src="@drawable/ic_image_navigate_next"
+        style="?android:attr/buttonBarStyle"/>
 
 </RelativeLayout>

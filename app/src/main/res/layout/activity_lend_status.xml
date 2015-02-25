@@ -23,7 +23,8 @@
                 <TextView
                     android:id="@+id/textView1"
                     style="@style/text_title"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
+                    android:textStyle="bold"
                     android:text="Debits" />
             </LinearLayout>
 
@@ -37,7 +38,8 @@
                 <TextView
                     android:id="@+id/textView2"
                     style="@style/text_title"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
+                    android:textStyle="bold"
                     android:text="Credits" />
 
             </LinearLayout>

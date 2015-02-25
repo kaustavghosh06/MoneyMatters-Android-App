@@ -2,6 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ghosh.kaustav.moneymatters.Lending">
     <item android:id="@+id/action_notf" android:title="Send Notifications"
-        android:showAsAction="always" android:icon="@android:drawable/ic_menu_add"
+        android:showAsAction="always" android:icon="@drawable/ic_action_content_add"
         android:orderInCategory="100"/>
 </menu>

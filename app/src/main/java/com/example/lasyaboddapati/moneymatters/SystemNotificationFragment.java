@@ -191,14 +191,13 @@ public class SystemNotificationFragment extends Fragment {
     private static void notify_user(int id, String message){
         Intent resultIntent = new Intent(context, Notifications.class);
         resultIntent.putExtra("Username",username);
-        resultIntent.setAction("System Notification");
         //TODO : set tab to System Notifications
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
 
         Notification notification = new Notification.Builder(context)
                 .setContentTitle("Money Matters")
                 .setContentText(message)
-                .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                .setSmallIcon(R.drawable.ic_social_notifications_on)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .build();

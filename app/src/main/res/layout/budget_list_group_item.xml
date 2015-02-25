@@ -4,22 +4,24 @@
     android:orientation="horizontal">
 
     <ImageButton
-        android:layout_width="10dp"
-        android:layout_height="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/deleteButton"
-        android:src="@android:drawable/ic_delete"
+        style="?android:attr/buttonBarStyle"
+        android:src="@drawable/ic_action_content_remove_circle"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/activity_margin"
-        android:layout_marginLeft="@dimen/activity_margin"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:focusable="false"/>
 
     <ImageButton
-        android:layout_width="10dp"
-        android:layout_height="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/editButton"
-        android:src="@android:drawable/ic_input_add"
+        style="?android:attr/buttonBarStyle"
+        android:src="@drawable/ic_action_content_add_circle"
         android:layout_toLeftOf="@id/deleteButton"
-        android:layout_marginLeft="@dimen/activity_margin"
+        android:layout_marginLeft="10dp"
         android:focusable="false"/>
 
     <TextView

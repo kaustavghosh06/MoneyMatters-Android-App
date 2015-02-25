@@ -68,14 +68,16 @@ public class BudgetGraphViewFragment extends Fragment {
         prev = (ImageButton) rootView.findViewById(R.id.prev);
         next = (ImageButton) rootView.findViewById(R.id.next);
 
-        yearButton.setTextColor(Color.parseColor("#ff166441"));
+        //yearButton.setTextColor(Color.parseColor("#ff166441"));
+        yearButton.setTextColor(Color.WHITE);
         yearButton.setEnabled(false);
         monthButton.setTextColor(Color.GRAY);
 
         yearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                yearButton.setTextColor(Color.parseColor("#ff166441"));
+                //yearButton.setTextColor(Color.parseColor("#ff166441"));
+                yearButton.setTextColor(Color.WHITE);
                 yearButton.setEnabled(false);
                 monthButton.setTextColor(Color.GRAY);
                 monthButton.setEnabled(true);
@@ -86,7 +88,8 @@ public class BudgetGraphViewFragment extends Fragment {
         monthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                monthButton.setTextColor(Color.parseColor("#ff166441"));
+                //monthButton.setTextColor(Color.parseColor("#ff166441"));
+                monthButton.setTextColor(Color.WHITE);
                 monthButton.setEnabled(false);
                 yearButton.setTextColor(Color.GRAY);
                 yearButton.setEnabled(true);
