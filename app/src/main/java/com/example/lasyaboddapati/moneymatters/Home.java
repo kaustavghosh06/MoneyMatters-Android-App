@@ -3,6 +3,7 @@ package com.example.lasyaboddapati.moneymatters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -38,8 +39,10 @@ public class Home extends Activity implements OnItemClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_home);
-        username= getIntent().getExtras().getString("Username");
+        setContentView(R.layout.activity_home);
+        //username= getIntent().getExtras().getString("Username");
+        SharedPreferences sharedPref = getSharedPreferences("Credentials",Context.MODE_PRIVATE);
+        username = sharedPref.getString("Username",null);
 
         GridView gridview = (GridView) findViewById(R.id.dashboard_grid);
         gridview.setAdapter(new ImageAdapter(this));

@@ -27,7 +27,7 @@ public class ViewPagerAdapter2 extends FragmentPagerAdapter {
                 f=UserNotificationFragment.newInstance(_context,username);
                 break;
             case 1:
-                f=SystemNotificationFragment.newInstance(_context,username);
+                f=SystemNotificationFragment.newInstance(_context);
                 break;
         }
         return f;

@@ -1,7 +1,9 @@
 package com.example.lasyaboddapati.moneymatters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,13 +47,6 @@ public class Login extends Activity {
         Firebase.setAndroidContext(this);
 
 
-
-
-
-
-
-
-
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -71,8 +66,13 @@ public class Login extends Activity {
                         {
                             Toast.makeText(getApplicationContext(), "Success",
                                     Toast.LENGTH_SHORT).show();
+                            SharedPreferences sharedPref = getSharedPreferences("Credentials",Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("Username", user);
+                            editor.commit();
+
                             Intent homeIntent = new Intent(Login.this, Home.class);
-                            homeIntent.putExtra("Username",user);
+                            //homeIntent.putExtra("Username",user);
                             startActivity(homeIntent);
                         }
 

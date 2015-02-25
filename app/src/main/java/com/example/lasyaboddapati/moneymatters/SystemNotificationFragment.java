@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -48,15 +49,16 @@ public class SystemNotificationFragment extends Fragment {
     static int MONTHLY_NOTIFICATION_ID = 2;
     static String username;
 
-    public static Fragment newInstance(Context context,String user) {
+    public static Fragment newInstance(Context context) {
         SystemNotificationFragment systemNotificationFragment = new SystemNotificationFragment();
         initialize(context);
-        systemNotificationFragment.username=user;
         return systemNotificationFragment;
     }
 
     public static void initialize(Context context1){
         context = context1;
+        SharedPreferences sharedPref = context.getSharedPreferences("Credentials",Context.MODE_PRIVATE);
+        username = sharedPref.getString("Username", "");
         adapter = new SystemNotificationsListAdapter(context, R.layout.custom_list_item);
         expenseDB = new ExpenseDatabase(context).getReadableDatabase();
         budgetDB = new BudgetDatabase(context).getReadableDatabase();
@@ -189,6 +191,7 @@ public class SystemNotificationFragment extends Fragment {
     private static void notify_user(int id, String message){
         Intent resultIntent = new Intent(context, Notifications.class);
         resultIntent.putExtra("Username",username);
+        resultIntent.setAction("System Notification");
         //TODO : set tab to System Notifications
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
 

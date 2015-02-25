@@ -1,7 +1,9 @@
 package com.example.lasyaboddapati.moneymatters;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -45,7 +47,9 @@ public class Notifications extends FragmentActivity {
         Log.d("INTENTTTTTTTTTTTTTT", getIntent()+"");
         Log.d("INTENTTTTTTTTTTTTTT", getIntent().getExtras()+"");
         Log.d("INTENTTTTTTTTTTTTTT", getIntent().getExtras().getString("Username")+"");
-        loginUser=getIntent().getExtras().getString("Username");
+        //loginUser=getIntent().getExtras().getString("Username");
+        SharedPreferences sharedPref = getSharedPreferences("Credentials",Context.MODE_PRIVATE);
+        loginUser = sharedPref.getString("Username", null);
         setUpView();
         setTab();
         //For getting UserList
@@ -165,12 +169,9 @@ public class Notifications extends FragmentActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if(!userlist.contains(s.toString()))
-                    {
+                    if (!userlist.contains(s.toString())) {
                         user.setError("User doesn't exist");
-                    }
-                    else
-                    {
+                    } else {
                         user.setError(null);
                     }
 

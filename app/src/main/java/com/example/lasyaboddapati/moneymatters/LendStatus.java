@@ -1,7 +1,9 @@
 package com.example.lasyaboddapati.moneymatters;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -51,7 +53,11 @@ public class LendStatus extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lend_status);
-        user= getIntent().getExtras().getString("Username");
+        //user= getIntent().getExtras().getString("Username");
+
+        SharedPreferences sharedPref = getSharedPreferences("Credentials",Context.MODE_PRIVATE);
+        user = sharedPref.getString("Username",null);
+        //Log.d("LENDSTATUSSSSSS", user+"");
 
         Firebase.setAndroidContext(this);
         final Firebase userscloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/");
