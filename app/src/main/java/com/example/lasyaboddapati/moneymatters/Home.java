@@ -3,8 +3,11 @@ package com.example.lasyaboddapati.moneymatters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -154,5 +157,23 @@ public class Home extends Activity implements OnItemClickListener {
 
             return v;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.action_uninstall) {
+            Intent uninstall = new Intent(Intent.ACTION_DELETE);
+            uninstall.setData(Uri.parse("package:" + this.getPackageName()));
+            startActivity(uninstall);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

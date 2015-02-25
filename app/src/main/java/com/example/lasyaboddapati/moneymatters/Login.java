@@ -42,7 +42,6 @@ public class Login extends Activity {
             }
         });
 
-        setTitle("Login");
         Firebase.setAndroidContext(this);
 
 

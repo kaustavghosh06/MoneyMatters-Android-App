@@ -1,6 +1,8 @@
 package com.example.lasyaboddapati.moneymatters;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,29 +81,6 @@ public class Expenses extends Activity /*implements CustomDialogFragment.CustomD
         generateGraphView();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_expenses, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_add) {
-            expensesListViewFragment.pop_up_add_expense_dialog();
-        }
-        else if (id == R.id.action_settings) {
-            return true;
-        }
-        else if (id == R.id.action_help) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private void generateListView() {
         getFragmentManager().beginTransaction().add(R.id.listViewContainer, expensesListViewFragment)
                 .commit();
@@ -114,5 +93,21 @@ public class Expenses extends Activity /*implements CustomDialogFragment.CustomD
 
     private void deleteDB() {
         Expenses.this.deleteDatabase(ExpenseDatabase.DATABASE_TABLE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_expenses, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.action_add) {
+            expensesListViewFragment.pop_up_add_expense_dialog();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -46,10 +46,12 @@ public class SystemNotificationFragment extends Fragment {
 
     static int WEEKLY_NOTIFICATION_ID = 1;
     static int MONTHLY_NOTIFICATION_ID = 2;
+    static String username;
 
-    public static Fragment newInstance(Context context) {
+    public static Fragment newInstance(Context context,String user) {
         SystemNotificationFragment systemNotificationFragment = new SystemNotificationFragment();
         initialize(context);
+        systemNotificationFragment.username=user;
         return systemNotificationFragment;
     }
 
@@ -186,6 +188,7 @@ public class SystemNotificationFragment extends Fragment {
 
     private static void notify_user(int id, String message){
         Intent resultIntent = new Intent(context, Notifications.class);
+        resultIntent.putExtra("Username",username);
         //TODO : set tab to System Notifications
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
 

@@ -22,5 +22,6 @@
     <string name="title_activity_notifications">Notifications</string>
     <string name="title_activity_dashboard">Dashboard</string>
     <string name="title_activity_home">Home</string>
+    <string name="action_uninstall">Uninstall</string>
 
 </resources>

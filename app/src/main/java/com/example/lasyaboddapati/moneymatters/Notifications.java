@@ -42,6 +42,9 @@ public class Notifications extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+        Log.d("INTENTTTTTTTTTTTTTT", getIntent()+"");
+        Log.d("INTENTTTTTTTTTTTTTT", getIntent().getExtras()+"");
+        Log.d("INTENTTTTTTTTTTTTTT", getIntent().getExtras().getString("Username")+"");
         loginUser=getIntent().getExtras().getString("Username");
         setUpView();
         setTab();
