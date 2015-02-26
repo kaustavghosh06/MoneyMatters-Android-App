@@ -266,7 +266,7 @@ public class ExpensesListViewFragment extends Fragment {
         amountValid = true;
 
         String[] expense = (String[]) adapter.getItem(position);
-        final String dateOld = expense[0].trim();
+        final String dateOld = expense[0].trim().substring(0,5);
         final String amountOld = expense[1].trim();
         final String descriptionOld = expense[2].trim();
 
@@ -322,7 +322,7 @@ public class ExpensesListViewFragment extends Fragment {
                     if (working.substring(4,5).matches("[/.-]")) {
                         working = working.substring(0,3)+"0"+working.substring(3,4);
                     }
-                    working+="/";
+                    //working+="/";
                     date.setText(working);
                     date.setSelection(working.length());
                 /*} else if (working.length()==10 && before ==0) {
@@ -493,6 +493,7 @@ public class ExpensesListViewFragment extends Fragment {
         }
 
         private void updateListItem(int groupPos, String date, String amount, String description) {
+            date = date+"/"+Calendar.getInstance().get(Calendar.YEAR);
             long id = (long) expenses.keySet().toArray()[groupPos];
             updateInDatabase(id, date, amount, description);
             filterItems();
@@ -507,13 +508,25 @@ public class ExpensesListViewFragment extends Fragment {
             int dd = Integer.parseInt(date.split("[/.-]")[1]);
 
             newValues.put(ExpenseDatabase.MONTH_COLUMN, Months.nameOf(mm));
-            Calendar c = Calendar.getInstance();
+            /*Calendar c = Calendar.getInstance();
             c.set(Calendar.MONTH, mm);
             c.set(Calendar.DATE, dd);
             int week = c.get(Calendar.WEEK_OF_MONTH);
             if (week == 5) {
                 week = 4;
+            }*/
+            int week = 0;
+            if(dd>=1 && dd<=7) {
+                week = 1;
+            } else if(dd>=8 && dd<=14) {
+                week = 2;
+            } else if(dd>=15 && dd<=21) {
+                week = 3;
+            } else if(dd>=22 && dd<=31) {
+                week = 4;
             }
+            Log.d("WEEEEEEEEEEEEK", "Date is "+date+"     WEEK OF MONTH is "+week);
+
 
             newValues.put(ExpenseDatabase.DATE_COLUMN, date);
             newValues.put(ExpenseDatabase.WEEK_COLUMN, week);
@@ -539,11 +552,21 @@ public class ExpensesListViewFragment extends Fragment {
             //int yyyy = Integer.parseInt(date.split("[/.-]")[2]);
             //newValues.put(ExpenseDatabase.MONTH_COLUMN, Expenses.MONTHS.values()[mm].toString());
             newValues.put(ExpenseDatabase.MONTH_COLUMN, Months.nameOf(mm));
-            Calendar c = Calendar.getInstance();
+            /*Calendar c = Calendar.getInstance();
             //c.set(Calendar.YEAR, yyyy);
             c.set(Calendar.MONTH, mm);
             c.set(Calendar.DATE, dd);
-            int week = c.get(Calendar.WEEK_OF_MONTH);
+            int week = c.get(Calendar.WEEK_OF_MONTH);*/
+            int week = 0;
+            if(dd>=1 && dd<=7) {
+                week = 1;
+            } else if(dd>=8 && dd<=14) {
+                week = 2;
+            } else if(dd>=15 && dd<=21) {
+                week = 3;
+            } else if(dd>=22 && dd<=31) {
+                week = 4;
+            }
 
             newValues.put(ExpenseDatabase.DATE_COLUMN, date);
             newValues.put(ExpenseDatabase.WEEK_COLUMN, week);
