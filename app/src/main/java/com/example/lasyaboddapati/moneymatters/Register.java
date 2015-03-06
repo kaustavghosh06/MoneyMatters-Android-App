@@ -3,6 +3,7 @@ package com.example.lasyaboddapati.moneymatters;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,7 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 
 public class Register extends Activity {
@@ -18,6 +25,8 @@ public class Register extends Activity {
     String susername;
     String spassword;
     String cspassowrd;
+    String semail;
+    ArrayList<String> userlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,36 @@ public class Register extends Activity {
         final EditText username=(EditText)findViewById(R.id.username);
         final EditText password=(EditText)findViewById(R.id.password);
         final EditText cpassword=(EditText)findViewById(R.id.cpassword);
+        final EditText email=(EditText)findViewById(R.id.email);
+
+        Firebase.setAndroidContext(getApplicationContext());
+        final Firebase userscloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/");
+
+        //For getting UserList
+
+
+        userscloud.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map<String, Object> usersmap = (Map<String, Object>) snapshot.getValue();
+                userlist = new ArrayList<String>();
+
+                for (String key : usersmap.keySet()) {
+
+                    userlist.add(key);
+                }
+                //userlist.remove(user);
+                for (String str : userlist) {
+                    Log.d("user", str);
+                }
+
+
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
 
         Button reg=(Button)findViewById(R.id.regis);
         reg.setOnClickListener(new View.OnClickListener() {
@@ -40,9 +79,15 @@ public class Register extends Activity {
                 susername=username.getText().toString();
                 spassword=password.getText().toString();
                 cspassowrd=cpassword.getText().toString();
+                semail=email.getText().toString();
 
 
-                if(sname.isEmpty() || susername.isEmpty() || spassword.isEmpty() || cspassowrd.isEmpty())
+
+
+
+
+
+                if(sname.isEmpty() || susername.isEmpty() || spassword.isEmpty() || cspassowrd.isEmpty() || semail.isEmpty() )
                 {
                     Toast.makeText(getApplicationContext(),
                             "Please enter all the values", Toast.LENGTH_SHORT).show();
@@ -53,6 +98,11 @@ public class Register extends Activity {
                     Toast.makeText(getApplicationContext(),
                             "Both Passwords don't match", Toast.LENGTH_SHORT).show();
                 }
+                else if(userlist.contains(susername))
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "User already exists!Enter different username", Toast.LENGTH_SHORT).show();
+                }
                 else {
 
                     Firebase.setAndroidContext(getApplicationContext());
@@ -62,9 +112,11 @@ public class Register extends Activity {
 
                     myFirebaseRef.child(susername).child("Debts").setValue("true");
                     myFirebaseRef.child(susername).child("Notifications").setValue("true");
+                    myFirebaseRef.child(susername).child("Friends").setValue("true");
                     myFirebaseRef.child(susername).child("PersonalInfo").setValue("true");
                     myFirebaseRef.child(susername).child("PersonalInfo").child("Name").setValue(sname);
                     myFirebaseRef.child(susername).child("PersonalInfo").child("Password").setValue(spassword);
+                    myFirebaseRef.child(susername).child("PersonalInfo").child("Email").setValue(semail);
                     Toast.makeText(getApplicationContext(),
                             "Successfully Registered!Login now", Toast.LENGTH_SHORT).show();
 

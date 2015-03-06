@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,11 +19,13 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 
 public class Login extends Activity {
     String cloudpass;
+    ArrayList<String> userlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,36 @@ public class Login extends Activity {
         Firebase.setAndroidContext(this);
 
 
+        final Firebase userscloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/");
+
+        //For getting UserList
+
+
+        userscloud.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map<String, Object> usersmap = (Map<String, Object>) snapshot.getValue();
+                userlist = new ArrayList<String>();
+
+                for (String key : usersmap.keySet()) {
+
+                    userlist.add(key);
+                }
+                //userlist.remove(user);
+                for (String str : userlist) {
+                    Log.d("user", str);
+                }
+
+
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+
+
+
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -57,41 +90,48 @@ public class Login extends Activity {
                 if (user.isEmpty() || pass.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please enter username and password", Toast.LENGTH_LONG).show();
                 } else {
-                    //final Firebase usernamecloud = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user);
-                    final Firebase passwordcloud = new Firebase("https://crackling-inferno-5209.firebaseio.com/" + user + "/PersonalInfo/Password");
+                    if(userlist.contains(user)) {
+                        //final Firebase usernamecloud = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user);
+                        final Firebase passwordcloud = new Firebase("https://crackling-inferno-5209.firebaseio.com/" + user + "/PersonalInfo/Password");
 
-                    passwordcloud.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot snapshot) {
+                        passwordcloud.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
 
-                            cloudpass = snapshot.getValue().toString();
-                            if (cloudpass.equals(pass))
+                                cloudpass = snapshot.getValue().toString();
+                                if (cloudpass.equals(pass))
 
-                            {
-                                Toast.makeText(getApplicationContext(), "Success",
-                                        Toast.LENGTH_SHORT).show();
-                                SharedPreferences sharedPref = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putString("Username", user);
-                                editor.commit();
+                                {
+                                    Toast.makeText(getApplicationContext(), "Success",
+                                            Toast.LENGTH_SHORT).show();
+                                    SharedPreferences sharedPref = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putString("Username", user);
+                                    editor.commit();
 
-                                Intent homeIntent = new Intent(Login.this, Home.class);
-                                //homeIntent.putExtra("Username",user);
-                                startActivity(homeIntent);
-                            } else
+                                    Intent homeIntent = new Intent(Login.this, Home.class);
+                                    //homeIntent.putExtra("Username",user);
+                                    startActivity(homeIntent);
+                                } else
 
-                            {
-                                Toast.makeText(getApplicationContext(), "Failed!",
-                                        Toast.LENGTH_SHORT).show();
+                                {
+                                    Toast.makeText(getApplicationContext(), "Failed!",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
                             }
 
-                        }
-
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-                            System.out.println("The read failed: " + firebaseError.getMessage());
-                        }
-                    });
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                                System.out.println("The read failed: " + firebaseError.getMessage());
+                            }
+                        });
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "Username doesn't exist!Please Register First",
+                                Toast.LENGTH_SHORT).show();
+                    }
 
                 }
             }

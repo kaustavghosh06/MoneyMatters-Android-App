@@ -23,5 +23,7 @@
     <string name="title_activity_dashboard">Dashboard</string>
     <string name="title_activity_home">Home</string>
     <string name="action_uninstall">Uninstall</string>
+    <string name="title_activity_addfriends">Addfriends</string>
+    <string name="title_activity_forgot_password">ForgotPassword</string>
 
 </resources>

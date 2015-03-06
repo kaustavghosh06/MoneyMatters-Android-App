@@ -10,4 +10,6 @@ user can separate his/her expenses into different categories when feeding them i
 app. The app also notifies you of when a bill/rent is due. It gets rid of the awkward
 situation of having to ask your friends to pay you back the money you’ve lent them by
 sending them periodic notifications. You can also get regular expense tracking statements
-and view the statistics in the form of graphs. 
+and view the statistics in the form of graphs.
+
+Project Video URL: 
