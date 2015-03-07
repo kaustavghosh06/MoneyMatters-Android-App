@@ -59,12 +59,12 @@ public class Home extends Activity implements OnItemClickListener {
         gridview.setOnItemClickListener(this);
 
         // Hack to disable GridView scrolling
-        gridview.setOnTouchListener(new OnTouchListener() {
+        /*gridview.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return event.getAction() == MotionEvent.ACTION_MOVE;
             }
-        });
+        });*/
 
         Firebase.setAndroidContext(getApplicationContext());
         final Firebase myFirebaseRef = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+username);
@@ -95,8 +95,6 @@ public class Home extends Activity implements OnItemClickListener {
                 NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(1, notification);
                 Log.d("NOTIFY", "user notified");
-
-
 
             }
 
@@ -145,8 +143,6 @@ public class Home extends Activity implements OnItemClickListener {
                 NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(2, notification);
                 Log.d("NOTIFYusernotif", "user notified");
-
-
 
             }
 
@@ -203,7 +199,7 @@ public class Home extends Activity implements OnItemClickListener {
         }
         else if(position==5)
         {
-            Intent intent = new Intent(this,   Addfriends.class);
+            Intent intent = new Intent(this, Addfriends.class);
             startActivity(intent);
 
             //Toast.makeText(getApplicationContext(),"Not yet implemented",Toast.LENGTH_LONG).show();
@@ -211,7 +207,9 @@ public class Home extends Activity implements OnItemClickListener {
         }
         /*else if(position==6)
         {
-            Toast.makeText(getApplicationContext(),"Not yet implemented",Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),"Not yet implemented",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, Help.class);
+            startActivity(intent);
         }*/
         //intent.putExtra(EXTRA_MAP, ICONS[position].map);
 

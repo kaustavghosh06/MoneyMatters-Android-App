@@ -3,19 +3,24 @@ package com.example.lasyaboddapati.moneymatters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -44,18 +49,16 @@ public class Addfriends extends Activity {
         loginUser = sharedPref.getString("Username", null);
 
         final AutoCompleteTextView friendname=(AutoCompleteTextView)findViewById(R.id.friendname);
-        Button addfriend=(Button)findViewById(R.id.addfriend);
-       listView = (ListView) findViewById(R.id.list);
+        final ImageButton addfriend = (ImageButton)findViewById(R.id.addfriend);
+        ImageButton cancel = (ImageButton) findViewById(R.id.cancel);
+        listView = (ListView) findViewById(R.id.list);
 
         Firebase.setAndroidContext(this);
-
 
         final Firebase userscloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/");
         Firebase friendcloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+loginUser+"/Friends/");
 
         //For getting UserList
-
-
         userscloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -63,7 +66,6 @@ public class Addfriends extends Activity {
                 userlist = new ArrayList<String>();
 
                 for (String key : usersmap.keySet()) {
-
                     userlist.add(key);
                 }
                 userlist.remove(loginUser);
@@ -72,10 +74,17 @@ public class Addfriends extends Activity {
                 }
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-                        android.R.layout.simple_dropdown_item_1line, userlist);
+                        android.R.layout.simple_dropdown_item_1line, userlist) {
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View v = super.getView(position, convertView, parent);
+                        ((TextView) v).setTextSize(14);
+                        ((TextView) v).setTextColor(Color.BLACK);
+                        ((TextView) v) .setGravity(Gravity.LEFT|Gravity.CENTER_VERTICAL);
+
+                        return v;
+                    }
+                };
                 friendname.setAdapter(adapter);
-
-
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -84,7 +93,6 @@ public class Addfriends extends Activity {
         });
 
         //For getting Friendlist
-
         friendcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -126,9 +134,6 @@ public class Addfriends extends Activity {
 
 
 
-
-
-
         friendname.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -164,19 +169,25 @@ public class Addfriends extends Activity {
                 if(friendlist.contains(friend))
                 {
                     Toast.makeText(getApplicationContext(),
-                            "The user is already your friend", Toast.LENGTH_SHORT).show();
+                            friend+" is already your friend", Toast.LENGTH_SHORT).show();
                 }
                 else {
 
                     Toast.makeText(getApplicationContext(),
-                            "User added to your Friend List", Toast.LENGTH_SHORT).show();
+                            friend+" added to your Friend List", Toast.LENGTH_SHORT).show();
                     receivercloud.child("Friends").child(friend).setValue("true");
+                    friendname.setText("");
+                    findViewById(R.id.add_friend_popup).setVisibility(View.GONE);
                 }
 
+            }
+        });
 
-
-
-
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                friendname.setText("");
+                findViewById(R.id.add_friend_popup).setVisibility(View.GONE);
             }
         });
 
@@ -201,8 +212,8 @@ public class Addfriends extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_add) {
+            findViewById(R.id.add_friend_popup).setVisibility(View.VISIBLE);
         }
 
         return super.onOptionsItemSelected(item);

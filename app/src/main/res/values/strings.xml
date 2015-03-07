@@ -27,5 +27,8 @@
     <string name="title_activity_forgot_password">ForgotPassword</string>
     <string name="title_activity_add_expense">AddExpense</string>
     <string name="title_activity_start_up">StartUp</string>
+    <string name="title_activity_reports">Reports</string>
+    <string name="title_activity_friend_requests">FriendRequests</string>
+    <string name="title_activity_help">Help</string>
 
 </resources>
