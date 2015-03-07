@@ -65,7 +65,7 @@ public class ExpensesListViewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_list_view, container, false);
 
         lv = (ListView) rootView.findViewById(R.id.listView);
-        lv.setChoiceMode(ExpandableListView.CHOICE_MODE_MULTIPLE_MODAL);
+        lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         lv.setAdapter(adapter);
         lv.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             int checkedCount;
