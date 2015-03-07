@@ -156,6 +156,7 @@ public class Notifications extends FragmentActivity {
             user.setHint("Enter User ID");
             user.setAdapter(adapter);
 
+
             user.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

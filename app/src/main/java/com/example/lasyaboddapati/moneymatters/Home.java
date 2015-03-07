@@ -203,7 +203,10 @@ public class Home extends Activity implements OnItemClickListener {
         }
         else if(position==5)
         {
-            Toast.makeText(getApplicationContext(),"Not yet implemented",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this,   Addfriends.class);
+            startActivity(intent);
+
+            //Toast.makeText(getApplicationContext(),"Not yet implemented",Toast.LENGTH_LONG).show();
 
         }
         /*else if(position==6)
