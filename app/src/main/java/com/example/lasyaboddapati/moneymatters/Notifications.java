@@ -36,7 +36,8 @@ public class Notifications extends FragmentActivity {
     String loginUser;
     private ViewPager _mViewPager;
     private ViewPagerAdapter2 _adapter;
-    ArrayList<String> userlist;
+    ArrayList<String>friendlist;
+
 
     int pos=0;
     /** Called when the activity is first created. */
@@ -55,25 +56,30 @@ public class Notifications extends FragmentActivity {
         //For getting UserList
 
         Firebase.setAndroidContext(this);
-        final Firebase userscloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/");
-        userscloud.addValueEventListener(new ValueEventListener() {
+        Firebase friendcloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+loginUser+"/Friends/");
+
+        //For getting Friendlist
+        friendcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                Map<String, Object> usersmap=null;
 
-                Map<String, Object> usersmap = (Map<String, Object>) snapshot.getValue();
-                userlist=new ArrayList<String>();
-
-
-
-                for (String key : usersmap.keySet()) {
-
-                    userlist.add(key);
+                if(!(snapshot.getValue().toString()).equals("true")){
+                    usersmap = (Map<String, Object>) snapshot.getValue();
                 }
-                userlist.remove(loginUser);
-                /*for(String str: userlist)
-                {
-                    Log.d("user", str);
-                }*/
+
+                friendlist = new ArrayList<String>();
+
+                if(usersmap!=null) {
+
+
+                    for (String key : usersmap.keySet()) {
+
+                        friendlist.add(key);
+                    }
+                }
+                //userlist.remove(loginUser);
+
 
 
 
@@ -84,6 +90,7 @@ public class Notifications extends FragmentActivity {
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
         });
+
 
         TextView b1=(TextView)findViewById(R.id.textView1);
         TextView b2=(TextView)findViewById(R.id.textView2);
@@ -151,7 +158,7 @@ public class Notifications extends FragmentActivity {
 
             final EditText message = new EditText(this);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_dropdown_item_1line, userlist);
+                    android.R.layout.simple_dropdown_item_1line, friendlist);
             final AutoCompleteTextView user = new AutoCompleteTextView(this);
             user.setHint("Enter User ID");
             user.setAdapter(adapter);
@@ -170,7 +177,7 @@ public class Notifications extends FragmentActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (!userlist.contains(s.toString())) {
+                    if (!friendlist.contains(s.toString())) {
                         user.setError("User doesn't exist");
                     } else {
                         user.setError(null);

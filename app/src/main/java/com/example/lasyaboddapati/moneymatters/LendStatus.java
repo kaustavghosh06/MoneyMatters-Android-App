@@ -29,6 +29,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,7 +46,8 @@ public class LendStatus extends FragmentActivity {
     Firebase receivercloud=null;
     String user;
     int pos=0;
-    ArrayList<String> userlist;
+    ArrayList<String>friendlist;
+
 
 
     /** Called when the activity is first created. */
@@ -60,26 +62,31 @@ public class LendStatus extends FragmentActivity {
         //Log.d("LENDSTATUSSSSSS", user+"");
 
         Firebase.setAndroidContext(this);
-        final Firebase userscloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/");
 
-        //For getting UserList
+        Firebase friendcloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user+"/Friends/");
 
-
-        userscloud.addValueEventListener(new ValueEventListener() {
+        //For getting Friendlist
+        friendcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Map<String, Object> usersmap = (Map<String, Object>) snapshot.getValue();
-                userlist=new ArrayList<String>();
+                Map<String, Object> usersmap=null;
 
-                for (String key : usersmap.keySet()) {
+                if(!(snapshot.getValue().toString()).equals("true")){
+                    usersmap = (Map<String, Object>) snapshot.getValue();
+                }
 
-                    userlist.add(key);
+                friendlist = new ArrayList<String>();
+
+                if(usersmap!=null) {
+
+
+                    for (String key : usersmap.keySet()) {
+
+                        friendlist.add(key);
+                    }
                 }
-                userlist.remove(user);
-                for(String str: userlist)
-                {
-                    Log.d("user", str);
-                }
+                //userlist.remove(loginUser);
+
 
 
 
@@ -90,7 +97,6 @@ public class LendStatus extends FragmentActivity {
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
         });
-
 
 
 
@@ -163,7 +169,7 @@ public class LendStatus extends FragmentActivity {
             final EditText amount = new EditText(this);
             final EditText description = new EditText(this);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_dropdown_item_1line, userlist);
+                    android.R.layout.simple_dropdown_item_1line, friendlist);
             final AutoCompleteTextView user1 = new AutoCompleteTextView(this);
             user1.setHint("Enter User ID");
             user1.setAdapter(adapter);
@@ -181,7 +187,7 @@ public class LendStatus extends FragmentActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if(!userlist.contains(s.toString()))
+                    if(!friendlist.contains(s.toString()))
                     {
                         user1.setError("User doesn't exist");
                     }
