@@ -157,6 +157,7 @@ public class ExpensesListViewFragment extends Fragment {
 
         final AlertDialog dialog = builder.create();
         dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 
         dateEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -314,7 +315,6 @@ public class ExpensesListViewFragment extends Fragment {
                         if (working.length() == 1) {
                             working = "0"+working;
                         }
-                        //working+="/";
                         date.setText(working);
                         date.setSelection(working.length());
                     }
@@ -322,27 +322,8 @@ public class ExpensesListViewFragment extends Fragment {
                     if (working.substring(4,5).matches("[/.-]")) {
                         working = working.substring(0,3)+"0"+working.substring(3,4);
                     }
-                    //working+="/";
                     date.setText(working);
                     date.setSelection(working.length());
-                /*} else if (working.length()==10 && before ==0) {
-                    int yyyy = Integer.parseInt(working.substring(6));
-                    int mm = Integer.parseInt(working.substring(0,2));
-                    int dd = Integer.parseInt(working.substring(3,5));
-                    //if (yyyy > Calendar.getInstance().get(Calendar.YEAR)) {  //TODO: Add check for year
-                    //    isValid = false;
-                    //}
-                    //else {
-                    Calendar c = new GregorianCalendar(yyyy, mm, dd);
-                    Log.d("DATE", c.get(Calendar.MONTH)+"");
-                    Log.d("DATE", c.getActualMaximum(Calendar.DATE)+"");
-                    if (dd<1 || dd>c.getActualMaximum(Calendar.DAY_OF_MONTH)) {
-                        isValid = false;    //TODO: Not working (check Feb 30)
-                    }
-                    //}
-                } else if (working.length()!=10) {
-                    isValid = false;
-                }*/
                 } else if(working.length() != 5) {
                     isValid = false;
                 }
@@ -471,7 +452,6 @@ public class ExpensesListViewFragment extends Fragment {
         public void addItem(String date, String amount, String description) {
             date = date+"/"+Calendar.getInstance().get(Calendar.YEAR);
             insertIntoDatabase(date, amount, description);
-            //expenses.put(rowId, new String[] {date, amount,description});
             filterItems();
             //notifyDataSetChanged();
             //graphViewFragment.populateGraphView();
@@ -591,7 +571,7 @@ public class ExpensesListViewFragment extends Fragment {
 
         public void populateListView() {
             String[] resultColumns = {ExpenseDatabase.ID_COLUMN, ExpenseDatabase.DATE_COLUMN
-                                    , ExpenseDatabase.AMOUNT_COLUMN, ExpenseDatabase.DESCRIPTION_COLUMN};
+                    , ExpenseDatabase.AMOUNT_COLUMN, ExpenseDatabase.DESCRIPTION_COLUMN};
             Cursor cursor = db.query(ExpenseDatabase.DATABASE_TABLE, resultColumns, null, null, null, null, null);
 
             expenses = new LinkedHashMap<Long, String[]>(cursor.getCount());
@@ -622,7 +602,7 @@ public class ExpensesListViewFragment extends Fragment {
             }
 
             String[] resultColumns = {ExpenseDatabase.ID_COLUMN, ExpenseDatabase.DATE_COLUMN, ExpenseDatabase.AMOUNT_COLUMN
-                                    , ExpenseDatabase.DESCRIPTION_COLUMN};
+                    , ExpenseDatabase.DESCRIPTION_COLUMN};
             String whereClause = null;
             if (month != "All" && week != "All") {
                 whereClause = ExpenseDatabase.MONTH_COLUMN + "='" + month + "' AND " + ExpenseDatabase.WEEK_COLUMN + "=" + week.charAt(week.length()-1);

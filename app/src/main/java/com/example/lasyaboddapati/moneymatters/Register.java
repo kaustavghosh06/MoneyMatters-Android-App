@@ -1,7 +1,9 @@
 package com.example.lasyaboddapati.moneymatters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,8 +25,8 @@ import java.util.Map;
 public class Register extends Activity {
     String sname;
     String susername;
-    String spassword;
-    String cspassowrd;
+    //String spassword;
+    //String cspassowrd;
     String semail;
     ArrayList<String> userlist;
 
@@ -37,8 +39,8 @@ public class Register extends Activity {
 
         final EditText name=(EditText)findViewById(R.id.name);
         final EditText username=(EditText)findViewById(R.id.username);
-        final EditText password=(EditText)findViewById(R.id.password);
-        final EditText cpassword=(EditText)findViewById(R.id.cpassword);
+        //final EditText password=(EditText)findViewById(R.id.password);
+        //final EditText cpassword=(EditText)findViewById(R.id.cpassword);
         final EditText email=(EditText)findViewById(R.id.email);
 
         Firebase.setAndroidContext(getApplicationContext());
@@ -77,31 +79,25 @@ public class Register extends Activity {
 
                 sname=name.getText().toString();
                 susername=username.getText().toString();
-                spassword=password.getText().toString();
-                cspassowrd=cpassword.getText().toString();
+                //spassword=password.getText().toString();
+                //cspassowrd=cpassword.getText().toString();
                 semail=email.getText().toString();
 
-
-
-
-
-
-
-                if(sname.isEmpty() || susername.isEmpty() || spassword.isEmpty() || cspassowrd.isEmpty() || semail.isEmpty() )
+                if(sname.isEmpty() || susername.isEmpty() /*|| spassword.isEmpty() || cspassowrd.isEmpty() */|| semail.isEmpty() )
                 {
                     Toast.makeText(getApplicationContext(),
                             "Please enter all the values", Toast.LENGTH_SHORT).show();
                 }
 
-                else if(!spassword.equals(cspassowrd))
+                /*else if(!spassword.equals(cspassowrd))
                 {
                     Toast.makeText(getApplicationContext(),
                             "Both Passwords don't match", Toast.LENGTH_SHORT).show();
-                }
+                }*/
                 else if(userlist.contains(susername))
                 {
                     Toast.makeText(getApplicationContext(),
-                            "User already exists!Enter different username", Toast.LENGTH_SHORT).show();
+                            "User already exists! Enter different username", Toast.LENGTH_SHORT).show();
                 }
                 else {
 
@@ -115,23 +111,21 @@ public class Register extends Activity {
                     myFirebaseRef.child(susername).child("Friends").setValue("true");
                     myFirebaseRef.child(susername).child("PersonalInfo").setValue("true");
                     myFirebaseRef.child(susername).child("PersonalInfo").child("Name").setValue(sname);
-                    myFirebaseRef.child(susername).child("PersonalInfo").child("Password").setValue(spassword);
+                    //myFirebaseRef.child(susername).child("PersonalInfo").child("Password").setValue(spassword);
                     myFirebaseRef.child(susername).child("PersonalInfo").child("Email").setValue(semail);
                     Toast.makeText(getApplicationContext(),
-                            "Successfully Registered!Login now", Toast.LENGTH_SHORT).show();
+                            "Successfully Registered!", Toast.LENGTH_SHORT).show();
 
-                    Intent registerIntent = new Intent(Register.this, Login.class);
-                    startActivity(registerIntent);
+                    /*Intent registerIntent = new Intent(Register.this, Login.class);
+                    startActivity(registerIntent);*/
+                    SharedPreferences sharedPref = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("Username", susername);
+                    editor.commit();
+                    Intent homeIntent = new Intent(Register.this, Home.class);
+                    startActivity(homeIntent);
+                    finish();
                 }
-
-
-
-
-
-
-
-
-
             }
         });
     }

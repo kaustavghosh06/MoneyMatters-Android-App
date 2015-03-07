@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/deleteButton"
         style="?android:attr/buttonBarStyle"
-        android:src="@drawable/ic_action_content_remove_circle"
+        android:src="@drawable/ic_action_content_clear"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editButton"
         style="?android:attr/buttonBarStyle"
-        android:src="@drawable/ic_action_content_add_circle"
+        android:src="@drawable/ic_action_content_add_green"
         android:layout_toLeftOf="@id/deleteButton"
         android:layout_marginLeft="10dp"
         android:focusable="false"/>

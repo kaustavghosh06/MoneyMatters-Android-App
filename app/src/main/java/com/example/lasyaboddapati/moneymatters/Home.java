@@ -32,16 +32,18 @@ import com.firebase.client.FirebaseError;
 
 public class Home extends Activity implements OnItemClickListener {
 
-    static final String EXTRA_MAP = "map";
+    //static final String EXTRA_MAP = "map";
+    static final int ADD_EXPENSE_REQUEST = 1;
     String username;
 
     static final LauncherIcon[] ICONS = {
-            new LauncherIcon(R.drawable.ic_action_av_my_library_books, "Budget", "budget.png"),
-            new LauncherIcon(R.drawable.ic_action_action_receipt, "Expenses", "expenses.png"),
-            new LauncherIcon(R.drawable.ic_action_action_thumbs_up_down, "Credits/Debits", "loans.png"),
-            new LauncherIcon(R.drawable.ic_action_action_question_answer, "Notifications", "notifications.png"),
-            new LauncherIcon(R.drawable.ic_action_social_people, "Friends", "friends.png"),
-            new LauncherIcon(R.drawable.ic_action_action_settings, "Settings", "settings.png")
+            new LauncherIcon(R.drawable.ic_action_action_note_add, "Add Expense"),
+            new LauncherIcon(R.drawable.ic_action_av_my_library_books, "Budget"/*, "budget.png"*/),
+            new LauncherIcon(R.drawable.ic_action_action_receipt, "Expenses"/*, "expenses.png"*/),
+            new LauncherIcon(R.drawable.ic_action_action_thumbs_up_down, "Credits/Debits"/*, "loans.png"*/),
+            new LauncherIcon(R.drawable.ic_action_action_question_answer, "Notifications"/*, "notifications.png"*/),
+            new LauncherIcon(R.drawable.ic_action_social_people, "Friends"/*, "friends.png"*/),
+            //new LauncherIcon(R.drawable.ic_action_action_settings, "Settings"/*, "settings.png"*/)
     };
 
     @Override
@@ -173,38 +175,41 @@ public class Home extends Activity implements OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-        if(position==0)
+        if(position == 0) {
+            Intent intent = new Intent(this, AddExpense.class);
+            startActivityForResult(intent, ADD_EXPENSE_REQUEST);
+        }
+        else if(position==1)
         {
             Intent intent = new Intent(this, Budget.class);
             startActivity(intent);
         }
-        else if(position==1)
+        else if(position==2)
         {
             Intent intent = new Intent(this, Expenses.class);
             startActivity(intent);
         }
-        else if(position==2)
+        else if(position==3)
         {
             Intent intent = new Intent(this, LendStatus.class);
             intent.putExtra("Username",username);
             startActivity(intent);
         }
-        else if(position==3)
+        else if(position==4)
         {
             Intent intent = new Intent(this, Notifications.class);
             intent.putExtra("Username",username);
             startActivity(intent);
         }
-        else if(position==4)
+        else if(position==5)
         {
             Toast.makeText(getApplicationContext(),"Not yet implemented",Toast.LENGTH_LONG).show();
 
         }
-        else if(position==5)
+        /*else if(position==6)
         {
             Toast.makeText(getApplicationContext(),"Not yet implemented",Toast.LENGTH_LONG).show();
-        }
+        }*/
         //intent.putExtra(EXTRA_MAP, ICONS[position].map);
 
     }
@@ -212,13 +217,13 @@ public class Home extends Activity implements OnItemClickListener {
     static class LauncherIcon {
         final String text;
         final int imgId;
-        final String map;
+        //final String map;
 
-        public LauncherIcon(int imgId, String text, String map) {
+        public LauncherIcon(int imgId, String text/*, String map*/) {
             super();
             this.imgId = imgId;
             this.text = text;
-            this.map = map;
+            //this.map = map;
         }
 
     }
@@ -291,5 +296,16 @@ public class Home extends Activity implements OnItemClickListener {
             startActivity(uninstall);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == ADD_EXPENSE_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "New Expense added", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

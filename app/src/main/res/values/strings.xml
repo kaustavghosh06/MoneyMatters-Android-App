@@ -25,5 +25,7 @@
     <string name="action_uninstall">Uninstall</string>
     <string name="title_activity_addfriends">Addfriends</string>
     <string name="title_activity_forgot_password">ForgotPassword</string>
+    <string name="title_activity_add_expense">AddExpense</string>
+    <string name="title_activity_start_up">StartUp</string>
 
 </resources>
