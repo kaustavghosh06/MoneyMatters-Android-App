@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin" android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="Money Matters"
+        android:gravity="center_horizontal"
+        android:textColor="@color/White"
+        android:id="@+id/title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/subtitle"
+        android:textColor="@color/White"
+        android:textSize="20sp"
+        android:text="Manage all your money matters in one place!"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="What you can do?"
+        android:textColor="@color/White"
+        android:id="@+id/description1"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/description2"
+        android:textColor="@color/White"
+        android:text="* Set budget monthly and weekly limits\n* Track your expenses\n* Get reports of your money transactions\n* Manage and keep track of money you've lent or borrowed\n* Send reminders to your friends to return your money"
+        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
+
+</LinearLayout>

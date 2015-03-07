@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin" android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Set budget"
+        android:textColor="@color/White"
+        android:id="@+id/set_budget_H" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/set_budget_D"
+        android:textColor="@color/White"
+        android:text="Go to 'Budget' from the Home screen. Click on the + next to the month you want to set the budget for"
+        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Edit Budget"
+        android:textColor="@color/White"
+        android:id="@+id/edit_budget_H"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/White"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Click on the + next to the month whose budget you want to change"
+        android:id="@+id/edit_budget_D"
+        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Reset Budget"
+        android:id="@+id/delete_budget_H"
+        android:textColor="@color/White"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Click on the x next to the month whose budget you want to reset"
+        android:id="@+id/delete_budget_D"
+        android:textColor="@color/White"
+        android:paddingLeft="@dimen/activity_horizontal_margin" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Monthly/Weekly Statistics"
+        android:id="@+id/statistics_H"
+        android:textColor="@color/White"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Select 'Year' to view the monthly statistics for the year. Select 'Month' to view the weekly statistics for each month. Click on the '&gt;' or '&lt;' to navigate between months"
+        android:id="@+id/statistics_D"
+        android:textColor="@color/White"
+        android:paddingLeft="@dimen/activity_horizontal_margin" />
+</LinearLayout>

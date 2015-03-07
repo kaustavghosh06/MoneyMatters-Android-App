@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin" android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Add an expense"
+        android:textColor="@color/White"
+        android:id="@+id/add_expense_H" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/add_expense_D"
+        android:textColor="@color/White"
+        android:text="1. Click on the 'Add Expense' icon on the Home screen (or)\n2. Go to 'Expenses from Home screen and click on the + on the top right corner"
+        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Edit an entry"
+        android:textColor="@color/White"
+        android:id="@+id/edit_entry_H"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/White"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Go to 'Expenses'. Long press on the entry you want to change. Then click on the edit icon that appears at the top"
+        android:id="@+id/edit_entry_D"
+        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Delete an entry"
+        android:id="@+id/delete_entry_H"
+        android:textColor="@color/White"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Go to 'Expenses'. Long press on an item you want to delete. Select all items you want to delete and click on the delete icon that appears at the top"
+        android:id="@+id/delete_entry_D"
+        android:textColor="@color/White"
+        android:paddingLeft="@dimen/activity_horizontal_margin" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Filter entries"
+        android:id="@+id/filter_H"
+        android:textColor="@color/White"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Filter entries according to month and week by choosing the month and week from the drop-downs at the top"
+        android:id="@+id/filter_D"
+        android:textColor="@color/White"
+        android:paddingLeft="@dimen/activity_horizontal_margin" />
+</LinearLayout>

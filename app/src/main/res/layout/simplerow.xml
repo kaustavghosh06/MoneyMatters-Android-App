@@ -5,9 +5,9 @@
         android:id="@+id/rowTextView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="@dimen/activity_horizontal_margin"
         android:textColor="@color/Black"
-        android:textSize="16sp" >
+        android:textSize="20sp" >
     </TextView>
 
 

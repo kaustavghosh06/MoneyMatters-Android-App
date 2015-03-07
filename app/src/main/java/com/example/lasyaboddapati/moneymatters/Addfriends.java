@@ -109,10 +109,7 @@ public class Addfriends extends Activity {
                 friendlist = new ArrayList<String>();
 
                 if(usersmap!=null) {
-
-
                     for (String key : usersmap.keySet()) {
-
                         friendlist.add(key);
                     }
                 }
@@ -224,7 +221,10 @@ public class Addfriends extends Activity {
                 Firebase receivercloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+loginUser);
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String friend=friendname.getText().toString();
-                if(friendlist.contains(friend))
+                if(friend.isEmpty()) {
+                    Toast.makeText(getApplicationContext(),
+                            "Username cannot be empty", Toast.LENGTH_SHORT).show();
+                } else if(friendlist.contains(friend))
                 {
                     Toast.makeText(getApplicationContext(),
                             friend+" is already your friend", Toast.LENGTH_SHORT).show();
@@ -234,7 +234,8 @@ public class Addfriends extends Activity {
                     Toast.makeText(getApplicationContext(),
                             friend+" added to your Friend List", Toast.LENGTH_SHORT).show();
                     receivercloud.child("Friends").child(friend).setValue("true");
-                    friendname.setText("");
+                    friendname.getText().clear();
+                    friendname.setError(null);
                     findViewById(R.id.add_friend_popup).setVisibility(View.GONE);
                 }
 
@@ -244,7 +245,8 @@ public class Addfriends extends Activity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                friendname.setText("");
+                friendname.getText().clear();
+                friendname.setError(null);
                 findViewById(R.id.add_friend_popup).setVisibility(View.GONE);
             }
         });

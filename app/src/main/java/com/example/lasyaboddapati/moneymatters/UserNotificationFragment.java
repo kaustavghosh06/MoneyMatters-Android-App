@@ -35,7 +35,7 @@ public class UserNotificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_user_notification, container, false);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_debit, null);
-        listView = (ListView) rootView.findViewById(R.id.list);
+        listView = (ListView) rootView.findViewById(R.id.received);
 
         Firebase.setAndroidContext(context1);
         final Firebase myFirebaseRef = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user);

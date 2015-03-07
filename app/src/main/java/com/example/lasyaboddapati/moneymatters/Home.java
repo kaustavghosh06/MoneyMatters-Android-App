@@ -295,6 +295,9 @@ public class Home extends Activity implements OnItemClickListener {
             Intent uninstall = new Intent(Intent.ACTION_DELETE);
             uninstall.setData(Uri.parse("package:" + this.getPackageName()));
             startActivity(uninstall);
+        } else if (id == R.id.action_help) {
+            Intent help = new Intent(this, Help.class);
+            startActivity(help);
         }
         return super.onOptionsItemSelected(item);
     }

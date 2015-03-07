@@ -1,6 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.lasyaboddapati.moneymatters.Register">
-    <item android:id="@+id/action_help" android:title="@string/action_help"
-        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_help" android:title="@string/action_help" android:icon="@drawable/ic_action_action_help"
+        android:orderInCategory="100" android:showAsAction="always" />
+    <item android:id="@+id/action_uninstall" android:title="@string/action_uninstall"
+        android:orderInCategory="200" android:showAsAction="never" />
 </menu>
