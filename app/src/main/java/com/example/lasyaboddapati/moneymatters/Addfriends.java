@@ -87,12 +87,21 @@ public class Addfriends extends Activity {
         friendcloud.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Map<String, Object> usersmap = (Map<String, Object>) snapshot.getValue();
+                Map<String, Object> usersmap=null;
+
+                if(!(snapshot.getValue().toString()).equals("true")){
+                    usersmap = (Map<String, Object>) snapshot.getValue();
+                }
+
                 friendlist = new ArrayList<String>();
 
-                for (String key : usersmap.keySet()) {
+                if(usersmap!=null) {
 
-                    friendlist.add(key);
+
+                    for (String key : usersmap.keySet()) {
+
+                        friendlist.add(key);
+                    }
                 }
                 //userlist.remove(loginUser);
                 for (String str : friendlist) {

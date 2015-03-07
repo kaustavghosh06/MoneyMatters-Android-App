@@ -42,23 +42,21 @@
       <file leaf-file-name="Home.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Home.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3975">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2985" max-vertical-offset="4800">
               <caret line="199" column="9" selection-start-line="199" selection-start-column="9" selection-end-line="199" selection-end-column="9" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Addfriends.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Addfriends.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Addfriends.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1078" max-vertical-offset="2940">
-              <caret line="98" column="39" selection-start-line="98" selection-start-column="39" selection-end-line="98" selection-end-column="39" />
+            <state vertical-scroll-proportion="0.47265625" vertical-offset="928" max-vertical-offset="2700">
+              <caret line="103" column="21" selection-start-line="103" selection-start-column="21" selection-end-line="103" selection-end-column="21" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3506#3514#0" expanded="true" />
-                <element signature="e#4621#5093#0" expanded="true" />
-                <element signature="e#5082#5083#0" expanded="true" />
+                <element signature="e#4815#5287#0" expanded="true" />
+                <element signature="e#5276#5277#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -67,21 +65,19 @@
       <file leaf-file-name="HomeScreen.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/HomeScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1035">
+            <state vertical-scroll-proportion="0.0" vertical-offset="375" max-vertical-offset="1035">
               <caret line="34" column="44" selection-start-line="34" selection-start-column="44" selection-end-line="34" selection-end-column="44" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_addfriends.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="activity_addfriends.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_addfriends.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3814433" vertical-offset="115" max-vertical-offset="600">
+            <state vertical-scroll-proportion="-8.888889" vertical-offset="60" max-vertical-offset="600">
               <caret line="20" column="39" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
-              <folding>
-                <element signature="e#223#258#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
           <provider editor-type-id="android-designer">
@@ -92,13 +88,9 @@
       <file leaf-file-name="Notifications.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Notifications.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2216" max-vertical-offset="3945">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3030" max-vertical-offset="4110">
               <caret line="202" column="0" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3073#3418#0" expanded="true" />
-                <element signature="e#3407#3408#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -106,8 +98,8 @@
       <file leaf-file-name="UserNotificationFragment.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/UserNotificationFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="733" max-vertical-offset="1245">
-              <caret line="66" column="52" selection-start-line="65" selection-start-column="18" selection-end-line="66" selection-end-column="52" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="358" max-vertical-offset="1245">
+              <caret line="53" column="17" selection-start-line="51" selection-start-column="16" selection-end-line="53" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -116,7 +108,7 @@
       <file leaf-file-name="fragment_user_notification.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_user_notification.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.8888888" vertical-offset="0" max-vertical-offset="285">
+            <state vertical-scroll-proportion="0.0" vertical-offset="105" max-vertical-offset="285">
               <caret line="7" column="13" selection-start-line="6" selection-start-column="2" selection-end-line="11" selection-end-column="36" />
               <folding />
             </state>
@@ -129,8 +121,8 @@
       <file leaf-file-name="Login.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Login.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2175">
-              <caret line="27" column="4" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="626" max-vertical-offset="2175">
+              <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -139,11 +131,9 @@
       <file leaf-file-name="ForgotPassword.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/ForgotPassword.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="821" max-vertical-offset="1830">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1275" max-vertical-offset="1830">
               <caret line="85" column="13" selection-start-line="85" selection-start-column="13" selection-end-line="85" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -151,7 +141,7 @@
       <file leaf-file-name="activity_forgot_password.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_forgot_password.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="270">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -839,8 +829,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/ForgotPassword.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Notifications.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Home.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Addfriends.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_addfriends.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Addfriends.java" />
       </list>
     </option>
   </component>
@@ -875,7 +865,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -964,6 +953,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1012,7 +1002,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Android Application.Login">
+  <component name="RunManager" selected="Android Application.Register">
     <configuration default="false" name="build (4)" type="GroovyScriptRunConfiguration" factoryName="Groovy" temporary="true">
       <module name="app" />
       <setting name="path" value="file://$PROJECT_DIR$/app/build.gradle" />
@@ -1263,9 +1253,9 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Android Application.Login" />
-        <item index="1" class="java.lang.String" itemvalue="Android Application.Addfriends" />
-        <item index="2" class="java.lang.String" itemvalue="Android Application.Register" />
+        <item index="0" class="java.lang.String" itemvalue="Android Application.Register" />
+        <item index="1" class="java.lang.String" itemvalue="Android Application.Login" />
+        <item index="2" class="java.lang.String" itemvalue="Android Application.Addfriends" />
         <item index="3" class="java.lang.String" itemvalue="Android Application.Home" />
         <item index="4" class="java.lang.String" itemvalue="Groovy.build (4)" />
       </list>
@@ -1359,6 +1349,52 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/UserNotificationFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="990" max-vertical-offset="1455">
+          <caret line="66" column="52" selection-start-line="65" selection-start-column="18" selection-end-line="66" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_user_notification.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="105" max-vertical-offset="285">
+          <caret line="7" column="13" selection-start-line="6" selection-start-column="2" selection-end-line="11" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Login.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="405" max-vertical-offset="2550">
+          <caret line="27" column="4" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/ForgotPassword.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1275" max-vertical-offset="1830">
+          <caret line="85" column="13" selection-start-line="85" selection-start-column="13" selection-end-line="85" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_forgot_password.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Home.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2790">
@@ -1371,11 +1407,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2565" max-vertical-offset="4095">
           <caret line="171" column="21" selection-start-line="164" selection-start-column="0" selection-end-line="171" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3073#3418#0" expanded="true" />
-            <element signature="e#3407#3408#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1415,11 +1447,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2565" max-vertical-offset="4080">
           <caret line="171" column="21" selection-start-line="164" selection-start-column="0" selection-end-line="171" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3073#3418#0" expanded="true" />
-            <element signature="e#3407#3408#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1459,11 +1487,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2565" max-vertical-offset="4035">
           <caret line="171" column="21" selection-start-line="164" selection-start-column="20" selection-end-line="171" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3073#3418#0" expanded="true" />
-            <element signature="e#3407#3408#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1675,9 +1699,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="821" max-vertical-offset="1830">
           <caret line="85" column="13" selection-start-line="85" selection-start-column="13" selection-end-line="85" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1695,14 +1717,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Login.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2175">
-          <caret line="27" column="4" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Home.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3975">
@@ -1713,7 +1727,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_user_notification.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.8888888" vertical-offset="0" max-vertical-offset="285">
+        <state vertical-scroll-proportion="0.0" vertical-offset="105" max-vertical-offset="285">
           <caret line="7" column="13" selection-start-line="6" selection-start-column="2" selection-end-line="11" selection-end-column="36" />
           <folding />
         </state>
@@ -1722,23 +1736,30 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/UserNotificationFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="733" max-vertical-offset="1245">
-          <caret line="66" column="52" selection-start-line="65" selection-start-column="18" selection-end-line="66" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Notifications.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2216" max-vertical-offset="3945">
           <caret line="202" column="0" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3073#3418#0" expanded="true" />
-            <element signature="e#3407#3408#0" expanded="true" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_addfriends.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.888889" vertical-offset="60" max-vertical-offset="600">
+          <caret line="20" column="39" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Login.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="626" max-vertical-offset="2175">
+          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1750,30 +1771,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Addfriends.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/UserNotificationFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1183" max-vertical-offset="2940">
-          <caret line="98" column="39" selection-start-line="98" selection-start-column="39" selection-end-line="98" selection-end-column="39" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3506#3514#0" expanded="true" />
-            <element signature="e#4621#5093#0" expanded="true" />
-            <element signature="e#5082#5083#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="358" max-vertical-offset="1245">
+          <caret line="53" column="17" selection-start-line="51" selection-start-column="16" selection-end-line="53" selection-end-column="17" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_addfriends.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/lasyaboddapati/moneymatters/Addfriends.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3814433" vertical-offset="115" max-vertical-offset="600">
-          <caret line="20" column="39" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
+        <state vertical-scroll-proportion="0.47265625" vertical-offset="928" max-vertical-offset="2700">
+          <caret line="103" column="21" selection-start-line="103" selection-start-column="21" selection-end-line="103" selection-end-column="21" />
           <folding>
-            <element signature="e#223#258#0" expanded="true" />
+            <element signature="e#4815#5287#0" expanded="true" />
+            <element signature="e#5276#5277#0" expanded="true" />
           </folding>
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
   </component>
