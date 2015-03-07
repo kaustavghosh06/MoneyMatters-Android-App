@@ -16,6 +16,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -160,8 +161,18 @@ public class Addfriends extends Activity {
                 Firebase receivercloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+loginUser);
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String friend=friendname.getText().toString();
+                if(friendlist.contains(friend))
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "The user is already your friend", Toast.LENGTH_SHORT).show();
+                }
+                else {
 
-                receivercloud.child("Friends").child(friend).setValue("true");
+                    Toast.makeText(getApplicationContext(),
+                            "User added to your Friend List", Toast.LENGTH_SHORT).show();
+                    receivercloud.child("Friends").child(friend).setValue("true");
+                }
+
 
 
 
