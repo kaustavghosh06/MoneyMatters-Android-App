@@ -79,7 +79,7 @@ public class SystemNotificationFragment extends Fragment {
                 // Capture total checked items
                 checkedCount = lv.getCheckedItemCount();
                 // Set the CAB title according to total checked items
-                mode.setTitle(checkedCount + "Selected");
+                mode.setTitle(checkedCount + " Selected");
             }
 
             @Override

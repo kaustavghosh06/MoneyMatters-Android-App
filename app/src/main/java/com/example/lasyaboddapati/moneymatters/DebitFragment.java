@@ -9,9 +9,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.firebase.client.ChildEventListener;
@@ -30,6 +35,7 @@ public class DebitFragment extends Fragment {
     //Set<String> d= new HashSet<String>();
     static Context context1;
     static CustomListAdapter adapter;
+    private ActionMode actionMode;
 
     public static Fragment newInstance(Context context,String username) {
         DebitFragment f = new DebitFragment();
@@ -148,6 +154,60 @@ public class DebitFragment extends Fragment {
         });
 
 
+        // Delete on LongPress
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            int checkedCount;
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                // Capture total checked items
+                checkedCount = listView.getCheckedItemCount();
+                // Set the CAB title according to total checked items
+                mode.setTitle(checkedCount + " Selected");
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.menu_multi_item_delete, menu);
+                actionMode = mode;
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                int id = item.getItemId();
+                SparseBooleanArray checkedItemPositions = listView.getCheckedItemPositions();
+
+                Log.d("CHECKED ITEM POSITIONS", checkedItemPositions.toString());
+                for (int i = 0; i < checkedItemPositions.size(); i++) {
+                    if (checkedItemPositions.valueAt(i)) {
+                        int position = checkedItemPositions.keyAt(i);
+                        if (id == R.id.action_delete) {
+                            //groupsToRemove.add(position);
+                            //TODO : Add function to delete
+                        }
+                    }
+                }
+
+                mode.finish();
+                return true;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                actionMode = null;
+                        /*if (groupsToRemove!=null) {
+                            adapter.removeItems(groupsToRemove);
+                            groupsToRemove.clear();
+                        }*/
+                //TODO: Clear checked items
+            }
+        });
 
         return rootView;
     }

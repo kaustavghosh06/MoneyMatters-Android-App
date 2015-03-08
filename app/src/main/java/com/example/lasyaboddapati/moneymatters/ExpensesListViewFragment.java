@@ -74,7 +74,7 @@ public class ExpensesListViewFragment extends Fragment {
                 // Capture total checked items
                 checkedCount = lv.getCheckedItemCount();
                 // Set the CAB title according to total checked items
-                mode.setTitle(checkedCount + "Selected");
+                mode.setTitle(checkedCount + " Selected");
                 // Hide edit button if multiple items selected
                 if (checkedCount > 1) {
                     mode.getMenu().findItem(R.id.action_edit).setVisible(false);

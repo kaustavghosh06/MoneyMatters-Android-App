@@ -47,7 +47,7 @@ public class BudgetListViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_expandable_list_view, container, false);
         lv = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
-        lv.setChoiceMode(ExpandableListView.CHOICE_MODE_MULTIPLE_MODAL);
+        //lv.setChoiceMode(ExpandableListView.CHOICE_MODE_MULTIPLE_MODAL);
         lv.setAdapter(adapter);
         adapter.populateListView();
         return rootView;

@@ -53,6 +53,7 @@ public class Home extends Activity implements OnItemClickListener {
         //username= getIntent().getExtras().getString("Username");
         SharedPreferences sharedPref = getSharedPreferences("Credentials",Context.MODE_PRIVATE);
         username = sharedPref.getString("Username",null);
+        setTitle("Welcome "+username);
 
         GridView gridview = (GridView) findViewById(R.id.dashboard_grid);
         gridview.setAdapter(new ImageAdapter(this));
