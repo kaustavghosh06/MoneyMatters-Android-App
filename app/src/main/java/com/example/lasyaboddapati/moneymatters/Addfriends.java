@@ -101,21 +101,24 @@ public class Addfriends extends Activity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map<String, Object> usersmap=null;
-
-                if(!(snapshot.getValue().toString()).equals("true")){
-                    usersmap = (Map<String, Object>) snapshot.getValue();
-                }
-
                 friendlist = new ArrayList<String>();
+                if(!(snapshot.getValue()==null)) {
 
-                if(usersmap!=null) {
-                    for (String key : usersmap.keySet()) {
-                        friendlist.add(key);
+                    if (!(snapshot.getValue().toString()).equals("true")) {
+                        usersmap = (Map<String, Object>) snapshot.getValue();
                     }
-                }
-                //userlist.remove(loginUser);
-                for (String str : friendlist) {
-                    Log.d("user", str);
+
+
+
+                    if (usersmap != null) {
+                        for (String key : usersmap.keySet()) {
+                            friendlist.add(key);
+                        }
+                    }
+                    //userlist.remove(loginUser);
+                    for (String str : friendlist) {
+                        Log.d("user", str);
+                    }
                 }
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
@@ -161,7 +164,16 @@ public class Addfriends extends Activity {
                                 if (id == R.id.action_delete) {
                                     //groupsToRemove.add(position);
                                     //TODO : Add function to delete
+                                    Firebase receivercloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+loginUser);
+                                    receivercloud.child("Friends").child(friendlist.get(position)).removeValue();
+
+
+
+
                                 }
+                                Log.d("Checked in position",friendlist.get(position));
+
+
                             }
                         }
 

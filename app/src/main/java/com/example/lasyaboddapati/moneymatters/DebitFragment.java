@@ -57,64 +57,7 @@ public class DebitFragment extends Fragment {
         final Firebase myFirebaseRef = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user);
         Firebase debtcloud=myFirebaseRef.child("Debts");
 
-       /* debtcloud.addChildEventListener(new ChildEventListener() {
-                                            @Override
-                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                                String timestamp;
-                                                String info=null;
-                                                Log.d("snapshotvalue",dataSnapshot.getValue().toString());
-                                                String[] parts=(dataSnapshot.getValue().toString()).split(":");
-
-                                                Intent resultIntent = new Intent(context1, LendStatus.class);
-                                                resultIntent.putExtra("Username",user);
-                                                //TODO : set tab to System Notifications
-                                                PendingIntent pendingIntent = PendingIntent.getActivity(context1, 0, resultIntent, 0);
-
-                                                Notification notification = new Notification.Builder(context1)
-                                                        .setContentTitle("Money Matters")
-                                                        .setContentText("hi")
-                                                        .setSmallIcon(R.drawable.ic_social_notifications_on)
-                                                        .setContentIntent(pendingIntent)
-                                                        .setAutoCancel(true)
-                                                        .build();
-
-                                                NotificationManager notificationManager = (NotificationManager) context1.getSystemService(Context.NOTIFICATION_SERVICE);
-                                                notificationManager.notify(1, notification);
-                                                Log.d("NOTIFY", "user notified");
-
-
-
-
-                                                /*Map<String, String> newPost = (Map<String, String>) dataSnapshot.getValue();
-                                                for (String key : newPost.keySet()) {
-
-                                                   info=newPost.get(key);
-                                                }
-                                                Log.d("debitinfo",info);*/
-/*
-                                            }
-
-                                            @Override
-                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                            }
-
-                                            @Override
-                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                            }
-
-                                            @Override
-                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                            }
-
-                                            @Override
-                                            public void onCancelled(FirebaseError firebaseError) {
-
-                                            }
-                                        });
-*/
+      
 
 
         //FOR DEBTS
@@ -154,60 +97,6 @@ public class DebitFragment extends Fragment {
         });
 
 
-        // Delete on LongPress
-        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
-        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-            int checkedCount;
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                // Capture total checked items
-                checkedCount = listView.getCheckedItemCount();
-                // Set the CAB title according to total checked items
-                mode.setTitle(checkedCount + " Selected");
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.menu_multi_item_delete, menu);
-                actionMode = mode;
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                int id = item.getItemId();
-                SparseBooleanArray checkedItemPositions = listView.getCheckedItemPositions();
-
-                Log.d("CHECKED ITEM POSITIONS", checkedItemPositions.toString());
-                for (int i = 0; i < checkedItemPositions.size(); i++) {
-                    if (checkedItemPositions.valueAt(i)) {
-                        int position = checkedItemPositions.keyAt(i);
-                        if (id == R.id.action_delete) {
-                            //groupsToRemove.add(position);
-                            //TODO : Add function to delete
-                        }
-                    }
-                }
-
-                mode.finish();
-                return true;
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                actionMode = null;
-                        /*if (groupsToRemove!=null) {
-                            adapter.removeItems(groupsToRemove);
-                            groupsToRemove.clear();
-                        }*/
-                //TODO: Clear checked items
-            }
-        });
 
         return rootView;
     }
