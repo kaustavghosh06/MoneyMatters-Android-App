@@ -109,6 +109,8 @@ public class Register extends Activity {
 
                     myFirebaseRef.child(susername).child("Debts").setValue("true");
                     myFirebaseRef.child(susername).child("Notifications").setValue("true");
+                    myFirebaseRef.child(susername).child("SentNotifications").setValue("true");
+
                     myFirebaseRef.child(susername).child("Friends").setValue("true");
                     myFirebaseRef.child(susername).child("PersonalInfo").setValue("true");
                     myFirebaseRef.child(susername).child("PersonalInfo").child("Name").setValue(sname);

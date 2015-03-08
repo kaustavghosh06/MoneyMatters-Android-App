@@ -209,9 +209,12 @@ public class Notifications extends FragmentActivity {
                             String notf=message.getText().toString();
 
                             Firebase receivercloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+receiver);
+                            Firebase usercloud=new Firebase("https://crackling-inferno-5209.firebaseio.com/"+loginUser);
                             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
                             receivercloud.child("Notifications").child(timeStamp).setValue(notf+":"+"0"+":"+loginUser);
+                            usercloud.child("SentNotifications").child(timeStamp).setValue(notf+":"+"0"+":"+receiver);
+
 
 
 

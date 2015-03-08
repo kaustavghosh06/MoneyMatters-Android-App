@@ -24,8 +24,10 @@ import java.util.Map;
 
 public class UserNotificationFragment extends Fragment {
     ListView listView ;
+    ListView sentlistView ;
     static String user;
     static CustomListAdapter adapter;
+    static CustomListAdapter sentadapter;
     //LinkedHashMap<String, String> d;
     //Set<String> d= new HashSet<String>();
     static Context context1;
@@ -43,14 +45,16 @@ public class UserNotificationFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_user_notification, container, false);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_debit, null);
         listView = (ListView) rootView.findViewById(R.id.received);
+        sentlistView=(ListView) rootView.findViewById(R.id.sent);
 
         Firebase.setAndroidContext(context1);
         final Firebase myFirebaseRef = new Firebase("https://crackling-inferno-5209.firebaseio.com/"+user);
         Firebase notifcloud=myFirebaseRef.child("Notifications");
+        Firebase sentnotifcloud=myFirebaseRef.child("SentNotifications");
 
 
 
-        //FOR DEBTS
+        //FOR ReceivedNotifications
 
         notifcloud.addValueEventListener(new ValueEventListener() {
             @Override
@@ -140,6 +144,51 @@ public class UserNotificationFragment extends Fragment {
                 //TODO: Clear checked items
             }
         });
+
+        //For Sent notifications
+
+        //FOR ReceivedNotifications
+
+        sentnotifcloud.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map<String, Object> de=null;
+                if(!(snapshot.getValue().toString()).equals("true")){
+                    de=(Map<String, Object>) snapshot.getValue();
+                }
+                ArrayList<String> d= new ArrayList<String>();
+
+                if(de!=null) {
+                    for (String key : de.keySet()) {
+
+                        d.add(key + "-" + de.get(key).toString());
+                    }
+                    String[] dArr = new String[d.size()];
+                    dArr = d.toArray(dArr);
+                }
+
+                //ArrayAdapter<String> adapter = new ArrayAdapter<String>(context1,
+                //R.layout.simplerow, dArr);
+
+                sentadapter = new CustomListAdapter(context1, R.layout.custom_list_item,d);
+
+
+
+
+                // Assign adapter to ListView
+                sentlistView.setAdapter(sentadapter);
+
+
+
+
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+
+
 
         return rootView;
     }
