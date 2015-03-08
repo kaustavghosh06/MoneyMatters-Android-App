@@ -132,10 +132,16 @@ public class SystemNotificationFragment extends Fragment {
         int mm = Integer.parseInt(date.split("[./-]")[0]);
         int dd = Integer.parseInt(date.split("[./-]")[1]);
         String month = Months.nameOf(mm);
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, mm);
-        c.set(Calendar.DATE, dd);
-        int week = (c.get(Calendar.WEEK_OF_MONTH));
+        int week = 0;
+        if(dd>=1 && dd<=7) {
+            week = 1;
+        } else if(dd>=8 && dd<=14) {
+            week = 2;
+        } else if(dd>=15 && dd<=21) {
+            week = 3;
+        } else if(dd>=22 && dd<=31) {
+            week = 4;
+        }
         Log.d("limit_exceeded_check", "week is "+week);
 
         String[] budgetResultColumns = null;

@@ -55,7 +55,6 @@ public class Register extends Activity {
             public void onDataChange(DataSnapshot snapshot) {
                 Map<String, Object> usersmap = (Map<String, Object>) snapshot.getValue();
                 userlist = new ArrayList<String>();
-
                 for (String key : usersmap.keySet()) {
 
                     userlist.add(key);
