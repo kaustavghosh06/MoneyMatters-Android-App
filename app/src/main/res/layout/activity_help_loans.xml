@@ -57,21 +57,4 @@
         android:textColor="@color/White"
         android:paddingLeft="@dimen/activity_horizontal_margin" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Clear transactions"
-        android:id="@+id/delete_item_H"
-        android:textColor="@color/White"
-        android:layout_marginTop="20dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Long press and select the credit transactions you want to clear and click on the delete icon that appears at the top.\nYour debits will be updated when your friend clears the corresponding credit."
-        android:id="@+id/delete_item_D"
-        android:textColor="@color/White"
-        android:paddingLeft="@dimen/activity_horizontal_margin" />
 </LinearLayout>

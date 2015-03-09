@@ -18,7 +18,7 @@ import java.util.Calendar;
 /**
  * Created by lasyaboddapati on 1/28/15.
  */
-public class Expenses extends Activity /*implements CustomDialogFragment.CustomDialogListener*/ {
+public class Expenses extends Activity {
     ExpensesListViewFragment expensesListViewFragment;
     ExpensesGraphViewFragment graphViewFragment;
     final String[] MONTHS = {"All", "January", "February", "March", "April", "May", "June", "July"

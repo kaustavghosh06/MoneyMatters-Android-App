@@ -1,7 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.ghosh.kaustav.moneymatters.Lending">
-    <item android:id="@+id/action_lend" android:title="Lend"
-        android:showAsAction="always" android:icon="@drawable/ic_action_content_add"
-        android:orderInCategory="100"/>
-</menu>

@@ -118,8 +118,7 @@ public class Register extends Activity {
                     Toast.makeText(getApplicationContext(),
                             "Successfully Registered!", Toast.LENGTH_SHORT).show();
 
-                    /*Intent registerIntent = new Intent(Register.this, Login.class);
-                    startActivity(registerIntent);*/
+
                     SharedPreferences sharedPref = getSharedPreferences("Credentials", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("Username", susername);

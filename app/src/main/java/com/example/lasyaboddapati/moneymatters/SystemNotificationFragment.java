@@ -142,15 +142,27 @@ public class SystemNotificationFragment extends Fragment {
         } else if(dd>=22 && dd<=31) {
             week = 4;
         }
-        Log.d("limit_exceeded_check", "week is "+week);
+        Log.d("limit_exceeded_check", "month is "+month+" and week is "+week);
 
         String[] budgetResultColumns = null;
         switch (week) {
-            case 1: budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK1_COLUMN};
-            case 2: budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK2_COLUMN};
-            case 3: budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK3_COLUMN};
+            case 1: {
+                budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK1_COLUMN};
+                break;
+            }
+            case 2: {
+                budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK2_COLUMN};
+                break;
+            }
+            case 3: {
+                budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK3_COLUMN};
+                break;
+            }
             case 4:
-            case 5: budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK4_COLUMN};
+            case 5: {
+                budgetResultColumns = new String[] {BudgetDatabase.MONTHLY_BUDGET_COLUMN, BudgetDatabase.WEEK4_COLUMN};
+                break;
+            }
         }
         Log.d("limit_exceeded_check", "budgetResultColumns is "+budgetResultColumns.toString());
         String budgetWhereClause = BudgetDatabase.MONTH_COLUMN + " = " + "'" + month + "'";
@@ -163,6 +175,7 @@ public class SystemNotificationFragment extends Fragment {
                 weeklyBudget = budgetCursor.getFloat(1);
             }
             budgetCursor.close();
+            Log.d("limit_exceeded_check", "monthly budget is: "+monthlyBudget+" and weekly budget is "+weeklyBudget);
 
             String[] expensesResultColumns = {ExpenseDatabase.AMOUNT_COLUMN, ExpenseDatabase.WEEK_COLUMN};
             String expensesWhereClause = ExpenseDatabase.MONTH_COLUMN + " = " + "'" + month + "'";

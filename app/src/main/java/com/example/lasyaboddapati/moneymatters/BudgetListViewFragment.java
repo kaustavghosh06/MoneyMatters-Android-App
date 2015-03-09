@@ -279,26 +279,16 @@ public class BudgetListViewFragment extends Fragment {
                 db.insert(BudgetDatabase.DATABASE_TABLE, null, newValues);
             }
             c.close();
+            //displayDb();
         }
 
         public void deleteFromDatabase(final String month) {
             String whereClause = BudgetDatabase.MONTH_COLUMN + " = "+"'"+month+"'";
             int n = db.delete(BudgetDatabase.DATABASE_TABLE, whereClause, null);
             Log.d("DELETE", "Deleted "+n);
-            displayDb();
+            //displayDb();
         }
 
-        public void updateInDatabase(final String month, final String monthlyBudget, final String[] weeklyBudget) {
-            String whereClause = BudgetDatabase.MONTH_COLUMN + " = "+"'"+month+"'";
-            ContentValues newValues = new ContentValues();
-            newValues.put(BudgetDatabase.MONTHLY_BUDGET_COLUMN, monthlyBudget);
-            newValues.put(BudgetDatabase.WEEK1_COLUMN, weeklyBudget[0]);
-            newValues.put(BudgetDatabase.WEEK2_COLUMN, weeklyBudget[1]);
-            newValues.put(BudgetDatabase.WEEK3_COLUMN, weeklyBudget[2]);
-            newValues.put(BudgetDatabase.WEEK4_COLUMN, weeklyBudget[3]);
-            int n = db.update(BudgetDatabase.DATABASE_TABLE, newValues, whereClause, null);
-            Log.d("UPDATE", "Updated "+n);
-        }
 
         public void displayDb() {
             Cursor c = db.rawQuery("SELECT * FROM "+BudgetDatabase.DATABASE_TABLE, null);

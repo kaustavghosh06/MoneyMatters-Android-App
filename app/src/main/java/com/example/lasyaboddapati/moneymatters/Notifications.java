@@ -145,17 +145,6 @@ public class Notifications extends FragmentActivity {
             alertDialog.setTitle("Send Notification");
             alertDialog.setMessage("Enter the Notification you want to send to your friend");
 
-           /* final EditText input = new EditText(Lending.this);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT);
-            input.setLayoutParams(lp);
-            alertDialog.setView(input);*/
-
-
-
-            //final EditText user = new EditText(this);
-
             final EditText message = new EditText(this);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_dropdown_item_1line, friendlist);
